@@ -1,0 +1,25 @@
+{
+  "name": "wsdot-traveler-info-js",
+  "version": "0.0.1",
+  "description": "Client for WSDOT Traveler Info API",
+  "main": "TravelerInfoClient.js",
+  "scripts": {
+    "prepublish": "tsc",
+    "test": "jasmine"
+  },
+  "keywords": [
+    "WSDOT",
+    "traveler",
+    "traffic",
+    "info",
+    "information"
+  ],
+  "author": "WSDOT",
+  "license": "Unlicense",
+  "devDependencies": {
+    "jasmine": "^2.4.1"
+  },
+  "dependencies": {
+    "node-fetch": "^1.5.2"
+  }
+}
