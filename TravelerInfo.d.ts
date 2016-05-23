@@ -14,6 +14,11 @@ interface Alert {
     Priority: string;
 }
 
+interface MapArea {
+    MapArea: string;
+    MapAreaDescription: string;
+}
+
 interface RoadwayLocation {
     Description: string;
     RoadName: string;
@@ -76,7 +81,7 @@ interface CVRestrictionData {
     SAMaxAxle: number;
     TDMaxAxle: number;
     VehicleType: string;
-    RestrictionType: string; //CommercialVehicleRestrictionType;
+    RestrictionType: "restriction" | "bridge" | "road"; //CommercialVehicleRestrictionType;
 }
 
 interface TravelRestriction {

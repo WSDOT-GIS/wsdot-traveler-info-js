@@ -1,3 +1,4 @@
+/// <amd-module name='TravelerInfoClient' />
 /// <reference path="typings/index.d.ts" />
 /// <reference path="TravelerInfo.d.ts" />
 (function (factory) {
@@ -9,7 +10,56 @@
     }
 })(function (require, exports) {
     "use strict";
+    // To use the Fetch API in node, the node-fetch module is required.
+    // Older web browsers may require a polyfill.
     var fetch = typeof window === "undefined" ? require("node-fetch") : window.fetch;
+    /**
+     * Parses a WCF formatted string.
+     * @param {string} dateString - A WCF formatted string.
+     * @returns {(Date|string)} If the input is a valid WCF formatted date string,
+     * a Date object will be returned. Otherwise the original string will be returned.
+     */
+    function parseWcfDate(dateString) {
+        var wcfDateRe = /^\/Date\((\d+)([+\-]\d+)?\)\/$/i;
+        if (typeof dateString === "string") {
+            var match = dateString.match(wcfDateRe);
+            if (match) {
+                // Remove the whole match, the first item in array.
+                // Parse remaining into numbers.
+                var numParts = match.slice(1).map(Number);
+                return new Date(numParts[0] + numParts[1]);
+            }
+        }
+        return dateString;
+    }
+    /**
+     * Provides custom JSON parsing.
+     */
+    function reviver(k, v) {
+        if (v && typeof v === "string") {
+            v = parseWcfDate(v);
+        }
+        return v;
+    }
+    function buildSearchString(searchParams) {
+        if (!searchParams) {
+            return null;
+        }
+        else {
+            var searchStringParts = [];
+            if (searchParams) {
+                for (var key in searchParams) {
+                    if (searchParams.hasOwnProperty(key)) {
+                        var element = searchParams[key];
+                        if (element != null) {
+                            searchStringParts.push(key + "=" + element);
+                        }
+                    }
+                }
+            }
+            return searchStringParts.join("&");
+        }
+    }
     /**
      * Client for the WSDOT Traveler Information API.
      * @see {@link http://www.wsdot.wa.gov/Traffic/api/}
@@ -30,21 +80,23 @@
         }
         /**
          * Constructs an API URL.
+         * @returns {string} - API URL.
          */
         TravelerInfoClient.prototype.buildApiUrl = function (operation, functionName, searchParams, omitAccessCode) {
             if (functionName === void 0) { functionName = "Get" + operation; }
             if (omitAccessCode === void 0) { omitAccessCode = false; }
-            var url = "http://wsdot.wa.gov/Traffic/api/" + operation + "/" + operation + "REST.svc/" + functionName + "AsJson?AccessCode=" + this.accessCode;
-            if (searchParams) {
-                var searchStringParts = [];
-                for (var key in searchParams) {
-                    if (searchParams.hasOwnProperty(key)) {
-                        var element = searchParams[key];
-                        searchStringParts.push(key + "=" + element);
-                    }
-                }
-                var searchString = searchStringParts.join("&");
-                url += searchString;
+            var url = "http://wsdot.wa.gov/Traffic/api/" + operation + "/" + operation + "REST.svc/" + functionName + "AsJson";
+            if (!searchParams && !omitAccessCode) {
+                searchParams = {
+                    AccessCode: this.accessCode
+                };
+            }
+            else if (!omitAccessCode) {
+                searchParams["accessCode"] = this.accessCode;
+            }
+            var searchString = buildSearchString(searchParams);
+            if (searchString) {
+                url = [url, searchString].join("?");
             }
             return url;
         };
@@ -56,7 +108,9 @@
             if (omitAccessCode === void 0) { omitAccessCode = false; }
             var url = this.buildApiUrl(operation, functionName, searchParams);
             return fetch(url).then(function (response) {
-                return response.json();
+                return response.text();
+            }).then(function (s) {
+                return JSON.parse(s, reviver);
             });
         };
         /**
@@ -68,21 +122,21 @@
         };
         /**
          * Gets Commercial Vehicle Restriction data.
-         * @returns {Promise.<CVRestrictionData[]>}
+         * @returns {Promise.<CVRestrictionData[]>} - commercial vehicle restriction data.
          */
         TravelerInfoClient.prototype.getCommercialVehicleRestrictions = function () {
             return this.getJson("CVRestrictions", "GetCommercialVehicleRestrictions");
         };
         /**
          * Gets an alert by ID.
-         * @returns {Promise.<Alert>}
+         * @returns {Promise.<Alert>} - alert
          */
         TravelerInfoClient.prototype.getAlert = function (alertId) {
             return this.getJson("HighwayAlerts", "GetAlert", { "AlertID": alertId });
         };
         /**
          * Gets all alerts
-         * @returns {Promise<Alert[]>}
+         * @returns {Promise.<Alert[]>} - alertsy
          */
         TravelerInfoClient.prototype.getAlerts = function () {
             return this.getJson("HighwayAlerts", "GetAlerts");
@@ -91,18 +145,40 @@
          * Gets alerts by a predefined map area.
          * @param {string} mapArea - The map area.
          * @see {getMapAreas}
-         * @returns {Promise<Alert[]>}
+         * @returns {Promise.<Alert[]>} - alerts
          */
         TravelerInfoClient.prototype.getAlertsByMapArea = function (mapArea) {
-            return this.getJson("HighwayAlerts", "GetAlertsByMapArea", { MapArea: mapArea });
+            return this.getJson("HighwayAlerts", "GetAlertsByMapArea", {
+                MapArea: typeof mapArea === "string" ? mapArea : mapArea.MapArea
+            });
         };
+        /**
+         * Gets alert event categories.
+         * @returns {string[]} - Event categories.
+         */
         TravelerInfoClient.prototype.getEventCategories = function () {
             return this.getJson("HighwayAlerts", "GetEventCategories", undefined, true);
         };
+        /**
+         * Gets map areas for use with the getAlertsByMapAreas function.
+         * @return {Promise.<MapArea[]>} - Map areas.
+         */
         TravelerInfoClient.prototype.getMapAreas = function () {
             return this.getJson("HighwayAlerts", "GetMapAreas");
         };
+        /**
+         * Searches for alerts that occur within a specific route segment
+         * and date range.
+         * @param {string} stateRoute - State Route ID
+         * @param {string} region - WSDOT region
+         * @param {Date} searchTimeStart - search time start
+         * @param {Date} searchTimeEnd - search time end
+         * @param {Number} startingMilepost - start milepost
+         * @param {Number} endMilepost - end milepost
+         * @returns {Promise.<Alert[]>} - An array of alerts that match the search criteria.
+         */
         TravelerInfoClient.prototype.searchAlerts = function (stateRoute, region, searchTimeStart, searchTimeEnd, startingMilepost, endingMilepost) {
+            // TODO: figure out how times are supposed to be formatted on the URL.
             return this.getJson("HighwayAlerts", "SearchAlerts", {
                 StateRoute: stateRoute,
                 Region: region,
@@ -112,24 +188,39 @@
                 EndingMilepost: endingMilepost
             });
         };
-        TravelerInfoClient.prototype.getCamera = function (cameraId) {
-            return this.getJson("HighwayCameras", "GetCamera", { "CameraID": cameraId });
-        };
+        /**
+         * Gets all cameras.
+         * @returns {Promise.<Camera[]>} - Array of all cameras.
+         */
         TravelerInfoClient.prototype.getCameras = function () {
             return this.getJson("HighwayCameras", "GetCameras");
         };
-        TravelerInfoClient.prototype.getMountainPassCondition = function (passConditionId) {
-            return this.getJson("MountainPassConditions", "GetMountainPassCondition", {
-                PassConditionId: passConditionId
-            });
+        /**
+         * Gets one specific camera.
+         * @param {string} cameraId - The unique identifier for a camera.
+         * @returns {Camera} - The camera that matches the given ID.
+         */
+        TravelerInfoClient.prototype.getCamera = function (cameraId) {
+            return this.getJson("HighwayCameras", "GetCamera", { "CameraID": cameraId });
         };
         TravelerInfoClient.prototype.getMountainPassConditions = function () {
             return this.getJson("MountainPassConditions");
         };
+        TravelerInfoClient.prototype.getMountainPassCondition = function (passConditionId) {
+            var url = this.buildApiUrl("MountainPassConditions", "GetMountainPassCondition", {
+                PassConditionId: passConditionId
+            });
+            url = url.replace(/AsJson/, "AsJon");
+            return fetch(url).then(function (response) {
+                return response.text();
+            }).then(function (text) {
+                return JSON.parse(text, reviver);
+            });
+        };
         TravelerInfoClient.prototype.getTrafficFlow = function (flowDataId) {
             return this.getJson("TrafficFlow", undefined, { FlowDataID: flowDataId });
         };
-        TravelerInfoClient.prototype.getTrafficFlows = function (flowDataId) {
+        TravelerInfoClient.prototype.getTrafficFlows = function () {
             return this.getJson("TrafficFlow", "GetTrafficFlows");
         };
         TravelerInfoClient.prototype.getTravelTime = function (travelTimeId) {
@@ -140,12 +231,24 @@
         TravelerInfoClient.prototype.getTravelTimes = function () {
             return this.getJson("TravelTimes");
         };
-        TravelerInfoClient.prototype.getCurrentWeatherInformation = function (stationId) {
-            var functionName = stationId ? "GetCurrentWeatherInformationByStationID" : "GetCurrentWeatherInformation";
-            var searchParams = stationId ? { StationID: stationId } : undefined;
-            return this.getJson("WeatherInformation", functionName, searchParams);
+        /**
+         * Gets current weather information.
+         * @returns {Promise.<WeatherInfo[]>} - an array WeatherInfo objects for all stations.
+         */
+        TravelerInfoClient.prototype.getCurrentWeatherInformation = function () {
+            return this.getJson("WeatherInformation", "GetCurrentWeatherInformation");
+        };
+        /**
+         * Gets current weather information.
+         * @param {string} stationId - Provide a station ID to only return a single weather station's info. Omit to return all.
+         * @returns {Promise.<WeatherInfo>} - a single WeatherInfo object.
+         */
+        TravelerInfoClient.prototype.getCurrentWeatherInformationById = function (stationId) {
+            var searchParams = { StationID: stationId };
+            return this.getJson("WeatherInformation", "GetCurrentWeatherInformationByStationID", searchParams);
         };
         TravelerInfoClient.prototype.searchWeatherInformation = function (stationId, searchStartTime, searchEndTime) {
+            // TODO: Determine how to format time in URL.
             return this.getJson("WeatherInformation", "SearchWeatherInformation", {
                 StationID: stationId,
                 SearchStartTime: searchStartTime,
