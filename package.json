@@ -14,12 +14,18 @@
     "info",
     "information"
   ],
+  "repository": {
+    "type": "git",
+    "url": "WSDOT-GIS/wsdot-traveler-info-js"
+  },
   "author": "WSDOT",
   "license": "Unlicense",
   "devDependencies": {
     "jasmine": "^2.4.1"
   },
   "dependencies": {
-    "node-fetch": "^1.5.2"
+    "node-fetch": "^1.5.2",
+    "urlsearchparams": "^0.1.1",
+    "whatwg-url": "^2.0.1"
   }
 }

@@ -6,59 +6,22 @@
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define(["require", "exports"], factory);
+        define(["require", "exports", "./CommonUtils"], factory);
     }
 })(function (require, exports) {
     "use strict";
     // To use the Fetch API in node, the node-fetch module is required.
     // Older web browsers may require a polyfill.
+    var CommonUtils_1 = require("./CommonUtils");
     var fetch = typeof window === "undefined" ? require("node-fetch") : window.fetch;
-    /**
-     * Parses a WCF formatted string.
-     * @param {string} dateString - A WCF formatted string.
-     * @returns {(Date|string)} If the input is a valid WCF formatted date string,
-     * a Date object will be returned. Otherwise the original string will be returned.
-     */
-    function parseWcfDate(dateString) {
-        var wcfDateRe = /^\/Date\((\d+)([+\-]\d+)?\)\/$/i;
-        if (typeof dateString === "string") {
-            var match = dateString.match(wcfDateRe);
-            if (match) {
-                // Remove the whole match, the first item in array.
-                // Parse remaining into numbers.
-                var numParts = match.slice(1).map(Number);
-                return new Date(numParts[0] + numParts[1]);
-            }
-        }
-        return dateString;
-    }
     /**
      * Provides custom JSON parsing.
      */
     function reviver(k, v) {
         if (v && typeof v === "string") {
-            v = parseWcfDate(v);
+            v = CommonUtils_1.parseWcfDate(v);
         }
         return v;
-    }
-    function buildSearchString(searchParams) {
-        if (!searchParams) {
-            return null;
-        }
-        else {
-            var searchStringParts = [];
-            if (searchParams) {
-                for (var key in searchParams) {
-                    if (searchParams.hasOwnProperty(key)) {
-                        var element = searchParams[key];
-                        if (element != null) {
-                            searchStringParts.push(key + "=" + element);
-                        }
-                    }
-                }
-            }
-            return searchStringParts.join("&");
-        }
     }
     /**
      * Client for the WSDOT Traveler Information API.
@@ -94,7 +57,7 @@
             else if (!omitAccessCode) {
                 searchParams["accessCode"] = this.accessCode;
             }
-            var searchString = buildSearchString(searchParams);
+            var searchString = CommonUtils_1.buildSearchString(searchParams);
             if (searchString) {
                 url = [url, searchString].join("?");
             }
@@ -198,14 +161,23 @@
         /**
          * Gets one specific camera.
          * @param {string} cameraId - The unique identifier for a camera.
-         * @returns {Camera} - The camera that matches the given ID.
+         * @returns {Promise.<Camera>} - The camera that matches the given ID.
          */
         TravelerInfoClient.prototype.getCamera = function (cameraId) {
             return this.getJson("HighwayCameras", "GetCamera", { "CameraID": cameraId });
         };
+        /**
+         * Gets mountain pass conditions
+         * @returns {Promise.<PassCondition[]>} - Array of pass condition objects.
+         */
         TravelerInfoClient.prototype.getMountainPassConditions = function () {
             return this.getJson("MountainPassConditions");
         };
+        /**
+         * Gets conditions for a single mountain pass.
+         * @param {number} passConditionId - Unique identifier for a pass condition.
+         * @returns {Promise.<PassCondition>} - A pass condition object.
+         */
         TravelerInfoClient.prototype.getMountainPassCondition = function (passConditionId) {
             var url = this.buildApiUrl("MountainPassConditions", "GetMountainPassCondition", {
                 PassConditionId: passConditionId
@@ -217,11 +189,15 @@
                 return JSON.parse(text, reviver);
             });
         };
-        TravelerInfoClient.prototype.getTrafficFlow = function (flowDataId) {
-            return this.getJson("TrafficFlow", undefined, { FlowDataID: flowDataId });
-        };
+        /**
+         * Gets traffic flow data for all locations.
+         * @returns {Promise.<FlowData[]>} - Traffic flow data.
+         */
         TravelerInfoClient.prototype.getTrafficFlows = function () {
             return this.getJson("TrafficFlow", "GetTrafficFlows");
+        };
+        TravelerInfoClient.prototype.getTrafficFlow = function (flowDataId) {
+            return this.getJson("TrafficFlow", undefined, { FlowDataID: flowDataId });
         };
         TravelerInfoClient.prototype.getTravelTime = function (travelTimeId) {
             return this.getJson("TravelTimes", "GetTravelTime", {

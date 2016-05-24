@@ -5,7 +5,7 @@
 
 interface DateRange {
     DateFrom: Date,
-    DateTo: Date
+    DateThru: Date
 }
 
 interface Terminal {

@@ -4,28 +4,9 @@
 
 // To use the Fetch API in node, the node-fetch module is required.
 // Older web browsers may require a polyfill.
+import { parseWcfDate, buildSearchString } from "./CommonUtils";
+
 let fetch = typeof window === "undefined" ? require("node-fetch") : window.fetch;
-
-/**
- * Parses a WCF formatted string.
- * @param {string} dateString - A WCF formatted string.
- * @returns {(Date|string)} If the input is a valid WCF formatted date string, 
- * a Date object will be returned. Otherwise the original string will be returned.
- */
-function parseWcfDate(dateString: string): Date | string {
-    let wcfDateRe = /^\/Date\((\d+)([+\-]\d+)?\)\/$/i;
-    if (typeof dateString === "string") {
-        let match: string[] = dateString.match(wcfDateRe);
-        if (match) {
-            // Remove the whole match, the first item in array.
-            // Parse remaining into numbers.
-            let numParts: number[] = match.slice(1).map(Number);
-            return new Date(numParts[0] + numParts[1]);
-        }
-    }
-    return dateString;
-}
-
 /**
  * Provides custom JSON parsing.
  */
@@ -35,25 +16,6 @@ function reviver(k: string, v: any): any {
     }
 
     return v;
-}
-
-function buildSearchString(searchParams: Object): string {
-    if (!searchParams) {
-        return null;
-    } else {
-        let searchStringParts: string[] = [];
-        if (searchParams) {
-            for (var key in searchParams) {
-                if (searchParams.hasOwnProperty(key)) {
-                    var element = searchParams[key];
-                    if (element != null) {
-                        searchStringParts.push(`${key}=${element}`);
-                    }
-                }
-            }
-        }
-        return searchStringParts.join("&");
-    }
 }
 
 /**
@@ -67,7 +29,7 @@ export default class TravelerInfoClient {
      */
     private buildApiUrl(operation: string, functionName: string = `Get${operation}`, searchParams?: Object, omitAccessCode: boolean = false): string {
         let url = `http://wsdot.wa.gov/Traffic/api/${operation}/${operation}REST.svc/${functionName}AsJson`;
-        
+
         if (!searchParams && !omitAccessCode) {
             searchParams = {
                 AccessCode: this.accessCode
@@ -75,7 +37,7 @@ export default class TravelerInfoClient {
         } else if (!omitAccessCode) {
             searchParams["accessCode"] = this.accessCode;
         }
-        
+
 
         let searchString = buildSearchString(searchParams);
         if (searchString) {
@@ -191,31 +153,44 @@ export default class TravelerInfoClient {
     /**
      * Gets one specific camera.
      * @param {string} cameraId - The unique identifier for a camera.
-     * @returns {Camera} - The camera that matches the given ID.
+     * @returns {Promise.<Camera>} - The camera that matches the given ID.
      */
     getCamera(cameraId: string): Promise<Camera> {
         return this.getJson("HighwayCameras", "GetCamera", { "CameraID": cameraId });
     }
+    /**
+     * Gets mountain pass conditions
+     * @returns {Promise.<PassCondition[]>} - Array of pass condition objects.
+     */
     getMountainPassConditions(): Promise<PassCondition[]> {
         return this.getJson("MountainPassConditions");
     }
+    /**
+     * Gets conditions for a single mountain pass.
+     * @param {number} passConditionId - Unique identifier for a pass condition.
+     * @returns {Promise.<PassCondition>} - A pass condition object.
+     */
     getMountainPassCondition(passConditionId: number): Promise<PassCondition> {
         var url = this.buildApiUrl("MountainPassConditions", "GetMountainPassCondition", {
-           PassConditionId: passConditionId 
+            PassConditionId: passConditionId
         });
         url = url.replace(/AsJson/, "AsJon");
-        return fetch(url).then(function(response) {
+        return fetch(url).then(function (response) {
             return response.text();
         }).then(function (text) {
             return JSON.parse(text, reviver);
         });
     }
-    
-    getTrafficFlow(flowDataId: number): Promise<FlowData> {
-        return this.getJson("TrafficFlow", undefined, { FlowDataID: flowDataId });
-    }
+
+    /**
+     * Gets traffic flow data for all locations.
+     * @returns {Promise.<FlowData[]>} - Traffic flow data.
+     */
     getTrafficFlows(): Promise<FlowData[]> {
         return this.getJson("TrafficFlow", "GetTrafficFlows");
+    }
+    getTrafficFlow(flowDataId: number): Promise<FlowData> {
+        return this.getJson("TrafficFlow", undefined, { FlowDataID: flowDataId });
     }
     getTravelTime(travelTimeId: number): Promise<TravelTimeRoute> {
         return this.getJson("TravelTimes", "GetTravelTime", {
