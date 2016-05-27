@@ -100,7 +100,7 @@
         };
         ;
         FerriesClient.prototype.getTerminalMates = function (tripDate, terminalId) {
-            var url = this.apiRoot + "terminalmates/" + tripDate + "/" + terminalId + "?apiaccesscode=" + this.apiAccessCode;
+            var url = this.apiRoot + "terminalmates/" + formatDate(tripDate) + "/" + terminalId + "?apiaccesscode=" + this.apiAccessCode;
             // TODO: enable caching for dates.
             return fetch(url).then(function (response) {
                 return response.json();
@@ -108,11 +108,38 @@
         };
         ;
         FerriesClient.prototype.getTerminalCombo = function (tripDate, departingTerminalId, arrivingTerminalId) {
-            var url = this.apiRoot + "terminalcombo/" + tripDate + "/" + departingTerminalId + "/" + arrivingTerminalId + "?apiaccesscode=" + this.apiAccessCode;
+            var url = this.apiRoot + "terminalcombo/" + formatDate(tripDate) + "/" + departingTerminalId + "/" + arrivingTerminalId + "?apiaccesscode=" + this.apiAccessCode;
             // TODO: enable caching
             return fetch(url).then(function (response) {
                 return response.json();
             });
+        };
+        FerriesClient.prototype.getTerminalComboVerbose = function (tripDate, departingTerminalId, arrivingTerminalId) {
+            var url = this.apiRoot + "terminalcomboverbose/" + formatDate(tripDate) + "?apiaccesscode=" + this.apiAccessCode;
+            // TODO: enable caching
+            return fetch(url).then(function (response) {
+                return response.json();
+            });
+        };
+        FerriesClient.prototype.getFareLineItems = function (tripDate, departingTerminalId, arrivingTerminalId, roundTrip, basic) {
+            if (basic === void 0) { basic = false; }
+            var url = this.apiRoot + "farelineitems" + (basic ? "basic" : "") + "/" + formatDate(tripDate) + "/" + departingTerminalId + "/" + arrivingTerminalId + "/" + roundTrip + "?apiaccesscode=" + this.apiAccessCode;
+            // TODO: enable caching
+            return fetch(url).then(function (response) {
+                return response.json();
+            });
+        };
+        FerriesClient.prototype.getFareLineItemsVerbose = function (tripDate) {
+            var url = this.apiRoot + "farelineitemsverbose/" + formatDate(tripDate) + "?apiaccesscode=" + this.apiAccessCode;
+            // TODO: enable caching
+            return fetch(url).then(function (response) {
+                return response.json();
+            });
+        };
+        FerriesClient.prototype.getFareTotals = function (tripDate, departingTerminalId, arrivingTerminalId, roundTrip, farelineItemId, quantity) {
+            var url = this.apiRoot + "faretotals/" + formatDate(tripDate) + "/" + departingTerminalId + "/" + arrivingTerminalId + "/" + roundTrip + "/" + farelineItemId + "/" + quantity + "?apiaccesscode=" + this.apiAccessCode;
+            // TODO: enable caching.
+            return fetch(url).then(function (response) { return response.json(); });
         };
         return FerriesClient;
     }());

@@ -92,19 +92,72 @@ export default class FerriesClient {
         // TODO: enable caching for dates.
         return f(); //this.getValueFromCacheOrRemote
     };
-    getTerminalMates(tripDate: Date, terminalId:number):Promise<Terminal[]> {
-        let url = `${this.apiRoot}terminalmates/${tripDate}/${terminalId}?apiaccesscode=${this.apiAccessCode}`;
+    getTerminalMates(tripDate: Date, terminalId: number): Promise<Terminal[]> {
+        let url = `${this.apiRoot}terminalmates/${formatDate(tripDate)}/${terminalId}?apiaccesscode=${this.apiAccessCode}`;
         // TODO: enable caching for dates.
-        return fetch(url).then(function(response){
+        return fetch(url).then(function (response) {
             return response.json();
         });
     };
-    getTerminalCombo(tripDate:Date, departingTerminalId: number, arrivingTerminalId: number):Promise<TerminalCombo> {
-        let url = `${this.apiRoot}terminalcombo/${tripDate}/${departingTerminalId}/${arrivingTerminalId}?apiaccesscode=${this.apiAccessCode}`;
-        
+    getTerminalCombo(
+        tripDate: Date,
+        departingTerminalId: number,
+        arrivingTerminalId: number
+    ): Promise<TerminalCombo> {
+        let url = `${this.apiRoot}terminalcombo/${formatDate(tripDate)}/${departingTerminalId}/${arrivingTerminalId}?apiaccesscode=${this.apiAccessCode}`;
+
         // TODO: enable caching
-        return fetch(url).then(function(response) {
+        return fetch(url).then(function (response) {
             return response.json();
         });
+    }
+    getTerminalComboVerbose(
+        tripDate: Date,
+        departingTerminalId: number,
+        arrivingTerminalId: number
+    ): Promise<TerminalComboVerbose[]> {
+        let url = `${this.apiRoot}terminalcomboverbose/${formatDate(tripDate)}?apiaccesscode=${this.apiAccessCode}`;
+
+        // TODO: enable caching
+        return fetch(url).then((response) => {
+            return response.json();
+        });
+    }
+
+    getFareLineItems(
+        tripDate: Date,
+        departingTerminalId: number,
+        arrivingTerminalId: number,
+        roundTrip: boolean, basic: boolean = false
+    ): Promise<FareLineItem[]> {
+        let url = `${this.apiRoot}farelineitems${basic ? "basic" : ""}/${formatDate(tripDate)}/${departingTerminalId}/${arrivingTerminalId}/${roundTrip}?apiaccesscode=${this.apiAccessCode}`;
+
+        // TODO: enable caching
+        return fetch(url).then((response) => {
+            return response.json();
+        });
+    }
+
+    getFareLineItemsVerbose(tripDate: Date): Promise<VerboseFareLineItem> {
+        let url = `${this.apiRoot}farelineitemsverbose/${formatDate(tripDate)}?apiaccesscode=${this.apiAccessCode}`;
+
+        // TODO: enable caching
+        return fetch(url).then((response) => {
+            return response.json();
+        });
+    }
+
+    getFareTotals(
+        tripDate: Date,
+        departingTerminalId: number,
+        arrivingTerminalId: number,
+        roundTrip: boolean,
+        farelineItemId: number,
+        quantity: number
+    ): Promise<FareTotal[]> {
+        let url = `${this.apiRoot}faretotals/${formatDate(tripDate)}/${departingTerminalId}/${arrivingTerminalId}/${roundTrip}/${farelineItemId}/${quantity}?apiaccesscode=${this.apiAccessCode}`;
+
+        // TODO: enable caching.
+        return fetch(url).then((response) => { return response.json(); });
     }
 }

@@ -53,8 +53,8 @@ declare enum FareTotalType  {
 }
 
 interface FareTotal {
-    FareTotalType: FareTotalType,
+    TotalType: FareTotalType,
     Description: string,
-    BreifDescription: string,
+    BriefDescription: string,
     Amount: number
 }
