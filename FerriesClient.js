@@ -82,7 +82,7 @@
          */
         FerriesClient.prototype.getValueFromCacheOrRemote = function (propertyName, remoteFunction) {
             var self = this;
-            if (!this[propertyName]) {
+            if (!self[propertyName]) {
                 return remoteFunction();
             }
             else {

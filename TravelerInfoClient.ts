@@ -27,7 +27,7 @@ export default class TravelerInfoClient {
      * Constructs an API URL.
      * @returns {string} - API URL.
      */
-    private buildApiUrl(operation: string, functionName: string = `Get${operation}`, searchParams?: Object, omitAccessCode: boolean = false): string {
+    private buildApiUrl(operation: string, functionName: string = `Get${operation}`, searchParams?: any, omitAccessCode: boolean = false): string {
         let url = `http://wsdot.wa.gov/Traffic/api/${operation}/${operation}REST.svc/${functionName}AsJson`;
 
         if (!searchParams && !omitAccessCode) {
@@ -50,9 +50,9 @@ export default class TravelerInfoClient {
      */
     private getJson(operation: string, functionName: string = `Get${operation}`, searchParams?: Object, omitAccessCode: boolean = false): Promise<any> {
         let url = this.buildApiUrl(operation, functionName, searchParams);
-        return fetch(url).then(function (response) {
+        return fetch(url).then(function (response:Response) {
             return response.text();
-        }).then(function (s) {
+        }).then(function (s:string) {
             return JSON.parse(s, reviver);
         });
     }
@@ -175,9 +175,9 @@ export default class TravelerInfoClient {
             PassConditionId: passConditionId
         });
         url = url.replace(/AsJson/, "AsJon");
-        return fetch(url).then(function (response) {
+        return fetch(url).then(function (response:Response) {
             return response.text();
-        }).then(function (text) {
+        }).then(function (text:string) {
             return JSON.parse(text, reviver);
         });
     }

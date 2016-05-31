@@ -29,15 +29,15 @@ export function parseWcfDate(dateString: string): Date | string {
  * Builds a search string.
  * @param {?Object} searchParams - Search parameters.
  */
-export function buildSearchString(searchParams?: Object): string {
+export function buildSearchString(searchParams?: any): string {
     if (!searchParams) {
         return null;
     } else {
         let searchStringParts: string[] = [];
         if (searchParams) {
-            for (var key in searchParams) {
+            for (let key in searchParams) {
                 if (searchParams.hasOwnProperty(key)) {
-                    var element = searchParams[key];
+                    let element:any = searchParams[key];
                     if (element != null) {
                         searchStringParts.push(`${encodeURIComponent(key)}=${encodeURIComponent(element)}`);
                     }

@@ -5,7 +5,7 @@ import TravelerInfoClient from "../TravelerInfoClient";
 let apiKey = "3a364cc8-0538-48f6-a08b-f1317f95fd7d";
 let client = new TravelerInfoClient(apiKey);
 
-function runGenericTests(response) {
+function runGenericTests(response:Array<any>) {
     expect(Array.isArray(response)).toBe(true);
     expect(response.length).toBeGreaterThan(1);
     let allItemsAreObjects = true;

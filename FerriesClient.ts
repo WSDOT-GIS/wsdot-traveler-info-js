@@ -38,7 +38,7 @@ export default class FerriesClient {
      * @param {string} apiAccessCode - Get an access code {@link http://www.wsdot.wa.gov/traffic/api/ here}.
      * @param {string} [apiRoot="http://www.wsdot.wa.gov/ferries/api/fares/rest/"] - Root of the API URL. You only need to set this if the URL changes before this library is updated. 
      */
-    constructor(public apiAccessCode, public apiRoot: string = "http://www.wsdot.wa.gov/ferries/api/fares/rest/") {}
+    constructor(public apiAccessCode:string, public apiRoot: string = "http://www.wsdot.wa.gov/ferries/api/fares/rest/") {}
     
     /**
      * Gets the cache flush date.
@@ -46,9 +46,9 @@ export default class FerriesClient {
      */
     getCacheFlushDate(): Promise<Date> {
         let url = `${this.apiRoot}cacheflushdate`;
-        return fetch(url).then(function (response) {
+        return fetch(url).then(function (response:Response) {
             return response.text();
-        }).then(function (dateString) {
+        }).then(function (dateString:string) {
             var d = new Date(dateString);
             return d;
         });
@@ -77,11 +77,11 @@ export default class FerriesClient {
      * @private
      */
     private getValueFromCacheOrRemote(propertyName: string, remoteFunction: Function): Promise<any> {
-        let self = this;
-        if (!this[propertyName]) {
+        let self:any = this;
+        if (!self[propertyName]) {
             return remoteFunction();
         } else {
-            return self.hasCacheBeenUpdated().then(function (isUpdated) {
+            return self.hasCacheBeenUpdated().then(function (isUpdated:boolean) {
                 if (!isUpdated && self[propertyName]) {
                     return self[propertyName];
                 } else {
@@ -98,9 +98,9 @@ export default class FerriesClient {
         let url = `${this.apiRoot}validdaterange?apiaccesscode=${this.apiAccessCode}`;
         let self = this;
         let getDateRangeFunc = function () {
-            return fetch(url).then(function (response) {
+            return fetch(url).then(function (response:Response) {
                 return response.text();
-            }).then(function (txt) {
+            }).then(function (txt:string) {
                 self.dateRange = JSON.parse(txt, function (k, v) {
                     var date: Date | string;
                     if (/Date/i.test(k)) {
@@ -122,7 +122,7 @@ export default class FerriesClient {
     getTerminals(tripDate: Date): Promise<Terminal[]> {
         let url = `${this.apiRoot}terminals/${formatDate(tripDate)}?apiaccesscode=${this.apiAccessCode}`;
         let f = function (): Promise<Terminal[]> {
-            return fetch(url).then(function (response) {
+            return fetch(url).then(function (response:Response) {
                 return response.json();
             });
         }
@@ -138,7 +138,7 @@ export default class FerriesClient {
     getTerminalMates(tripDate: Date, terminalId: number): Promise<Terminal[]> {
         let url = `${this.apiRoot}terminalmates/${formatDate(tripDate)}/${terminalId}?apiaccesscode=${this.apiAccessCode}`;
         // TODO: enable caching for dates.
-        return fetch(url).then(function (response) {
+        return fetch(url).then(function (response:Response) {
             return response.json();
         });
     };
@@ -157,7 +157,7 @@ export default class FerriesClient {
         let url = `${this.apiRoot}terminalcombo/${formatDate(tripDate)}/${departingTerminalId}/${arrivingTerminalId}?apiaccesscode=${this.apiAccessCode}`;
 
         // TODO: enable caching
-        return fetch(url).then(function (response) {
+        return fetch(url).then(function (response:Response) {
             return response.json();
         });
     }
@@ -175,7 +175,7 @@ export default class FerriesClient {
         let url = `${this.apiRoot}terminalcomboverbose/${formatDate(tripDate)}?apiaccesscode=${this.apiAccessCode}`;
 
         // TODO: enable caching
-        return fetch(url).then((response) => {
+        return fetch(url).then((response:Response) => {
             return response.json();
         });
     }
@@ -197,7 +197,7 @@ export default class FerriesClient {
         let url = `${this.apiRoot}farelineitems${basic ? "basic" : ""}/${formatDate(tripDate)}/${departingTerminalId}/${arrivingTerminalId}/${roundTrip}?apiaccesscode=${this.apiAccessCode}`;
 
         // TODO: enable caching
-        return fetch(url).then((response) => {
+        return fetch(url).then((response:Response) => {
             return response.json();
         });
     }
@@ -211,7 +211,7 @@ export default class FerriesClient {
         let url = `${this.apiRoot}farelineitemsverbose/${formatDate(tripDate)}?apiaccesscode=${this.apiAccessCode}`;
 
         // TODO: enable caching
-        return fetch(url).then((response) => {
+        return fetch(url).then((response:Response) => {
             return response.json();
         });
     }
@@ -236,6 +236,6 @@ export default class FerriesClient {
         let url = `${this.apiRoot}faretotals/${formatDate(tripDate)}/${departingTerminalId}/${arrivingTerminalId}/${roundTrip}/${farelineItemId}/${quantity}?apiaccesscode=${this.apiAccessCode}`;
 
         // TODO: enable caching.
-        return fetch(url).then((response) => { return response.json(); });
+        return fetch(url).then((response:Response) => { return response.json(); });
     }
 }
