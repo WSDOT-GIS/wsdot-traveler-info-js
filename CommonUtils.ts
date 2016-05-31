@@ -1,4 +1,10 @@
 /// <amd-module name="CommonUtils" />
+
+/**
+ * Provides common functions for other modules.
+ * @module CommonUtils
+ */
+
 /**
  * Parses a WCF formatted string.
  * @param {string} dateString - A WCF formatted string.

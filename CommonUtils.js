@@ -1,3 +1,4 @@
+/// <amd-module name="CommonUtils" />
 (function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
@@ -7,7 +8,10 @@
     }
 })(function (require, exports) {
     "use strict";
-    /// <amd-module name="CommonUtils" />
+    /**
+     * Provides common functions for other modules.
+     * @module CommonUtils
+     */
     /**
      * Parses a WCF formatted string.
      * @param {string} dateString - A WCF formatted string.
