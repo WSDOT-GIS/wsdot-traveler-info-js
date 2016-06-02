@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "WSDOT-GIS/wsdot-traveler-info-js"
+    "url": "git+https://github.com/wsdot-gis/wsdot-traveler-info-js.git"
   },
   "author": "WSDOT",
   "license": "Unlicense",
@@ -25,5 +25,9 @@
   },
   "dependencies": {
     "node-fetch": "^1.5.2"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/wsdot-gis/wsdot-traveler-info-js/issues"
+  },
+  "homepage": "https://github.com/wsdot-gis/wsdot-traveler-info-js#readme"
 }

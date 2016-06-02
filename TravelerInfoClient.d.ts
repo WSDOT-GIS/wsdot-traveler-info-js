@@ -110,6 +110,6 @@ export default class TravelerInfoClient {
      * @returns {Promise.<WeatherInfo>} - a single WeatherInfo object.
      */
     getCurrentWeatherInformationById(stationId: number): Promise<WeatherInfo>;
-    searchWeatherInformation(stationId: number, searchStartTime: Date, searchEndTime: Date): Promise<WeatherInfo>;
+    searchWeatherInformation(stationId: number, searchStartTime: Date, searchEndTime: Date): Promise<WeatherInfo[]>;
     getCurrentStations(): Promise<WeatherStationData[]>;
 }

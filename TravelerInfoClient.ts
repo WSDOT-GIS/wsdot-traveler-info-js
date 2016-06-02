@@ -216,7 +216,7 @@ export default class TravelerInfoClient {
         let searchParams = { StationID: stationId };
         return this.getJson("WeatherInformation", "GetCurrentWeatherInformationByStationID", searchParams);
     }
-    searchWeatherInformation(stationId: number, searchStartTime: Date, searchEndTime: Date): Promise<WeatherInfo> {
+    searchWeatherInformation(stationId: number, searchStartTime: Date, searchEndTime: Date): Promise<WeatherInfo[]> {
         // TODO: Determine how to format time in URL.
         return this.getJson("WeatherInformation", "SearchWeatherInformation", {
             StationID: stationId,

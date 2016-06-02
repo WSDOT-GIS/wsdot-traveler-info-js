@@ -1,6 +1,8 @@
 /*eslint-env jasmine*/
 /// <reference path="../typings/index.d.ts" />
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
+
 import TravelerInfoClient from "../TravelerInfoClient";
 let apiKey = "3a364cc8-0538-48f6-a08b-f1317f95fd7d";
 let client = new TravelerInfoClient(apiKey);
@@ -206,14 +208,18 @@ describe("Traveler Info API client test", function () {
         it("should be able to search weather info for a single station", function (done) {
             let stationId = 1909;
             let startTime:Date, endTime:Date;
-            startTime = endTime = new Date(Date.now());
+            startTime = new Date();
+            endTime = new Date(startTime.getTime());
             startTime.setHours(0);
             startTime.setMinutes(0);
             startTime.setSeconds(0);
             startTime.setMilliseconds(0);
             
-            client.searchWeatherInformation(stationId, startTime, endTime).then(function (weatherInfo) {
-                expect(weatherInfo.StationID).toEqual(stationId);
+            client.searchWeatherInformation(stationId, startTime, endTime).then(function (weatherInfos) {
+                expect(Array.isArray(weatherInfos)).toEqual(true);
+                if (weatherInfos.length > 0) {
+                    expect(weatherInfos[0].StationID).toEqual(stationId);
+                }
                 done();
             }, function (error: Error) {
                 done.fail(error);
