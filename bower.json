@@ -1,0 +1,29 @@
+{
+  "name": "wsdot-traveler-info-js",
+  "description": "Client for WSDOT Traveler Info API",
+  "main": "TravelerInfoClient.js",
+  "authors": [
+    "WSDOT"
+  ],
+  "license": "Unlicense",
+  "keywords": [
+    "WSDOT",
+    "traveler",
+    "traffic",
+    "info",
+    "information"
+  ],
+  "homepage": "https://github.com/WSDOT-GIS/wsdot-traveler-info-js",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jasmine-core": "jasmine#^2.4.1",
+    "requirejs": "^2.2.0"
+  }
+}

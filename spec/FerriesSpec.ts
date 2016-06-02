@@ -2,7 +2,7 @@
 
 import FerriesClient from "../FerriesClient";
 
-describe("Ferries", function () {
+export default describe("Ferries", function () {
     let client = new FerriesClient("3a364cc8-0538-48f6-a08b-f1317f95fd7d");
     let tripDate: Date = new Date();
     let terminalId: number = 1;

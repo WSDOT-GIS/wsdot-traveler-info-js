@@ -32,6 +32,11 @@
         return dateString;
     }
     exports.parseWcfDate = parseWcfDate;
+    /**
+     * Converts a date into a WCF formatted date string.
+     * @param {Date} date - A date
+     * @returns {string} WCF date string.
+     */
     function toWcfDate(date) {
         return "/Date(" + date.getTime() + ")/";
     }

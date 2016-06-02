@@ -9,6 +9,11 @@
  * a Date object will be returned. Otherwise the original string will be returned.
  */
 export declare function parseWcfDate(dateString: string): Date | string;
+/**
+ * Converts a date into a WCF formatted date string.
+ * @param {Date} date - A date
+ * @returns {string} WCF date string.
+ */
 export declare function toWcfDate(date: Date): string;
 /**
  * Builds a search string.

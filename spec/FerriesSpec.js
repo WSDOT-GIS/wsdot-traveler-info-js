@@ -9,7 +9,8 @@
 })(function (require, exports) {
     "use strict";
     var FerriesClient_1 = require("../FerriesClient");
-    describe("Ferries", function () {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = describe("Ferries", function () {
         var client = new FerriesClient_1.default("3a364cc8-0538-48f6-a08b-f1317f95fd7d");
         var tripDate = new Date();
         var terminalId = 1;

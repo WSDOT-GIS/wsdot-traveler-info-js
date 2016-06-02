@@ -25,6 +25,11 @@ export function parseWcfDate(dateString: string): Date | string {
     return dateString;
 }
 
+/**
+ * Converts a date into a WCF formatted date string.
+ * @param {Date} date - A date
+ * @returns {string} WCF date string.
+ */
 export function toWcfDate(date: Date): string {
     return `/Date(${date.getTime()})/`;
 }
