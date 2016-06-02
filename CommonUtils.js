@@ -32,6 +32,10 @@
         return dateString;
     }
     exports.parseWcfDate = parseWcfDate;
+    function toWcfDate(date) {
+        return "/Date(" + date.getTime() + ")/";
+    }
+    exports.toWcfDate = toWcfDate;
     /**
      * Builds a search string.
      * @param {?Object} searchParams - Search parameters.
@@ -45,9 +49,12 @@
             if (searchParams) {
                 for (var key in searchParams) {
                     if (searchParams.hasOwnProperty(key)) {
-                        var element = searchParams[key];
-                        if (element != null) {
-                            searchStringParts.push(encodeURIComponent(key) + "=" + encodeURIComponent(element));
+                        var val = searchParams[key];
+                        if (val != null) {
+                            if (val instanceof Date) {
+                                val = val.toISOString();
+                            }
+                            searchStringParts.push(encodeURIComponent(key) + "=" + encodeURIComponent(val));
                         }
                     }
                 }

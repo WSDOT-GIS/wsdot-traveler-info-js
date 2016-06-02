@@ -1,4 +1,6 @@
 typings/
+bower_components
+*Spec.d.ts
 
 # Logs
 logs

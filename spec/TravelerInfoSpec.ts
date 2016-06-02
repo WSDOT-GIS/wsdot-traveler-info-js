@@ -71,7 +71,7 @@ describe("Traveler Info API client test", function () {
 
         });
 
-        xit("should be able to search for alerts", function (done) {
+        it("should be able to search for alerts", function (done) {
             allAlertsPromise.then(function (response) {
                 let alert: Alert = response[0];
                 client.searchAlerts(alert.StartRoadwayLocation.RoadName,
@@ -203,7 +203,7 @@ describe("Traveler Info API client test", function () {
             });
         });
 
-        xit("should be able to get weather info for a single station", function (done) {
+        it("should be able to search weather info for a single station", function (done) {
             let stationId = 1909;
             let startTime:Date, endTime:Date;
             startTime = endTime = new Date(Date.now());

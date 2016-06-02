@@ -25,6 +25,10 @@ export function parseWcfDate(dateString: string): Date | string {
     return dateString;
 }
 
+export function toWcfDate(date: Date): string {
+    return `/Date(${date.getTime()})/`;
+}
+
 /**
  * Builds a search string.
  * @param {?Object} searchParams - Search parameters.
@@ -37,9 +41,12 @@ export function buildSearchString(searchParams?: any): string {
         if (searchParams) {
             for (let key in searchParams) {
                 if (searchParams.hasOwnProperty(key)) {
-                    let element:any = searchParams[key];
-                    if (element != null) {
-                        searchStringParts.push(`${encodeURIComponent(key)}=${encodeURIComponent(element)}`);
+                    let val:any = searchParams[key];
+                    if (val != null) {
+                        if (val instanceof Date) {
+                            val = val.toISOString();
+                        }
+                        searchStringParts.push(`${encodeURIComponent(key)}=${encodeURIComponent(val)}`);
                     }
                 }
             }

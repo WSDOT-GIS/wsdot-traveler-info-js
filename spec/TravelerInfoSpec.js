@@ -70,7 +70,7 @@
                     });
                 });
             });
-            xit("should be able to search for alerts", function (done) {
+            it("should be able to search for alerts", function (done) {
                 allAlertsPromise.then(function (response) {
                     var alert = response[0];
                     client.searchAlerts(alert.StartRoadwayLocation.RoadName, alert.Region, alert.StartTime, new Date(), alert.StartRoadwayLocation.MilePost, alert.EndRoadwayLocation.MilePost).then(function (alerts) {
@@ -184,7 +184,7 @@
                     done.fail(error);
                 });
             });
-            xit("should be able to get weather info for a single station", function (done) {
+            it("should be able to search weather info for a single station", function (done) {
                 var stationId = 1909;
                 var startTime, endTime;
                 startTime = endTime = new Date(Date.now());
