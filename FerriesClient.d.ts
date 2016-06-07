@@ -1,20 +1,24 @@
 /// <reference path="typings/index.d.ts" />
 /// <reference path="Ferries.d.ts" />
+/// <reference path="index.d.ts" />
 /**
  * Client for Ferries API.
  * @alias module:FerriesClient
  */
 export default class FerriesClient {
     apiAccessCode: string;
+    useCallback: boolean;
     apiRoot: string;
     private lastFlushDate;
     private dateRange;
     /**
      * Creates a new instance of the client class.
      * @param {string} apiAccessCode - Get an access code {@link http://www.wsdot.wa.gov/traffic/api/ here}.
+     * @param {Boolean} useCallback - Set to true for browsers since API is not CORS-compatible.
      * @param {string} [apiRoot="http://www.wsdot.wa.gov/ferries/api/fares/rest/"] - Root of the API URL. You only need to set this if the URL changes before this library is updated.
      */
-    constructor(apiAccessCode: string, apiRoot?: string);
+    constructor(apiAccessCode: string, useCallback?: boolean, apiRoot?: string);
+    private callbackSuffix;
     /**
      * Gets the cache flush date.
      * @returns {Promise.<Date>} - The date the info was last updated.

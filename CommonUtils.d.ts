@@ -2,6 +2,7 @@
  * Provides common functions for other modules.
  * @module CommonUtils
  */
+export declare let wcfDateRe: RegExp;
 /**
  * Parses a WCF formatted string.
  * @param {string} dateString - A WCF formatted string.
@@ -20,3 +21,7 @@ export declare function toWcfDate(date: Date): string;
  * @param {?Object} searchParams - Search parameters.
  */
 export declare function buildSearchString(searchParams?: any): string;
+/**
+ * Converts properties of an object. E.g., converts Wcf date strings into Date objects.
+ */
+export declare function convertObjectProperties(o: any): void;

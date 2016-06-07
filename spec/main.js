@@ -17,7 +17,7 @@ require.config({
 });
 
 require(['jasmine/boot'], function (jasmineBoot) {
-    require(["./TravelerInfoSpec", "./FerriesSpec"], function () {
+    require(["./FerriesSpec"], function () {
         window.onload();
     });
 });

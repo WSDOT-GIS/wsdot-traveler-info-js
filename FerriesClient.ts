@@ -1,16 +1,22 @@
 /// <reference path="typings/index.d.ts" />
 /// <reference path="Ferries.d.ts" />
+/// <reference path="index.d.ts" />
+
 
 /**
  * Client for {@link http://www.wsdot.wa.gov/ferries/api/fares/documentation/ WSDOT Ferries API}.
  * @module FerriesClient
  */
 
-import { parseWcfDate } from "./CommonUtils";
+
+import { parseWcfDate, wcfDateRe, convertObjectProperties } from "./CommonUtils";
+
+
+let isBrowser = typeof window === "undefined";
 
 // To use the Fetch API in node, the node-fetch module is required.
 // Older web browsers may require a polyfill.
-let fetch = typeof window === "undefined" ? require("node-fetch") : window.fetch;
+let fetch = isBrowser ? require("node-fetch") : window.fetch;
 let dateFmt = new Intl.DateTimeFormat(undefined, {
     year: "numeric",
     month: "2-digit",
@@ -22,9 +28,61 @@ let dateFmt = new Intl.DateTimeFormat(undefined, {
  * @param {Date} theDate - Date to be formatted.
  * @returns {string}
  */
-function formatDate(theDate: Date):string {
+function formatDate(theDate: Date): string {
     return dateFmt.format(theDate).replace(/\//g, "-");
 }
+
+
+function responseToJson(response: Response): Promise<any> {
+    let reviver = function (k: string, v: any) {
+        let match: RegExpMatchArray;
+        if (v && typeof v === "string") {
+            return parseWcfDate(v);
+        }
+        return v;
+    }
+
+    return response.text().then(function (text) {
+        let re = /^\s*\w+\s*\((.+?)\);?\s*$/;
+        let match = text.match(re);
+        if (match) {
+            try {
+                return JSON.parse(match[1], reviver);
+            } catch (err) {
+                console.log(match, err);
+                throw err;
+            }
+        } else {
+            return JSON.parse(text, reviver);
+        }
+    });
+}
+
+function getJsonP(url: string): Promise<any> {
+    return new Promise(function (resolve, reject) {
+        let scriptTag = document.createElement("script");
+
+        window.wsdot_ferries_callback = function (json: any) {
+            document.head.removeChild(scriptTag);
+            convertObjectProperties(json);
+            resolve(json);
+        };
+
+        scriptTag.src = url;
+
+        document.head.appendChild(scriptTag);
+
+    });
+}
+
+function getJsonFromUrl(url: string): Promise<any> {
+    if (/&callback/.test(url)) {
+        return getJsonP(url);
+    } else {
+        return fetch(url).then(responseToJson);
+    }
+}
+
 
 /**
  * Client for Ferries API.
@@ -36,22 +94,31 @@ export default class FerriesClient {
     /**
      * Creates a new instance of the client class.
      * @param {string} apiAccessCode - Get an access code {@link http://www.wsdot.wa.gov/traffic/api/ here}.
+     * @param {Boolean} useCallback - Set to true for browsers since API is not CORS-compatible.
      * @param {string} [apiRoot="http://www.wsdot.wa.gov/ferries/api/fares/rest/"] - Root of the API URL. You only need to set this if the URL changes before this library is updated. 
      */
-    constructor(public apiAccessCode:string, public apiRoot: string = "http://www.wsdot.wa.gov/ferries/api/fares/rest/") {}
-    
+    constructor(public apiAccessCode: string, public useCallback: boolean = false, public apiRoot: string = "http://www.wsdot.wa.gov/ferries/api/fares/rest/") { }
+    private callbackSuffix: string = this.useCallback ? "&callback=wsdot_ferries_callback" : "";
+
     /**
      * Gets the cache flush date.
      * @returns {Promise.<Date>} - The date the info was last updated.
      */
     getCacheFlushDate(): Promise<Date> {
         let url = `${this.apiRoot}cacheflushdate`;
-        return fetch(url).then(function (response:Response) {
-            return response.text();
-        }).then(function (dateString:string) {
-            var d = new Date(dateString);
-            return d;
-        });
+        if (this.useCallback) {
+            url = `${url}${this.callbackSuffix.replace(/^&/, '?')}`;
+        }
+        if (!this.useCallback) {
+            return fetch(url).then(function (response: Response) {
+                return response.text();
+            }).then(function (dateString: string) {
+                var d = new Date(dateString);
+                return d;
+            });
+        } else {
+            return getJsonP(url).then(parseWcfDate);
+        }
     }
     /**
      * Gets a boolean indicating if the cache needs to be updated.
@@ -77,11 +144,11 @@ export default class FerriesClient {
      * @private
      */
     private getValueFromCacheOrRemote(propertyName: string, remoteFunction: Function): Promise<any> {
-        let self:any = this;
+        let self: any = this;
         if (!self[propertyName]) {
             return remoteFunction();
         } else {
-            return self.hasCacheBeenUpdated().then(function (isUpdated:boolean) {
+            return self.hasCacheBeenUpdated().then(function (isUpdated: boolean) {
                 if (!isUpdated && self[propertyName]) {
                     return self[propertyName];
                 } else {
@@ -95,24 +162,11 @@ export default class FerriesClient {
      * @returns {Promise.<DateRange>} - The valid date range. 
      */
     getValidDateRange(): Promise<DateRange> {
-        let url = `${this.apiRoot}validdaterange?apiaccesscode=${this.apiAccessCode}`;
+        let url = `${this.apiRoot}validdaterange?apiaccesscode=${this.apiAccessCode}${this.callbackSuffix}`;
         let self = this;
-        let getDateRangeFunc = function () {
-            return fetch(url).then(function (response:Response) {
-                return response.text();
-            }).then(function (txt:string) {
-                self.dateRange = JSON.parse(txt, function (k, v) {
-                    var date: Date | string;
-                    if (/Date/i.test(k)) {
-                        date = parseWcfDate(v);
-                    }
-                    return date || v;
-                });
-                return self.dateRange;
-            });
-        };
-
-        return this.getValueFromCacheOrRemote("dateRange", getDateRangeFunc);
+        return this.getValueFromCacheOrRemote("dateRange", function () {
+            return getJsonFromUrl(url);
+        });
     };
     /**
      * Gets an array of terminals for a specific date.
@@ -120,14 +174,10 @@ export default class FerriesClient {
      * @returns {Promise.<Terminal[]>} - An array of terminals.
      */
     getTerminals(tripDate: Date): Promise<Terminal[]> {
-        let url = `${this.apiRoot}terminals/${formatDate(tripDate)}?apiaccesscode=${this.apiAccessCode}`;
-        let f = function (): Promise<Terminal[]> {
-            return fetch(url).then(function (response:Response) {
-                return response.json();
-            });
-        }
+        let url = `${this.apiRoot}terminals/${formatDate(tripDate)}?apiaccesscode=${this.apiAccessCode}${this.callbackSuffix}`;
+        let self = this;
         // TODO: enable caching for dates.
-        return f(); //this.getValueFromCacheOrRemote
+        return getJsonFromUrl(url);
     };
     /**
      * Gets list of terminals that are destinations from a given terminal.
@@ -136,11 +186,9 @@ export default class FerriesClient {
      * @returns {Promise.<Terminal[]>} - List of terminals.
      */
     getTerminalMates(tripDate: Date, terminalId: number): Promise<Terminal[]> {
-        let url = `${this.apiRoot}terminalmates/${formatDate(tripDate)}/${terminalId}?apiaccesscode=${this.apiAccessCode}`;
+        let url = `${this.apiRoot}terminalmates/${formatDate(tripDate)}/${terminalId}?apiaccesscode=${this.apiAccessCode}${this.callbackSuffix}`;
         // TODO: enable caching for dates.
-        return fetch(url).then(function (response:Response) {
-            return response.json();
-        });
+        return getJsonFromUrl(url);
     };
     /**
      * Get information about a pair of terminals on a given date.
@@ -154,12 +202,10 @@ export default class FerriesClient {
         departingTerminalId: number,
         arrivingTerminalId: number
     ): Promise<TerminalCombo> {
-        let url = `${this.apiRoot}terminalcombo/${formatDate(tripDate)}/${departingTerminalId}/${arrivingTerminalId}?apiaccesscode=${this.apiAccessCode}`;
+        let url = `${this.apiRoot}terminalcombo/${formatDate(tripDate)}/${departingTerminalId}/${arrivingTerminalId}?apiaccesscode=${this.apiAccessCode}${this.callbackSuffix}`;
 
         // TODO: enable caching
-        return fetch(url).then(function (response:Response) {
-            return response.json();
-        });
+        return getJsonFromUrl(url);
     }
     /**
      * Gets verbose terminal combo information.
@@ -172,12 +218,10 @@ export default class FerriesClient {
         departingTerminalId: number,
         arrivingTerminalId: number
     ): Promise<TerminalComboVerbose[]> {
-        let url = `${this.apiRoot}terminalcomboverbose/${formatDate(tripDate)}?apiaccesscode=${this.apiAccessCode}`;
+        let url = `${this.apiRoot}terminalcomboverbose/${formatDate(tripDate)}?apiaccesscode=${this.apiAccessCode}${this.callbackSuffix}`;
 
         // TODO: enable caching
-        return fetch(url).then((response:Response) => {
-            return response.json();
-        });
+        return getJsonFromUrl(url);
     }
 
     /**
@@ -194,12 +238,10 @@ export default class FerriesClient {
         arrivingTerminalId: number,
         roundTrip: boolean, basic: boolean = false
     ): Promise<FareLineItem[]> {
-        let url = `${this.apiRoot}farelineitems${basic ? "basic" : ""}/${formatDate(tripDate)}/${departingTerminalId}/${arrivingTerminalId}/${roundTrip}?apiaccesscode=${this.apiAccessCode}`;
+        let url = `${this.apiRoot}farelineitems${basic ? "basic" : ""}/${formatDate(tripDate)}/${departingTerminalId}/${arrivingTerminalId}/${roundTrip}?apiaccesscode=${this.apiAccessCode}${this.callbackSuffix}`;
 
         // TODO: enable caching
-        return fetch(url).then((response:Response) => {
-            return response.json();
-        });
+        return getJsonFromUrl(url);
     }
 
     /**
@@ -208,12 +250,10 @@ export default class FerriesClient {
      * @return {Promise.<VerboseFareLineItem>} - verbose fare line items.
      */
     getFareLineItemsVerbose(tripDate: Date): Promise<VerboseFareLineItem> {
-        let url = `${this.apiRoot}farelineitemsverbose/${formatDate(tripDate)}?apiaccesscode=${this.apiAccessCode}`;
+        let url = `${this.apiRoot}farelineitemsverbose/${formatDate(tripDate)}?apiaccesscode=${this.apiAccessCode}${this.callbackSuffix}`;
 
         // TODO: enable caching
-        return fetch(url).then((response:Response) => {
-            return response.json();
-        });
+        return getJsonFromUrl(url);
     }
 
     /**
@@ -233,9 +273,9 @@ export default class FerriesClient {
         farelineItemId: number,
         quantity: number
     ): Promise<FareTotal[]> {
-        let url = `${this.apiRoot}faretotals/${formatDate(tripDate)}/${departingTerminalId}/${arrivingTerminalId}/${roundTrip}/${farelineItemId}/${quantity}?apiaccesscode=${this.apiAccessCode}`;
+        let url = `${this.apiRoot}faretotals/${formatDate(tripDate)}/${departingTerminalId}/${arrivingTerminalId}/${roundTrip}/${farelineItemId}/${quantity}?apiaccesscode=${this.apiAccessCode}${this.callbackSuffix}`;
 
         // TODO: enable caching.
-        return fetch(url).then((response:Response) => { return response.json(); });
+        return getJsonFromUrl(url);
     }
 }

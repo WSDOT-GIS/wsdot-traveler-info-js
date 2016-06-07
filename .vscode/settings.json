@@ -4,9 +4,7 @@
         "**/*.js": {
             "when": "$(basename).ts"
         },
-        "**/*.d.ts": {
-            "when": "$(basename).ts"
-        },
+        "**/*.d.ts": { "when": "$(basename).ts" },
         "**/.git": true,
         "**/.svn": true,
         "**/.DS_Store": true

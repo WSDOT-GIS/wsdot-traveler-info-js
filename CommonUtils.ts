@@ -4,6 +4,7 @@
  * Provides common functions for other modules.
  * @module CommonUtils
  */
+export let wcfDateRe:RegExp = /^\/Date\((\d+)([+\-]\d+)?\)\/$/i;
 
 /**
  * Parses a WCF formatted string.
@@ -12,7 +13,6 @@
  * a Date object will be returned. Otherwise the original string will be returned.
  */
 export function parseWcfDate(dateString: string): Date | string {
-    let wcfDateRe = /^\/Date\((\d+)([+\-]\d+)?\)\/$/i;
     if (typeof dateString === "string") {
         let match: string[] = dateString.match(wcfDateRe);
         if (match) {
@@ -57,5 +57,21 @@ export function buildSearchString(searchParams?: any): string {
             }
         }
         return searchStringParts.join("&");
+    }
+}
+
+/**
+ * Converts properties of an object. E.g., converts Wcf date strings into Date objects.
+ */
+export function convertObjectProperties(o:any):void {
+    for (let key in o) {
+        if (o.hasOwnProperty(key)) {
+            let value = o[key];
+            if (typeof value === "string" && value.length > 8) {
+                o[key] = parseWcfDate(value);
+            } else if (typeof value === "object") {
+                convertObjectProperties(value);
+            }
+        }
     }
 }

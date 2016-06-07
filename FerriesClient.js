@@ -1,5 +1,6 @@
 /// <reference path="typings/index.d.ts" />
 /// <reference path="Ferries.d.ts" />
+/// <reference path="index.d.ts" />
 (function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
@@ -14,9 +15,10 @@
      * @module FerriesClient
      */
     var CommonUtils_1 = require("./CommonUtils");
+    var isBrowser = typeof window === "undefined";
     // To use the Fetch API in node, the node-fetch module is required.
     // Older web browsers may require a polyfill.
-    var fetch = typeof window === "undefined" ? require("node-fetch") : window.fetch;
+    var fetch = isBrowser ? require("node-fetch") : window.fetch;
     var dateFmt = new Intl.DateTimeFormat(undefined, {
         year: "numeric",
         month: "2-digit",
@@ -30,6 +32,51 @@
     function formatDate(theDate) {
         return dateFmt.format(theDate).replace(/\//g, "-");
     }
+    function responseToJson(response) {
+        var reviver = function (k, v) {
+            var match;
+            if (v && typeof v === "string") {
+                return CommonUtils_1.parseWcfDate(v);
+            }
+            return v;
+        };
+        return response.text().then(function (text) {
+            var re = /^\s*\w+\s*\((.+?)\);?\s*$/;
+            var match = text.match(re);
+            if (match) {
+                try {
+                    return JSON.parse(match[1], reviver);
+                }
+                catch (err) {
+                    console.log(match, err);
+                    throw err;
+                }
+            }
+            else {
+                return JSON.parse(text, reviver);
+            }
+        });
+    }
+    function getJsonP(url) {
+        return new Promise(function (resolve, reject) {
+            var scriptTag = document.createElement("script");
+            window.wsdot_ferries_callback = function (json) {
+                document.head.removeChild(scriptTag);
+                CommonUtils_1.convertObjectProperties(json);
+                resolve(json);
+            };
+            scriptTag.src = url;
+            document.head.appendChild(scriptTag);
+        });
+    }
+    function getJsonFromUrl(url) {
+        if (/&callback/.test(url)) {
+            return getJsonP(url);
+        }
+        else {
+            return fetch(url).then(responseToJson);
+        }
+    }
     /**
      * Client for Ferries API.
      * @alias module:FerriesClient
@@ -38,12 +85,16 @@
         /**
          * Creates a new instance of the client class.
          * @param {string} apiAccessCode - Get an access code {@link http://www.wsdot.wa.gov/traffic/api/ here}.
+         * @param {Boolean} useCallback - Set to true for browsers since API is not CORS-compatible.
          * @param {string} [apiRoot="http://www.wsdot.wa.gov/ferries/api/fares/rest/"] - Root of the API URL. You only need to set this if the URL changes before this library is updated.
          */
-        function FerriesClient(apiAccessCode, apiRoot) {
+        function FerriesClient(apiAccessCode, useCallback, apiRoot) {
+            if (useCallback === void 0) { useCallback = false; }
             if (apiRoot === void 0) { apiRoot = "http://www.wsdot.wa.gov/ferries/api/fares/rest/"; }
             this.apiAccessCode = apiAccessCode;
+            this.useCallback = useCallback;
             this.apiRoot = apiRoot;
+            this.callbackSuffix = this.useCallback ? "&callback=wsdot_ferries_callback" : "";
         }
         /**
          * Gets the cache flush date.
@@ -51,12 +102,20 @@
          */
         FerriesClient.prototype.getCacheFlushDate = function () {
             var url = this.apiRoot + "cacheflushdate";
-            return fetch(url).then(function (response) {
-                return response.text();
-            }).then(function (dateString) {
-                var d = new Date(dateString);
-                return d;
-            });
+            if (this.useCallback) {
+                url = "" + url + this.callbackSuffix.replace(/^&/, '?');
+            }
+            if (!this.useCallback) {
+                return fetch(url).then(function (response) {
+                    return response.text();
+                }).then(function (dateString) {
+                    var d = new Date(dateString);
+                    return d;
+                });
+            }
+            else {
+                return getJsonP(url).then(CommonUtils_1.parseWcfDate);
+            }
         };
         /**
          * Gets a boolean indicating if the cache needs to be updated.
@@ -101,23 +160,11 @@
          * @returns {Promise.<DateRange>} - The valid date range.
          */
         FerriesClient.prototype.getValidDateRange = function () {
-            var url = this.apiRoot + "validdaterange?apiaccesscode=" + this.apiAccessCode;
+            var url = this.apiRoot + "validdaterange?apiaccesscode=" + this.apiAccessCode + this.callbackSuffix;
             var self = this;
-            var getDateRangeFunc = function () {
-                return fetch(url).then(function (response) {
-                    return response.text();
-                }).then(function (txt) {
-                    self.dateRange = JSON.parse(txt, function (k, v) {
-                        var date;
-                        if (/Date/i.test(k)) {
-                            date = CommonUtils_1.parseWcfDate(v);
-                        }
-                        return date || v;
-                    });
-                    return self.dateRange;
-                });
-            };
-            return this.getValueFromCacheOrRemote("dateRange", getDateRangeFunc);
+            return this.getValueFromCacheOrRemote("dateRange", function () {
+                return getJsonFromUrl(url);
+            });
         };
         ;
         /**
@@ -126,14 +173,10 @@
          * @returns {Promise.<Terminal[]>} - An array of terminals.
          */
         FerriesClient.prototype.getTerminals = function (tripDate) {
-            var url = this.apiRoot + "terminals/" + formatDate(tripDate) + "?apiaccesscode=" + this.apiAccessCode;
-            var f = function () {
-                return fetch(url).then(function (response) {
-                    return response.json();
-                });
-            };
+            var url = this.apiRoot + "terminals/" + formatDate(tripDate) + "?apiaccesscode=" + this.apiAccessCode + this.callbackSuffix;
+            var self = this;
             // TODO: enable caching for dates.
-            return f(); //this.getValueFromCacheOrRemote
+            return getJsonFromUrl(url);
         };
         ;
         /**
@@ -143,11 +186,9 @@
          * @returns {Promise.<Terminal[]>} - List of terminals.
          */
         FerriesClient.prototype.getTerminalMates = function (tripDate, terminalId) {
-            var url = this.apiRoot + "terminalmates/" + formatDate(tripDate) + "/" + terminalId + "?apiaccesscode=" + this.apiAccessCode;
+            var url = this.apiRoot + "terminalmates/" + formatDate(tripDate) + "/" + terminalId + "?apiaccesscode=" + this.apiAccessCode + this.callbackSuffix;
             // TODO: enable caching for dates.
-            return fetch(url).then(function (response) {
-                return response.json();
-            });
+            return getJsonFromUrl(url);
         };
         ;
         /**
@@ -158,11 +199,9 @@
          * @return {Promise.<TerminalCombo>} - Terminal combo info.
          */
         FerriesClient.prototype.getTerminalCombo = function (tripDate, departingTerminalId, arrivingTerminalId) {
-            var url = this.apiRoot + "terminalcombo/" + formatDate(tripDate) + "/" + departingTerminalId + "/" + arrivingTerminalId + "?apiaccesscode=" + this.apiAccessCode;
+            var url = this.apiRoot + "terminalcombo/" + formatDate(tripDate) + "/" + departingTerminalId + "/" + arrivingTerminalId + "?apiaccesscode=" + this.apiAccessCode + this.callbackSuffix;
             // TODO: enable caching
-            return fetch(url).then(function (response) {
-                return response.json();
-            });
+            return getJsonFromUrl(url);
         };
         /**
          * Gets verbose terminal combo information.
@@ -171,11 +210,9 @@
          * @return {Promise.<TerminalComboVerbose[]>} - Terminal combo info.
          */
         FerriesClient.prototype.getTerminalComboVerbose = function (tripDate, departingTerminalId, arrivingTerminalId) {
-            var url = this.apiRoot + "terminalcomboverbose/" + formatDate(tripDate) + "?apiaccesscode=" + this.apiAccessCode;
+            var url = this.apiRoot + "terminalcomboverbose/" + formatDate(tripDate) + "?apiaccesscode=" + this.apiAccessCode + this.callbackSuffix;
             // TODO: enable caching
-            return fetch(url).then(function (response) {
-                return response.json();
-            });
+            return getJsonFromUrl(url);
         };
         /**
          * Gets fare line items
@@ -187,11 +224,9 @@
          */
         FerriesClient.prototype.getFareLineItems = function (tripDate, departingTerminalId, arrivingTerminalId, roundTrip, basic) {
             if (basic === void 0) { basic = false; }
-            var url = this.apiRoot + "farelineitems" + (basic ? "basic" : "") + "/" + formatDate(tripDate) + "/" + departingTerminalId + "/" + arrivingTerminalId + "/" + roundTrip + "?apiaccesscode=" + this.apiAccessCode;
+            var url = this.apiRoot + "farelineitems" + (basic ? "basic" : "") + "/" + formatDate(tripDate) + "/" + departingTerminalId + "/" + arrivingTerminalId + "/" + roundTrip + "?apiaccesscode=" + this.apiAccessCode + this.callbackSuffix;
             // TODO: enable caching
-            return fetch(url).then(function (response) {
-                return response.json();
-            });
+            return getJsonFromUrl(url);
         };
         /**
          * Gets verbose fare line items.
@@ -199,11 +234,9 @@
          * @return {Promise.<VerboseFareLineItem>} - verbose fare line items.
          */
         FerriesClient.prototype.getFareLineItemsVerbose = function (tripDate) {
-            var url = this.apiRoot + "farelineitemsverbose/" + formatDate(tripDate) + "?apiaccesscode=" + this.apiAccessCode;
+            var url = this.apiRoot + "farelineitemsverbose/" + formatDate(tripDate) + "?apiaccesscode=" + this.apiAccessCode + this.callbackSuffix;
             // TODO: enable caching
-            return fetch(url).then(function (response) {
-                return response.json();
-            });
+            return getJsonFromUrl(url);
         };
         /**
          * Gets fare totals.
@@ -215,9 +248,9 @@
          * @param {number} quantity - how many tickets?
          */
         FerriesClient.prototype.getFareTotals = function (tripDate, departingTerminalId, arrivingTerminalId, roundTrip, farelineItemId, quantity) {
-            var url = this.apiRoot + "faretotals/" + formatDate(tripDate) + "/" + departingTerminalId + "/" + arrivingTerminalId + "/" + roundTrip + "/" + farelineItemId + "/" + quantity + "?apiaccesscode=" + this.apiAccessCode;
+            var url = this.apiRoot + "faretotals/" + formatDate(tripDate) + "/" + departingTerminalId + "/" + arrivingTerminalId + "/" + roundTrip + "/" + farelineItemId + "/" + quantity + "?apiaccesscode=" + this.apiAccessCode + this.callbackSuffix;
             // TODO: enable caching.
-            return fetch(url).then(function (response) { return response.json(); });
+            return getJsonFromUrl(url);
         };
         return FerriesClient;
     }());

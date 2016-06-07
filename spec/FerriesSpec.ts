@@ -3,14 +3,14 @@
 import FerriesClient from "../FerriesClient";
 
 export default describe("Ferries", function () {
-    let client = new FerriesClient("3a364cc8-0538-48f6-a08b-f1317f95fd7d");
+    let client = new FerriesClient("3a364cc8-0538-48f6-a08b-f1317f95fd7d", typeof window === "object");
     let tripDate: Date = new Date();
     let terminalId: number = 1;
     let endTerminalId: number = 10;
 
     it("should be able to get cache date", function (done) {
         client.getCacheFlushDate().then(function (flushDate) {
-            expect(flushDate instanceof Date).toBe(true);
+            expect(flushDate instanceof Date).toBe(true, `The returned value should be a Date object. Actual value is ${flushDate}.`);
             done();
         }, function (error) {
             done.fail(error);
@@ -93,6 +93,10 @@ export default describe("Ferries", function () {
     it("should be able to get verbose fare line items", (done) => {
         let promise = client.getFareLineItemsVerbose(tripDate);
         promise.then((vfli) => {
+            expect(vfli.LineItems).toBeTruthy(vfli.LineItems);
+            // expect(vfli.LineItemXref).toBeTruthy(vfli.LineItemXref);
+            expect(vfli.RoundTripLineItems).toBeTruthy(vfli.RoundTripLineItems);
+            // expect(vfli.TerminalComboVerbose).toBeTruthy(vfli.TerminalComboVerbose);
             done();
         });
         promise.catch((error) => {

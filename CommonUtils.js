@@ -12,6 +12,7 @@
      * Provides common functions for other modules.
      * @module CommonUtils
      */
+    exports.wcfDateRe = /^\/Date\((\d+)([+\-]\d+)?\)\/$/i;
     /**
      * Parses a WCF formatted string.
      * @param {string} dateString - A WCF formatted string.
@@ -19,9 +20,8 @@
      * a Date object will be returned. Otherwise the original string will be returned.
      */
     function parseWcfDate(dateString) {
-        var wcfDateRe = /^\/Date\((\d+)([+\-]\d+)?\)\/$/i;
         if (typeof dateString === "string") {
-            var match = dateString.match(wcfDateRe);
+            var match = dateString.match(exports.wcfDateRe);
             if (match) {
                 // Remove the whole match, the first item in array.
                 // Parse remaining into numbers.
@@ -68,4 +68,21 @@
         }
     }
     exports.buildSearchString = buildSearchString;
+    /**
+     * Converts properties of an object. E.g., converts Wcf date strings into Date objects.
+     */
+    function convertObjectProperties(o) {
+        for (var key in o) {
+            if (o.hasOwnProperty(key)) {
+                var value = o[key];
+                if (typeof value === "string" && value.length > 8) {
+                    o[key] = parseWcfDate(value);
+                }
+                else if (typeof value === "object") {
+                    convertObjectProperties(value);
+                }
+            }
+        }
+    }
+    exports.convertObjectProperties = convertObjectProperties;
 });
