@@ -9,7 +9,9 @@
     "tasks": [
         {
             "taskName": "build",
-            "args": ["run-script", "prepublish"]
+            "args": ["run-script", "prepublish"],
+            "isBuildCommand": true,
+            "echoCommand": true
         },
         {
             "taskName": "install",
@@ -21,7 +23,8 @@
         },
         {
             "taskName": "test",
-            "args": ["run", "test"]
+            "args": ["run", "test"],
+            "isTestCommand": true
         }
     ]
 }
