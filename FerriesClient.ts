@@ -9,14 +9,14 @@
  */
 
 
-import { parseWcfDate, wcfDateRe, convertObjectProperties } from "./CommonUtils";
+import { parseWcfDate, wcfDateRe, convertObjectProperties, getJsonP, getJsonFromUrl } from "./CommonUtils";
 
 
-let isBrowser = typeof window === "undefined";
+// let isBrowser = typeof window === "undefined";
 
-// To use the Fetch API in node, the node-fetch module is required.
-// Older web browsers may require a polyfill.
-let fetch = isBrowser ? require("node-fetch") : window.fetch;
+// // To use the Fetch API in node, the node-fetch module is required.
+// // Older web browsers may require a polyfill.
+// let fetch = isBrowser ? require("node-fetch") : window.fetch;
 let dateFmt = new Intl.DateTimeFormat(undefined, {
     year: "numeric",
     month: "2-digit",
@@ -33,55 +33,55 @@ function formatDate(theDate: Date): string {
 }
 
 
-function responseToJson(response: Response): Promise<any> {
-    let reviver = function (k: string, v: any) {
-        let match: RegExpMatchArray;
-        if (v && typeof v === "string") {
-            return parseWcfDate(v);
-        }
-        return v;
-    }
+// function responseToJson(response: Response): Promise<any> {
+//     let reviver = function (k: string, v: any) {
+//         let match: RegExpMatchArray;
+//         if (v && typeof v === "string") {
+//             return parseWcfDate(v);
+//         }
+//         return v;
+//     }
 
-    return response.text().then(function (text) {
-        let re = /^\s*\w+\s*\((.+?)\);?\s*$/;
-        let match = text.match(re);
-        if (match) {
-            try {
-                return JSON.parse(match[1], reviver);
-            } catch (err) {
-                console.log(match, err);
-                throw err;
-            }
-        } else {
-            return JSON.parse(text, reviver);
-        }
-    });
-}
+//     return response.text().then(function (text) {
+//         let re = /^\s*\w+\s*\((.+?)\);?\s*$/;
+//         let match = text.match(re);
+//         if (match) {
+//             try {
+//                 return JSON.parse(match[1], reviver);
+//             } catch (err) {
+//                 console.log(match, err);
+//                 throw err;
+//             }
+//         } else {
+//             return JSON.parse(text, reviver);
+//         }
+//     });
+// }
 
-function getJsonP(url: string): Promise<any> {
-    return new Promise(function (resolve, reject) {
-        let scriptTag = document.createElement("script");
+// function getJsonP(url: string): Promise<any> {
+//     return new Promise(function (resolve, reject) {
+//         let scriptTag = document.createElement("script");
 
-        window.wsdot_ferries_callback = function (json: any) {
-            document.head.removeChild(scriptTag);
-            convertObjectProperties(json);
-            resolve(json);
-        };
+//         window.wsdot_ferries_callback = function (json: any) {
+//             document.head.removeChild(scriptTag);
+//             convertObjectProperties(json);
+//             resolve(json);
+//         };
 
-        scriptTag.src = url;
+//         scriptTag.src = url;
 
-        document.head.appendChild(scriptTag);
+//         document.head.appendChild(scriptTag);
 
-    });
-}
+//     });
+// }
 
-function getJsonFromUrl(url: string): Promise<any> {
-    if (/&callback/.test(url)) {
-        return getJsonP(url);
-    } else {
-        return fetch(url).then(responseToJson);
-    }
-}
+// function getJsonFromUrl(url: string): Promise<any> {
+//     if (/&callback/.test(url)) {
+//         return getJsonP(url);
+//     } else {
+//         return fetch(url).then(responseToJson);
+//     }
+// }
 
 
 /**
@@ -109,16 +109,17 @@ export default class FerriesClient {
         if (this.useCallback) {
             url = `${url}${this.callbackSuffix.replace(/^&/, '?')}`;
         }
-        if (!this.useCallback) {
-            return fetch(url).then(function (response: Response) {
-                return response.text();
-            }).then(function (dateString: string) {
-                var d = new Date(dateString);
-                return d;
-            });
-        } else {
-            return getJsonP(url).then(parseWcfDate);
-        }
+        return getJsonFromUrl(url);
+        // if (!this.useCallback) {
+        //     return fetch(url).then(function (response: Response) {
+        //         return response.text();
+        //     }).then(function (dateString: string) {
+        //         var d = new Date(dateString);
+        //         return d;
+        //     });
+        // } else {
+        //     return getJsonP(url).then(parseWcfDate);
+        // }
     }
     /**
      * Gets a boolean indicating if the cache needs to be updated.

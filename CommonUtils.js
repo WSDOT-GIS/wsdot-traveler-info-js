@@ -1,4 +1,4 @@
-/// <amd-module name="CommonUtils" />
+/// <reference path="typings/index.d.ts" />
 (function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
@@ -8,11 +8,69 @@
     }
 })(function (require, exports) {
     "use strict";
+    /// <amd-module name="CommonUtils" />
+    var isBrowser = typeof window === "undefined";
+    // To use the Fetch API in node, the node-fetch module is required.
+    // Older web browsers may require a polyfill.
+    var fetch = isBrowser ? require("node-fetch") : window.fetch;
     /**
      * Provides common functions for other modules.
      * @module CommonUtils
      */
     exports.wcfDateRe = /^\/Date\((\d+)([+\-]\d+)?\)\/$/i;
+    function responseToJson(response) {
+        var reviver = function (k, v) {
+            var match;
+            if (v && typeof v === "string") {
+                return parseWcfDate(v);
+            }
+            return v;
+        };
+        return response.text().then(function (text) {
+            var re = /^\s*\w+\s*\((.+?)\);?\s*$/;
+            var match = text.match(re);
+            if (match) {
+                try {
+                    return JSON.parse(match[1], reviver);
+                }
+                catch (err) {
+                    console.log(match, err);
+                    throw err;
+                }
+            }
+            else {
+                return JSON.parse(text, reviver);
+            }
+        });
+    }
+    exports.responseToJson = responseToJson;
+    function getJsonP(url) {
+        return new Promise(function (resolve, reject) {
+            var scriptTag = document.createElement("script");
+            window.wsdot_ferries_callback = function (json) {
+                document.head.removeChild(scriptTag);
+                if (typeof json === "string") {
+                    json = parseWcfDate(json);
+                }
+                else if (typeof json === "object") {
+                    convertObjectProperties(json);
+                }
+                resolve(json);
+            };
+            scriptTag.src = url;
+            document.head.appendChild(scriptTag);
+        });
+    }
+    exports.getJsonP = getJsonP;
+    function getJsonFromUrl(url) {
+        if (/&callback/.test(url)) {
+            return getJsonP(url);
+        }
+        else {
+            return fetch(url).then(responseToJson);
+        }
+    }
+    exports.getJsonFromUrl = getJsonFromUrl;
     /**
      * Parses a WCF formatted string.
      * @param {string} dateString - A WCF formatted string.

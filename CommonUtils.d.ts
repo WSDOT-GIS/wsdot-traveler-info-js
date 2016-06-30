@@ -1,8 +1,12 @@
+/// <reference path="typings/index.d.ts" />
 /**
  * Provides common functions for other modules.
  * @module CommonUtils
  */
 export declare let wcfDateRe: RegExp;
+export declare function responseToJson(response: Response): Promise<any>;
+export declare function getJsonP(url: string): Promise<any>;
+export declare function getJsonFromUrl(url: string): Promise<any>;
 /**
  * Parses a WCF formatted string.
  * @param {string} dateString - A WCF formatted string.
