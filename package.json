@@ -4,8 +4,10 @@
   "description": "Client for WSDOT Traveler Info API",
   "main": "TravelerInfoClient.js",
   "scripts": {
-    "prepublish": "typings install && tsc",
-    "test": "jasmine"
+    "build": "typings install && tsc",
+    "prepublish": "npm run build",
+    "test": "jasmine",
+    "clean": "echo Removing compiled JavaScript... && del *.js \"spec\\*Spec.js\""
   },
   "keywords": [
     "WSDOT",
