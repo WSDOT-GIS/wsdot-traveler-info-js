@@ -100,7 +100,7 @@
         FerriesClient.prototype.getCacheFlushDate = function () {
             var url = this.apiRoot + "cacheflushdate";
             if (this.useCallback) {
-                url = "" + url + this.callbackSuffix.replace(/^&/, '?');
+                url = "" + url + this.callbackSuffix.replace(/^&/, "?");
             }
             return CommonUtils_1.getJsonFromUrl(url);
             // if (!this.useCallback) {

@@ -3,9 +3,29 @@
  * Provides common functions for other modules.
  * @module CommonUtils
  */
+/**
+ * Matches the date format string used by WCF services.
+ * @type {RegExp}
+ */
 export declare let wcfDateRe: RegExp;
+/**
+ * Converts a HTTP fetch Response to JSON.
+ * @param {Response} response - HTTP fetch response
+ * @returns {Promise<Object>}
+ */
 export declare function responseToJson(response: Response): Promise<any>;
+/**
+ * Submits a JSONP request via a temporarily added script tag.
+ * @param {string} url - JSONP request URL
+ * @returns {Promise<Object>} - parsed JSON response
+ */
 export declare function getJsonP(url: string): Promise<any>;
+/**
+ * Makes JSON request (detecting if JSONP is necessary based on URL)
+ * and parses output to an object.
+ * @param {string} url - request URL
+ * @returns {Promise.<Object>}
+ */
 export declare function getJsonFromUrl(url: string): Promise<any>;
 /**
  * Parses a WCF formatted string.
@@ -27,5 +47,6 @@ export declare function toWcfDate(date: Date): string;
 export declare function buildSearchString(searchParams?: any): string;
 /**
  * Converts properties of an object. E.g., converts Wcf date strings into Date objects.
+ * @param {Object} o - an object.
  */
 export declare function convertObjectProperties(o: any): void;

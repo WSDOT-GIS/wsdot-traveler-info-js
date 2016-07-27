@@ -1,8 +1,8 @@
 /// <reference path="typings/index.d.ts" />
 /// <reference path="TravelerInfo.d.ts" />
 /**
- * Client for the WSDOT Traveler Information API.
- * @see {@link http://www.wsdot.wa.gov/Traffic/api/}
+ * @class
+ * @alias module:TravelerInfoClient
  */
 export default class TravelerInfoClient {
     accessCode: string;

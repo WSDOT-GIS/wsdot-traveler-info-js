@@ -1,13 +1,13 @@
 /*eslint-env jasmine*/
 /// <reference path="../typings/index.d.ts" />
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
 import TravelerInfoClient from "../TravelerInfoClient";
 let apiKey = "3a364cc8-0538-48f6-a08b-f1317f95fd7d";
 let client = new TravelerInfoClient(apiKey);
 
-function runGenericTests(response:Array<any>) {
+function runGenericTests(response: Array<any>) {
     expect(Array.isArray(response)).toBe(true);
     expect(response.length).toBeGreaterThan(1);
     let allItemsAreObjects = true;
@@ -46,8 +46,8 @@ describe("Traveler Info API client test", function () {
             client.getMapAreas().then(function (mapAreas: MapArea[]) {
                 expect(mapAreas.length).toBeGreaterThan(0);
                 done();
-            })
-        })
+            });
+        });
 
         it("should be able to get all alerts", function (done) {
             let singleAlertPromise: Promise<Alert>;
@@ -58,7 +58,7 @@ describe("Traveler Info API client test", function () {
                 done();
             }, function (error) {
                 done.fail(error);
-            })
+            });
         });
 
         it("should be able to get a single alert by ID", function (done) {
@@ -152,7 +152,7 @@ describe("Traveler Info API client test", function () {
         });
 
         it("should be able to get single traffic flow data by ID", function (done) {
-            var id = 1;
+            let id = 1;
             client.getTrafficFlow(id).then(function (flow) {
                 expect(flow).toBeTruthy();
                 expect(flow.FlowDataID).toEqual(id);
@@ -174,7 +174,7 @@ describe("Traveler Info API client test", function () {
         });
 
         it("should be able to get single travel time object by ID", function (done) {
-            var id = 1;
+            let id = 1;
             client.getTravelTime(id).then(function (travelTimeData) {
                 expect(travelTimeData).toBeTruthy();
                 expect(travelTimeData.TravelTimeID).toEqual(id);
@@ -207,14 +207,14 @@ describe("Traveler Info API client test", function () {
 
         it("should be able to search weather info for a single station", function (done) {
             let stationId = 1909;
-            let startTime:Date, endTime:Date;
+            let startTime: Date, endTime: Date;
             startTime = new Date();
             endTime = new Date(startTime.getTime());
             startTime.setHours(0);
             startTime.setMinutes(0);
             startTime.setSeconds(0);
             startTime.setMilliseconds(0);
-            
+
             client.searchWeatherInformation(stationId, startTime, endTime).then(function (weatherInfos) {
                 expect(Array.isArray(weatherInfos)).toEqual(true);
                 if (weatherInfos.length > 0) {
@@ -226,15 +226,15 @@ describe("Traveler Info API client test", function () {
             });
         });
     });
-    
+
     it("Should be able to get weather station locations", function (done) {
         let promise = client.getCurrentStations();
         promise.then(function (stations) {
            runGenericTests(stations);
-           done(); 
+           done();
         });
         promise.catch(function(error){
             done.fail(error);
         });
-    })
+    });
 });

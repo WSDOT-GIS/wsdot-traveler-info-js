@@ -10,6 +10,11 @@
     }
 })(function (require, exports) {
     "use strict";
+    /**
+     * Client for the WSDOT Traveler Information API.
+     * @see {@link http://www.wsdot.wa.gov/Traffic/api/}
+     * @module TravelerInfoClient
+     */
     // To use the Fetch API in node, the node-fetch module is required.
     // Older web browsers may require a polyfill.
     var CommonUtils_1 = require("./CommonUtils");
@@ -24,8 +29,8 @@
         return v;
     }
     /**
-     * Client for the WSDOT Traveler Information API.
-     * @see {@link http://www.wsdot.wa.gov/Traffic/api/}
+     * @class
+     * @alias module:TravelerInfoClient
      */
     var TravelerInfoClient = (function () {
         /**

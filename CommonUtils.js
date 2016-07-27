@@ -8,7 +8,6 @@
     }
 })(function (require, exports) {
     "use strict";
-    /// <amd-module name="CommonUtils" />
     var isBrowser = typeof window === "undefined";
     // To use the Fetch API in node, the node-fetch module is required.
     // Older web browsers may require a polyfill.
@@ -17,7 +16,16 @@
      * Provides common functions for other modules.
      * @module CommonUtils
      */
+    /**
+     * Matches the date format string used by WCF services.
+     * @type {RegExp}
+     */
     exports.wcfDateRe = /^\/Date\((\d+)([+\-]\d+)?\)\/$/i;
+    /**
+     * Converts a HTTP fetch Response to JSON.
+     * @param {Response} response - HTTP fetch response
+     * @returns {Promise<Object>}
+     */
     function responseToJson(response) {
         var reviver = function (k, v) {
             var match;
@@ -44,6 +52,11 @@
         });
     }
     exports.responseToJson = responseToJson;
+    /**
+     * Submits a JSONP request via a temporarily added script tag.
+     * @param {string} url - JSONP request URL
+     * @returns {Promise<Object>} - parsed JSON response
+     */
     function getJsonP(url) {
         return new Promise(function (resolve, reject) {
             var scriptTag = document.createElement("script");
@@ -62,6 +75,12 @@
         });
     }
     exports.getJsonP = getJsonP;
+    /**
+     * Makes JSON request (detecting if JSONP is necessary based on URL)
+     * and parses output to an object.
+     * @param {string} url - request URL
+     * @returns {Promise.<Object>}
+     */
     function getJsonFromUrl(url) {
         if (/&callback/.test(url)) {
             return getJsonP(url);
@@ -128,6 +147,7 @@
     exports.buildSearchString = buildSearchString;
     /**
      * Converts properties of an object. E.g., converts Wcf date strings into Date objects.
+     * @param {Object} o - an object.
      */
     function convertObjectProperties(o) {
         for (var key in o) {

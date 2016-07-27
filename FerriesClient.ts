@@ -95,7 +95,7 @@ export default class FerriesClient {
      * Creates a new instance of the client class.
      * @param {string} apiAccessCode - Get an access code {@link http://www.wsdot.wa.gov/traffic/api/ here}.
      * @param {Boolean} useCallback - Set to true for browsers since API is not CORS-compatible.
-     * @param {string} [apiRoot="http://www.wsdot.wa.gov/ferries/api/fares/rest/"] - Root of the API URL. You only need to set this if the URL changes before this library is updated. 
+     * @param {string} [apiRoot="http://www.wsdot.wa.gov/ferries/api/fares/rest/"] - Root of the API URL. You only need to set this if the URL changes before this library is updated.
      */
     constructor(public apiAccessCode: string, public useCallback: boolean = false, public apiRoot: string = "http://www.wsdot.wa.gov/ferries/api/fares/rest/") { }
     private callbackSuffix: string = this.useCallback ? "&callback=wsdot_ferries_callback" : "";
@@ -107,7 +107,7 @@ export default class FerriesClient {
     getCacheFlushDate(): Promise<Date> {
         let url = `${this.apiRoot}cacheflushdate`;
         if (this.useCallback) {
-            url = `${url}${this.callbackSuffix.replace(/^&/, '?')}`;
+            url = `${url}${this.callbackSuffix.replace(/^&/, "?")}`;
         }
         return getJsonFromUrl(url);
         // if (!this.useCallback) {
@@ -128,7 +128,7 @@ export default class FerriesClient {
     hasCacheBeenUpdated(): Promise<Boolean> {
         let self = this;
         return this.getCacheFlushDate().then(function (d) {
-            var output = d !== self.lastFlushDate;
+            let output = d !== self.lastFlushDate;
             if (output) {
                 self.lastFlushDate = d;
             }
@@ -139,7 +139,7 @@ export default class FerriesClient {
     /**
      * Gets a value from cache. If the cache is outdated, requests updated data and stores it in cache.
      * @param {string} propertyName - The name of a property of this class that holds cached data.
-     * @param {function} remoteFunction - The function that should be called if the cached data needs 
+     * @param {function} remoteFunction - The function that should be called if the cached data needs
      * to be refreshed.
      * @returns {Promise}
      * @private
@@ -160,7 +160,7 @@ export default class FerriesClient {
     }
     /**
      * Gets a list of valid dates for use with the API queries.
-     * @returns {Promise.<DateRange>} - The valid date range. 
+     * @returns {Promise.<DateRange>} - The valid date range.
      */
     getValidDateRange(): Promise<DateRange> {
         let url = `${this.apiRoot}validdaterange?apiaccesscode=${this.apiAccessCode}${this.callbackSuffix}`;
@@ -264,7 +264,7 @@ export default class FerriesClient {
      * @param {number} arrivingTerminalId - arriving terminal ID
      * @param {boolean} roundTrip - round trip?
      * @param {number} fareLineItemId - fare line item ID
-     * @param {number} quantity - how many tickets? 
+     * @param {number} quantity - how many tickets?
      */
     getFareTotals(
         tripDate: Date,

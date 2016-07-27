@@ -1,7 +1,5 @@
 /// <reference path="typings/index.d.ts" />
 
-/// <amd-module name="CommonUtils" />
-
 let isBrowser = typeof window === "undefined";
 
 // To use the Fetch API in node, the node-fetch module is required.
@@ -12,8 +10,18 @@ let fetch = isBrowser ? require("node-fetch") : window.fetch;
  * Provides common functions for other modules.
  * @module CommonUtils
  */
+
+/**
+ * Matches the date format string used by WCF services.
+ * @type {RegExp}
+ */
 export let wcfDateRe: RegExp = /^\/Date\((\d+)([+\-]\d+)?\)\/$/i;
 
+/**
+ * Converts a HTTP fetch Response to JSON.
+ * @param {Response} response - HTTP fetch response
+ * @returns {Promise<Object>}
+ */
 export function responseToJson(response: Response): Promise<any> {
     let reviver = function (k: string, v: any) {
         let match: RegExpMatchArray;
@@ -21,7 +29,7 @@ export function responseToJson(response: Response): Promise<any> {
             return parseWcfDate(v);
         }
         return v;
-    }
+    };
 
     return response.text().then(function (text) {
         let re = /^\s*\w+\s*\((.+?)\);?\s*$/;
@@ -39,6 +47,11 @@ export function responseToJson(response: Response): Promise<any> {
     });
 }
 
+/**
+ * Submits a JSONP request via a temporarily added script tag.
+ * @param {string} url - JSONP request URL
+ * @returns {Promise<Object>} - parsed JSON response
+ */
 export function getJsonP(url: string): Promise<any> {
     return new Promise(function (resolve, reject) {
         let scriptTag = document.createElement("script");
@@ -60,6 +73,12 @@ export function getJsonP(url: string): Promise<any> {
     });
 }
 
+/**
+ * Makes JSON request (detecting if JSONP is necessary based on URL)
+ * and parses output to an object.
+ * @param {string} url - request URL
+ * @returns {Promise.<Object>}
+ */
 export function getJsonFromUrl(url: string): Promise<any> {
     if (/&callback/.test(url)) {
         return getJsonP(url);
@@ -71,7 +90,7 @@ export function getJsonFromUrl(url: string): Promise<any> {
 /**
  * Parses a WCF formatted string.
  * @param {string} dateString - A WCF formatted string.
- * @returns {(Date|string)} If the input is a valid WCF formatted date string, 
+ * @returns {(Date|string)} If the input is a valid WCF formatted date string,
  * a Date object will be returned. Otherwise the original string will be returned.
  */
 export function parseWcfDate(dateString: string): Date | string {
@@ -124,6 +143,7 @@ export function buildSearchString(searchParams?: any): string {
 
 /**
  * Converts properties of an object. E.g., converts Wcf date strings into Date objects.
+ * @param {Object} o - an object.
  */
 export function convertObjectProperties(o: any): void {
     for (let key in o) {

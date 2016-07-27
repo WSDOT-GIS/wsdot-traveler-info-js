@@ -36,7 +36,7 @@ export default describe("Ferries", function () {
         });
         terminals.catch(function (error) {
             done.fail(error);
-        })
+        });
     });
     it("should be able to get terminal mates", (done) => {
         let terminalMates = client.getTerminalMates(tripDate, terminalId);
@@ -46,7 +46,7 @@ export default describe("Ferries", function () {
         });
         terminalMates.catch((error) => {
             done.fail(error);
-        })
+        });
     });
     it("should be able to get terminal combos", (done) => {
         let promise = client.getTerminalCombo(tripDate, terminalId, endTerminalId);
@@ -111,9 +111,9 @@ export default describe("Ferries", function () {
             for (let ft of fareTotals) {
                 expect(typeof ft.TotalType).toEqual("number");
                 expect(ft.TotalType >= 0 && ft.TotalType <= 4 && ft.TotalType % 1 === 0).toEqual(true, "Fare TotalType should be an integer between 0 and 4.");
-                expect(typeof ft.Description).toEqual('string');
-                expect(typeof ft.BriefDescription).toEqual('string');
-                expect(typeof ft.Amount).toEqual('number');
+                expect(typeof ft.Description).toEqual("string");
+                expect(typeof ft.BriefDescription).toEqual("string");
+                expect(typeof ft.Amount).toEqual("number");
             }
             done();
         });

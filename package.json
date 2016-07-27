@@ -4,10 +4,12 @@
   "description": "Client for WSDOT Traveler Info API",
   "main": "TravelerInfoClient.js",
   "scripts": {
+    "docs": "jsdoc2md TravelerInfoClient.js FerriesClient.js CommonUtils.js > api.md",
     "build": "typings install && tsc",
     "prepublish": "npm run build",
     "test": "jasmine",
-    "clean": "echo Removing compiled JavaScript... && del *.js \"spec\\*Spec.js\""
+    "lint": "tslint -c tslint.json -e \"typings/**/\" \"**/*.ts\"",
+    "clean": "echo Removing compiled JavaScript... && del *.js *.map \"spec\\*Spec.js\""
   },
   "keywords": [
     "WSDOT",

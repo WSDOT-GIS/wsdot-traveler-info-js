@@ -116,9 +116,9 @@
                     var ft = fareTotals_1[_i];
                     expect(typeof ft.TotalType).toEqual("number");
                     expect(ft.TotalType >= 0 && ft.TotalType <= 4 && ft.TotalType % 1 === 0).toEqual(true, "Fare TotalType should be an integer between 0 and 4.");
-                    expect(typeof ft.Description).toEqual('string');
-                    expect(typeof ft.BriefDescription).toEqual('string');
-                    expect(typeof ft.Amount).toEqual('number');
+                    expect(typeof ft.Description).toEqual("string");
+                    expect(typeof ft.BriefDescription).toEqual("string");
+                    expect(typeof ft.Amount).toEqual("number");
                 }
                 done();
             });

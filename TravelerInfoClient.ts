@@ -2,6 +2,12 @@
 /// <reference path="typings/index.d.ts" />
 /// <reference path="TravelerInfo.d.ts" />
 
+/**
+ * Client for the WSDOT Traveler Information API.
+ * @see {@link http://www.wsdot.wa.gov/Traffic/api/}
+ * @module TravelerInfoClient
+ */
+
 // To use the Fetch API in node, the node-fetch module is required.
 // Older web browsers may require a polyfill.
 import { parseWcfDate, buildSearchString } from "./CommonUtils";
@@ -19,8 +25,8 @@ function reviver(k: string, v: any): any {
 }
 
 /**
- * Client for the WSDOT Traveler Information API.
- * @see {@link http://www.wsdot.wa.gov/Traffic/api/}
+ * @class
+ * @alias module:TravelerInfoClient
  */
 export default class TravelerInfoClient {
     /**
@@ -50,9 +56,9 @@ export default class TravelerInfoClient {
      */
     private getJson(operation: string, functionName: string = `Get${operation}`, searchParams?: Object, omitAccessCode: boolean = false): Promise<any> {
         let url = this.buildApiUrl(operation, functionName, searchParams);
-        return fetch(url).then(function (response:Response) {
+        return fetch(url).then(function (response: Response) {
             return response.text();
-        }).then(function (s:string) {
+        }).then(function (s: string) {
             return JSON.parse(s, reviver);
         });
     }
@@ -64,7 +70,7 @@ export default class TravelerInfoClient {
         if (!this.accessCode || typeof this.accessCode !== "string") {
             throw new TypeError("Invalid access code");
         } else if (!/[a-f0-9\-]+/.test(this.accessCode)) {
-            throw new Error("Invalid access code.")
+            throw new Error("Invalid access code.");
         }
     }
     /**
@@ -171,13 +177,13 @@ export default class TravelerInfoClient {
      * @returns {Promise.<PassCondition>} - A pass condition object.
      */
     getMountainPassCondition(passConditionId: number): Promise<PassCondition> {
-        var url = this.buildApiUrl("MountainPassConditions", "GetMountainPassCondition", {
+        let url = this.buildApiUrl("MountainPassConditions", "GetMountainPassCondition", {
             PassConditionId: passConditionId
         });
         url = url.replace(/AsJson/, "AsJon");
-        return fetch(url).then(function (response:Response) {
+        return fetch(url).then(function (response: Response) {
             return response.text();
-        }).then(function (text:string) {
+        }).then(function (text: string) {
             return JSON.parse(text, reviver);
         });
     }
@@ -210,7 +216,7 @@ export default class TravelerInfoClient {
     /**
      * Gets current weather information.
      * @param {string} stationId - Provide a station ID to only return a single weather station's info. Omit to return all.
-     * @returns {Promise.<WeatherInfo>} - a single WeatherInfo object. 
+     * @returns {Promise.<WeatherInfo>} - a single WeatherInfo object.
      */
     getCurrentWeatherInformationById(stationId: number): Promise<WeatherInfo> {
         let searchParams = { StationID: stationId };
