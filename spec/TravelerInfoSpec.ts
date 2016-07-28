@@ -152,7 +152,7 @@ describe("Traveler Info API client test", function () {
         });
 
         it("should be able to get single traffic flow data by ID", function (done) {
-            let id = 1;
+            const id = 157;
             client.getTrafficFlow(id).then(function (flow) {
                 expect(flow).toBeTruthy();
                 expect(flow.FlowDataID).toEqual(id);

@@ -15,7 +15,7 @@
         var tripDate = new Date();
         var terminalId = 1;
         var endTerminalId = 10;
-        it("should be able to get cache date", function (done) {
+        (typeof window !== "undefined" ? xit : it)("should be able to get cache date (disabled in browser)", function (done) {
             client.getCacheFlushDate().then(function (flushDate) {
                 expect(flushDate instanceof Date).toBe(true, "The returned value should be a Date object. Actual value is " + flushDate + ".");
                 done();

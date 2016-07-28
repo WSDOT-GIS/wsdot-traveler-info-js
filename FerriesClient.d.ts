@@ -1,6 +1,4 @@
-/// <reference path="typings/index.d.ts" />
 /// <reference path="Ferries.d.ts" />
-/// <reference path="index.d.ts" />
 /**
  * Client for Ferries API.
  * @alias module:FerriesClient

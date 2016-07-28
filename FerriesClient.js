@@ -1,6 +1,4 @@
-/// <reference path="typings/index.d.ts" />
 /// <reference path="Ferries.d.ts" />
-/// <reference path="index.d.ts" />
 (function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;

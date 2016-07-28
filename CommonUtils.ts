@@ -1,5 +1,3 @@
-/// <reference path="typings/index.d.ts" />
-
 let isBrowser = typeof window === "undefined";
 
 // To use the Fetch API in node, the node-fetch module is required.

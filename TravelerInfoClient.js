@@ -1,5 +1,4 @@
 /// <amd-module name='TravelerInfoClient' />
-/// <reference path="typings/index.d.ts" />
 /// <reference path="TravelerInfo.d.ts" />
 (function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
@@ -78,7 +77,14 @@
             return fetch(url).then(function (response) {
                 return response.text();
             }).then(function (s) {
-                return JSON.parse(s, reviver);
+                try {
+                    return JSON.parse(s, reviver);
+                }
+                catch (e) {
+                    if (e instanceof SyntaxError && /Unexpected end of JSON input/i.test(e.message)) {
+                        throw new Error("Invalid JSON:\n" + s);
+                    }
+                }
             });
         };
         /**

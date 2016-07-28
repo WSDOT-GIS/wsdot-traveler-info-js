@@ -1,7 +1,4 @@
-/// <reference path="typings/index.d.ts" />
 /// <reference path="Ferries.d.ts" />
-/// <reference path="index.d.ts" />
-
 
 /**
  * Client for {@link http://www.wsdot.wa.gov/ferries/api/fares/documentation/ WSDOT Ferries API}.

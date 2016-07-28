@@ -1,4 +1,3 @@
-/// <reference path="typings/index.d.ts" />
 /**
  * Provides common functions for other modules.
  * @module CommonUtils

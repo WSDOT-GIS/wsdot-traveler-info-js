@@ -1,5 +1,4 @@
 /// <amd-module name='TravelerInfoClient' />
-/// <reference path="typings/index.d.ts" />
 /// <reference path="TravelerInfo.d.ts" />
 
 /**
@@ -59,7 +58,13 @@ export default class TravelerInfoClient {
         return fetch(url).then(function (response: Response) {
             return response.text();
         }).then(function (s: string) {
-            return JSON.parse(s, reviver);
+            try {
+                return JSON.parse(s, reviver);
+            } catch (e) {
+                if (e instanceof SyntaxError && /Unexpected end of JSON input/i.test(e.message)) {
+                    throw new Error(`Invalid JSON:\n${s}`);
+                }
+            }
         });
     }
     /**
