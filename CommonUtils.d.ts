@@ -10,7 +10,7 @@ export declare let wcfDateRe: RegExp;
 /**
  * Converts a HTTP fetch Response to JSON.
  * @param {Response} response - HTTP fetch response
- * @returns {Promise<Object>}
+ * @returns {Promise<Object>} Promise with parsed JSON object.
  */
 export declare function responseToJson(response: Response): Promise<any>;
 /**
@@ -23,7 +23,7 @@ export declare function getJsonP(url: string): Promise<any>;
  * Makes JSON request (detecting if JSONP is necessary based on URL)
  * and parses output to an object.
  * @param {string} url - request URL
- * @returns {Promise.<Object>}
+ * @returns {Promise.<Object>} - Parsed JSON response object promise
  */
 export declare function getJsonFromUrl(url: string): Promise<any>;
 /**
@@ -42,6 +42,7 @@ export declare function toWcfDate(date: Date): string;
 /**
  * Builds a search string.
  * @param {?Object} searchParams - Search parameters.
+ * @returns {string} search string for URL
  */
 export declare function buildSearchString(searchParams?: any): string;
 /**

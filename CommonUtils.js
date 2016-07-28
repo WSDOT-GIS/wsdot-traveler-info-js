@@ -23,7 +23,7 @@
     /**
      * Converts a HTTP fetch Response to JSON.
      * @param {Response} response - HTTP fetch response
-     * @returns {Promise<Object>}
+     * @returns {Promise<Object>} Promise with parsed JSON object.
      */
     function responseToJson(response) {
         var reviver = function (k, v) {
@@ -78,7 +78,7 @@
      * Makes JSON request (detecting if JSONP is necessary based on URL)
      * and parses output to an object.
      * @param {string} url - request URL
-     * @returns {Promise.<Object>}
+     * @returns {Promise.<Object>} - Parsed JSON response object promise
      */
     function getJsonFromUrl(url) {
         if (/&callback/.test(url)) {
@@ -120,6 +120,7 @@
     /**
      * Builds a search string.
      * @param {?Object} searchParams - Search parameters.
+     * @returns {string} search string for URL
      */
     function buildSearchString(searchParams) {
         if (!searchParams) {

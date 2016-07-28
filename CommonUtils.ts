@@ -18,7 +18,7 @@ export let wcfDateRe: RegExp = /^\/Date\((\d+)([+\-]\d+)?\)\/$/i;
 /**
  * Converts a HTTP fetch Response to JSON.
  * @param {Response} response - HTTP fetch response
- * @returns {Promise<Object>}
+ * @returns {Promise<Object>} Promise with parsed JSON object.
  */
 export function responseToJson(response: Response): Promise<any> {
     let reviver = function (k: string, v: any) {
@@ -75,7 +75,7 @@ export function getJsonP(url: string): Promise<any> {
  * Makes JSON request (detecting if JSONP is necessary based on URL)
  * and parses output to an object.
  * @param {string} url - request URL
- * @returns {Promise.<Object>}
+ * @returns {Promise.<Object>} - Parsed JSON response object promise
  */
 export function getJsonFromUrl(url: string): Promise<any> {
     if (/&callback/.test(url)) {
@@ -116,6 +116,7 @@ export function toWcfDate(date: Date): string {
 /**
  * Builds a search string.
  * @param {?Object} searchParams - Search parameters.
+ * @returns {string} search string for URL
  */
 export function buildSearchString(searchParams?: any): string {
     if (!searchParams) {
@@ -126,7 +127,7 @@ export function buildSearchString(searchParams?: any): string {
             for (let key in searchParams) {
                 if (searchParams.hasOwnProperty(key)) {
                     let val: any = searchParams[key];
-                    if (val != null) {
+                    if (val != null) { // eslint-disable-line eqeqeq
                         if (val instanceof Date) {
                             val = val.toISOString();
                         }
