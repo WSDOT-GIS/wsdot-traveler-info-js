@@ -17,7 +17,7 @@ require.config({
 });
 
 require(['jasmine/boot'], function (jasmineBoot) {
-    require(["./FerriesSpec"], function () { // TravelerInfo supports neither CORS nor PJSON.
+    require(["./TravelerInfoSpec", "./FerriesSpec"], function () { // TravelerInfo supports neither CORS nor PJSON.
         window.onload();
     });
 });

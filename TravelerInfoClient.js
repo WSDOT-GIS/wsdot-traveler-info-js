@@ -35,9 +35,12 @@
         /**
          * Creates a new instance of this class
          * @param {string} accessCode - API access code
+         * @param {string} [urlBase="http://wsdot.wa.gov/Traffic/api/"] - Base URL. Unless you're using a proxy, you can just use the default value.
          */
-        function TravelerInfoClient(accessCode) {
+        function TravelerInfoClient(accessCode, urlBase) {
+            if (urlBase === void 0) { urlBase = "http://wsdot.wa.gov/Traffic/api/"; }
             this.accessCode = accessCode;
+            this.urlBase = urlBase;
             if (!this.accessCode || typeof this.accessCode !== "string") {
                 throw new TypeError("Invalid access code");
             }
@@ -52,7 +55,7 @@
         TravelerInfoClient.prototype.buildApiUrl = function (operation, functionName, searchParams, omitAccessCode) {
             if (functionName === void 0) { functionName = "Get" + operation; }
             if (omitAccessCode === void 0) { omitAccessCode = false; }
-            var url = "http://wsdot.wa.gov/Traffic/api/" + operation + "/" + operation + "REST.svc/" + functionName + "AsJson";
+            var url = "" + this.urlBase + operation + "/" + operation + "REST.svc/" + functionName + "AsJson";
             if (!searchParams && !omitAccessCode) {
                 searchParams = {
                     AccessCode: this.accessCode

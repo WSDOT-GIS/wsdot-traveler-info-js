@@ -13,6 +13,10 @@
     var TravelerInfoClient_1 = require("../TravelerInfoClient");
     var apiKey = "3a364cc8-0538-48f6-a08b-f1317f95fd7d";
     var client = new TravelerInfoClient_1.default(apiKey);
+    // Add proxy URL if in browser.
+    if (typeof window !== "undefined") {
+        client.urlBase = "http://crossorigin.me/" + client.urlBase;
+    }
     function runGenericTests(response) {
         expect(Array.isArray(response)).toBe(true);
         expect(response.length).toBeGreaterThan(1);
@@ -75,6 +79,7 @@
                 allAlertsPromise.then(function (response) {
                     var alert = response[0];
                     client.searchAlerts(alert.StartRoadwayLocation.RoadName, alert.Region, alert.StartTime, new Date(), alert.StartRoadwayLocation.MilePost, alert.EndRoadwayLocation.MilePost).then(function (alerts) {
+                        expect(Array.isArray(alerts)).toEqual(true);
                         done();
                     });
                 });

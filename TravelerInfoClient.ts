@@ -33,7 +33,7 @@ export default class TravelerInfoClient {
      * @returns {string} - API URL.
      */
     private buildApiUrl(operation: string, functionName: string = `Get${operation}`, searchParams?: any, omitAccessCode: boolean = false): string {
-        let url = `http://wsdot.wa.gov/Traffic/api/${operation}/${operation}REST.svc/${functionName}AsJson`;
+        let url = `${this.urlBase}${operation}/${operation}REST.svc/${functionName}AsJson`;
 
         if (!searchParams && !omitAccessCode) {
             searchParams = {
@@ -67,11 +67,13 @@ export default class TravelerInfoClient {
             }
         });
     }
+
     /**
      * Creates a new instance of this class
      * @param {string} accessCode - API access code
+     * @param {string} [urlBase="http://wsdot.wa.gov/Traffic/api/"] - Base URL. Unless you're using a proxy, you can just use the default value.
      */
-    constructor(public accessCode: string) {
+    constructor(public accessCode: string, public urlBase: string = "http://wsdot.wa.gov/Traffic/api/") {
         if (!this.accessCode || typeof this.accessCode !== "string") {
             throw new TypeError("Invalid access code");
         } else if (!/[a-f0-9\-]+/.test(this.accessCode)) {

@@ -5,6 +5,7 @@
  */
 export default class TravelerInfoClient {
     accessCode: string;
+    urlBase: string;
     /**
      * Constructs an API URL.
      * @returns {string} - API URL.
@@ -17,8 +18,9 @@ export default class TravelerInfoClient {
     /**
      * Creates a new instance of this class
      * @param {string} accessCode - API access code
+     * @param {string} [urlBase="http://wsdot.wa.gov/Traffic/api/"] - Base URL. Unless you're using a proxy, you can just use the default value.
      */
-    constructor(accessCode: string);
+    constructor(accessCode: string, urlBase?: string);
     /**
      * Gets the border crossing information.
      * @returns {BorderCrossingData[]} - An array of border crossing data objects.

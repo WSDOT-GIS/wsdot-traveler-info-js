@@ -7,6 +7,11 @@ import TravelerInfoClient from "../TravelerInfoClient";
 let apiKey = "3a364cc8-0538-48f6-a08b-f1317f95fd7d";
 let client = new TravelerInfoClient(apiKey);
 
+// Add proxy URL if in browser.
+if (typeof window !== "undefined") {
+    client.urlBase = "http://crossorigin.me/" + client.urlBase;
+}
+
 function runGenericTests(response: Array<any>) {
     expect(Array.isArray(response)).toBe(true);
     expect(response.length).toBeGreaterThan(1);
@@ -83,6 +88,7 @@ describe("Traveler Info API client test", function () {
                     alert.StartRoadwayLocation.MilePost,
                     alert.EndRoadwayLocation.MilePost
                 ).then(function (alerts) {
+                    expect(Array.isArray(alerts)).toEqual(true);
                     done();
                 });
             });
