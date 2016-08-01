@@ -1,5 +1,5 @@
 {
-  "name": "wsdot-traveler-info-js",
+  "name": "wsdot-traveler-info",
   "version": "1.0.0",
   "description": "Client for WSDOT Traveler Info API",
   "main": "TravelerInfoClient.js",
