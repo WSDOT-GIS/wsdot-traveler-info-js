@@ -93,8 +93,9 @@ export default class FerriesClient {
      * @param {string} apiAccessCode - Get an access code {@link http://www.wsdot.wa.gov/traffic/api/ here}.
      * @param {Boolean} useCallback - Set to true for browsers since API is not CORS-compatible.
      * @param {string} [apiRoot="http://www.wsdot.wa.gov/ferries/api/fares/rest/"] - Root of the API URL. You only need to set this if the URL changes before this library is updated.
+     * @param {string} [proxy] - Proxy URL for the date
      */
-    constructor(public apiAccessCode: string, public useCallback: boolean = false, public apiRoot: string = "http://www.wsdot.wa.gov/ferries/api/fares/rest/") { }
+    constructor(public apiAccessCode: string, public useCallback: boolean = false, public apiRoot: string = "http://www.wsdot.wa.gov/ferries/api/fares/rest/", public proxy?: string) { }
     private callbackSuffix: string = this.useCallback ? "&callback=wsdot_ferries_callback" : "";
 
     /**
@@ -104,19 +105,13 @@ export default class FerriesClient {
     getCacheFlushDate(): Promise<Date> {
         let url = `${this.apiRoot}cacheflushdate`;
         if (this.useCallback) {
-            url = `${url}${this.callbackSuffix.replace(/^&/, "?")}`;
+            // This API call doesn't support JSONP.  Use proxy if provided.
+            if (this.proxy) {
+                url = `${this.proxy}${url}`;
+            }
+            // url = `${url}${this.callbackSuffix.replace(/^&/, "?")}`;
         }
         return getJsonFromUrl(url);
-        // if (!this.useCallback) {
-        //     return fetch(url).then(function (response: Response) {
-        //         return response.text();
-        //     }).then(function (dateString: string) {
-        //         var d = new Date(dateString);
-        //         return d;
-        //     });
-        // } else {
-        //     return getJsonP(url).then(parseWcfDate);
-        // }
     }
     /**
      * Gets a boolean indicating if the cache needs to be updated.

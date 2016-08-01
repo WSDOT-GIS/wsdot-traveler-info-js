@@ -82,13 +82,15 @@
          * @param {string} apiAccessCode - Get an access code {@link http://www.wsdot.wa.gov/traffic/api/ here}.
          * @param {Boolean} useCallback - Set to true for browsers since API is not CORS-compatible.
          * @param {string} [apiRoot="http://www.wsdot.wa.gov/ferries/api/fares/rest/"] - Root of the API URL. You only need to set this if the URL changes before this library is updated.
+         * @param {string} [proxy] - Proxy URL for the date
          */
-        function FerriesClient(apiAccessCode, useCallback, apiRoot) {
+        function FerriesClient(apiAccessCode, useCallback, apiRoot, proxy) {
             if (useCallback === void 0) { useCallback = false; }
             if (apiRoot === void 0) { apiRoot = "http://www.wsdot.wa.gov/ferries/api/fares/rest/"; }
             this.apiAccessCode = apiAccessCode;
             this.useCallback = useCallback;
             this.apiRoot = apiRoot;
+            this.proxy = proxy;
             this.callbackSuffix = this.useCallback ? "&callback=wsdot_ferries_callback" : "";
         }
         /**
@@ -98,19 +100,12 @@
         FerriesClient.prototype.getCacheFlushDate = function () {
             var url = this.apiRoot + "cacheflushdate";
             if (this.useCallback) {
-                url = "" + url + this.callbackSuffix.replace(/^&/, "?");
+                // This API call doesn't support JSONP.  Use proxy if provided.
+                if (this.proxy) {
+                    url = "" + this.proxy + url;
+                }
             }
             return CommonUtils_1.getJsonFromUrl(url);
-            // if (!this.useCallback) {
-            //     return fetch(url).then(function (response: Response) {
-            //         return response.text();
-            //     }).then(function (dateString: string) {
-            //         var d = new Date(dateString);
-            //         return d;
-            //     });
-            // } else {
-            //     return getJsonP(url).then(parseWcfDate);
-            // }
         };
         /**
          * Gets a boolean indicating if the cache needs to be updated.

@@ -7,6 +7,7 @@ export default class FerriesClient {
     apiAccessCode: string;
     useCallback: boolean;
     apiRoot: string;
+    proxy: string;
     private lastFlushDate;
     private dateRange;
     /**
@@ -14,8 +15,9 @@ export default class FerriesClient {
      * @param {string} apiAccessCode - Get an access code {@link http://www.wsdot.wa.gov/traffic/api/ here}.
      * @param {Boolean} useCallback - Set to true for browsers since API is not CORS-compatible.
      * @param {string} [apiRoot="http://www.wsdot.wa.gov/ferries/api/fares/rest/"] - Root of the API URL. You only need to set this if the URL changes before this library is updated.
+     * @param {string} [proxy] - Proxy URL for the date
      */
-    constructor(apiAccessCode: string, useCallback?: boolean, apiRoot?: string);
+    constructor(apiAccessCode: string, useCallback?: boolean, apiRoot?: string, proxy?: string);
     private callbackSuffix;
     /**
      * Gets the cache flush date.

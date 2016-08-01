@@ -11,11 +11,12 @@
     var FerriesClient_1 = require("../FerriesClient");
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = describe("Ferries", function () {
-        var client = new FerriesClient_1.default("3a364cc8-0538-48f6-a08b-f1317f95fd7d", typeof window === "object");
+        var needsClient = Boolean(typeof window === "object");
+        var client = new FerriesClient_1.default("3a364cc8-0538-48f6-a08b-f1317f95fd7d", needsClient, undefined, "http://crossorigin.me/");
         var tripDate = new Date();
         var terminalId = 1;
         var endTerminalId = 10;
-        (typeof window !== "undefined" ? xit : it)("should be able to get cache date (disabled in browser)", function (done) {
+        it("should be able to get cache date", function (done) {
             client.getCacheFlushDate().then(function (flushDate) {
                 expect(flushDate instanceof Date).toBe(true, "The returned value should be a Date object. Actual value is " + flushDate + ".");
                 done();
