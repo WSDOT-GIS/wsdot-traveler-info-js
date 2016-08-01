@@ -28,8 +28,8 @@
             var validDateRange = client.getValidDateRange();
             validDateRange.then(function (dateRange) {
                 expect(typeof dateRange).toBe("object", "Expected returned value to be an object.");
-                expect(dateRange.DateFrom instanceof Date).toBe(true, "DateFrom should be date");
-                expect(dateRange.DateThru instanceof Date).toBe(true, "DateTo should be Date. DateTo = " + dateRange.DateThru);
+                expect(dateRange.DateFrom instanceof Date).toBe(true, "DateFrom should be Date object. DateFrom = " + dateRange.DateFrom);
+                expect(dateRange.DateThru instanceof Date).toBe(true, "DateTo should be Date object. DateTo = " + dateRange.DateThru);
                 done();
             }, function (error) {
                 done.fail(error);
