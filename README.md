@@ -1,7 +1,12 @@
 WSDOT Traveler Information API Client
 =====================================
 
-Client library for [WSDOT Traveler Information API].
+JavaScript client library for [WSDOT Traveler Information API].
+
+* Supports Node and browser environments.
+* Written in TypeScript.
+
+[![Build Status](https://travis-ci.org/WSDOT-GIS/wsdot-traveler-info-js.svg?branch=master)](https://travis-ci.org/WSDOT-GIS/wsdot-traveler-info-js)
 
 Browser needs proxy
 -------------------

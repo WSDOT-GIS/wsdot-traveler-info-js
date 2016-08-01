@@ -30,48 +30,6 @@
     function formatDate(theDate) {
         return dateFmt.format(theDate).replace(/\//g, "-");
     }
-    // function responseToJson(response: Response): Promise<any> {
-    //     let reviver = function (k: string, v: any) {
-    //         let match: RegExpMatchArray;
-    //         if (v && typeof v === "string") {
-    //             return parseWcfDate(v);
-    //         }
-    //         return v;
-    //     }
-    //     return response.text().then(function (text) {
-    //         let re = /^\s*\w+\s*\((.+?)\);?\s*$/;
-    //         let match = text.match(re);
-    //         if (match) {
-    //             try {
-    //                 return JSON.parse(match[1], reviver);
-    //             } catch (err) {
-    //                 console.log(match, err);
-    //                 throw err;
-    //             }
-    //         } else {
-    //             return JSON.parse(text, reviver);
-    //         }
-    //     });
-    // }
-    // function getJsonP(url: string): Promise<any> {
-    //     return new Promise(function (resolve, reject) {
-    //         let scriptTag = document.createElement("script");
-    //         window.wsdot_ferries_callback = function (json: any) {
-    //             document.head.removeChild(scriptTag);
-    //             convertObjectProperties(json);
-    //             resolve(json);
-    //         };
-    //         scriptTag.src = url;
-    //         document.head.appendChild(scriptTag);
-    //     });
-    // }
-    // function getJsonFromUrl(url: string): Promise<any> {
-    //     if (/&callback/.test(url)) {
-    //         return getJsonP(url);
-    //     } else {
-    //         return fetch(url).then(responseToJson);
-    //     }
-    // }
     /**
      * Client for Ferries API.
      * @alias module:FerriesClient
