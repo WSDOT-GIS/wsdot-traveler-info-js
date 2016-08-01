@@ -13,5 +13,10 @@ Development Environment
 
 [Visual Studio Code]
 
+Usage
+-----
+
+See the JavaScript and TypeScript files in the `spec` folder for usage examples.
+
 [WSDOT Traveler Information API]:http://www.wsdot.wa.gov/Traffic/api/
 [Visual Studio Code]:http://code.visualstudio.com/
