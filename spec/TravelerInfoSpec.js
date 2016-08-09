@@ -1,5 +1,3 @@
-/*eslint-env jasmine*/
-/// <reference path="../typings/index.d.ts" />
 (function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
@@ -13,13 +11,13 @@
     var TravelerInfoClient_1 = require("../TravelerInfoClient");
     var apiKey = "3a364cc8-0538-48f6-a08b-f1317f95fd7d";
     var client = new TravelerInfoClient_1.default(apiKey);
-    // Add proxy URL if in browser.
-    if (typeof window !== "undefined") {
-        client.urlBase = "http://crossorigin.me/" + client.urlBase;
-    }
+    // // Add proxy URL if in browser.
+    // if (typeof window !== "undefined") {
+    //     client.urlBase = "http://crossorigin.me/" + client.urlBase;
+    // }
     function runGenericTests(response) {
-        expect(Array.isArray(response)).toBe(true);
-        expect(response.length).toBeGreaterThan(1);
+        expect(Array.isArray(response)).toBe(true, "Response should be an array.");
+        expect(response.length).toBeGreaterThan(1, "Should be at least one item in array.");
         var allItemsAreObjects = true;
         for (var _i = 0, response_1 = response; _i < response_1.length; _i++) {
             var item = response_1[_i];
@@ -28,7 +26,7 @@
                 break;
             }
         }
-        expect(allItemsAreObjects).toBe(true);
+        expect(allItemsAreObjects).toBe(true, "All items in array should be an object.");
     }
     describe("Traveler Info API client test", function () {
         it("should be able to retrieve border crossings", function (done) {
@@ -176,48 +174,46 @@
             it("Should be able to get weather information", function (done) {
                 client.getCurrentWeatherInformation().then(function (weatherInfos) {
                     runGenericTests(weatherInfos);
-                    done();
+                    // Get the first station ID to ensure a valid ID.
+                    var stationId = weatherInfos[0].StationID;
+                    var promise1 = client.getCurrentWeatherInformationById(stationId);
+                    promise1.then(function (weatherInfo) {
+                        expect(weatherInfo.StationID).toEqual(stationId);
+                    }, function (error) {
+                        done.fail(error);
+                    });
+                    var startTime, endTime;
+                    startTime = new Date();
+                    endTime = new Date(startTime.getTime());
+                    startTime.setHours(0);
+                    startTime.setMinutes(0);
+                    startTime.setSeconds(0);
+                    startTime.setMilliseconds(0);
+                    var promise2 = client.searchWeatherInformation(stationId, startTime, endTime);
+                    promise2.then(function (searchResults) {
+                        expect(Array.isArray(searchResults)).toEqual(true);
+                        if (searchResults.length > 0) {
+                            expect(searchResults[0].StationID).toEqual(stationId);
+                        }
+                    }, function (error) {
+                        done.fail(error);
+                    });
+                    Promise.all([promise1, promise2]).then(function () {
+                        done();
+                    });
                 }, function (error) {
                     done.fail(error);
                 });
             });
-            it("should be able to get weather info for a single station", function (done) {
-                var stationId = 1909;
-                client.getCurrentWeatherInformationById(stationId).then(function (weatherInfo) {
-                    expect(weatherInfo.StationID).toEqual(stationId);
+            it("Should be able to get weather station locations", function (done) {
+                var promise = client.getCurrentStations();
+                promise.then(function (stations) {
+                    runGenericTests(stations);
                     done();
-                }, function (error) {
+                });
+                promise.catch(function (error) {
                     done.fail(error);
                 });
-            });
-            it("should be able to search weather info for a single station", function (done) {
-                var stationId = 1909;
-                var startTime, endTime;
-                startTime = new Date();
-                endTime = new Date(startTime.getTime());
-                startTime.setHours(0);
-                startTime.setMinutes(0);
-                startTime.setSeconds(0);
-                startTime.setMilliseconds(0);
-                client.searchWeatherInformation(stationId, startTime, endTime).then(function (weatherInfos) {
-                    expect(Array.isArray(weatherInfos)).toEqual(true);
-                    if (weatherInfos.length > 0) {
-                        expect(weatherInfos[0].StationID).toEqual(stationId);
-                    }
-                    done();
-                }, function (error) {
-                    done.fail(error);
-                });
-            });
-        });
-        it("Should be able to get weather station locations", function (done) {
-            var promise = client.getCurrentStations();
-            promise.then(function (stations) {
-                runGenericTests(stations);
-                done();
-            });
-            promise.catch(function (error) {
-                done.fail(error);
             });
         });
     });

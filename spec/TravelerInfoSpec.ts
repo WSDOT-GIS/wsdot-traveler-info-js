@@ -1,6 +1,3 @@
-/*eslint-env jasmine*/
-/// <reference path="../typings/index.d.ts" />
-
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
 import TravelerInfoClient from "../TravelerInfoClient";
@@ -13,8 +10,8 @@ if (typeof window !== "undefined") {
 }
 
 function runGenericTests(response: Array<any>) {
-    expect(Array.isArray(response)).toBe(true);
-    expect(response.length).toBeGreaterThan(1);
+    expect(Array.isArray(response)).toBe(true, "Response should be an array.");
+    expect(response.length).toBeGreaterThan(1, "Should be at least one item in array.");
     let allItemsAreObjects = true;
     for (let item of response) {
         if (typeof item !== "object") {
@@ -22,7 +19,7 @@ function runGenericTests(response: Array<any>) {
             break;
         }
     }
-    expect(allItemsAreObjects).toBe(true);
+    expect(allItemsAreObjects).toBe(true, "All items in array should be an object.");
 }
 
 describe("Traveler Info API client test", function () {
@@ -195,52 +192,51 @@ describe("Traveler Info API client test", function () {
         it("Should be able to get weather information", function (done) {
             client.getCurrentWeatherInformation().then(function (weatherInfos) {
                 runGenericTests(weatherInfos);
-                done();
+                // Get the first station ID to ensure a valid ID.
+                let stationId = weatherInfos[0].StationID;
+
+                let promise1 = client.getCurrentWeatherInformationById(stationId);
+                promise1.then(function (weatherInfo: WeatherInfo) {
+                    expect(weatherInfo.StationID).toEqual(stationId);
+                }, function (error: Error) {
+                    done.fail(error);
+                });
+
+                let startTime: Date, endTime: Date;
+                startTime = new Date();
+                endTime = new Date(startTime.getTime());
+                startTime.setHours(0);
+                startTime.setMinutes(0);
+                startTime.setSeconds(0);
+                startTime.setMilliseconds(0);
+
+                let promise2 = client.searchWeatherInformation(stationId, startTime, endTime);
+                promise2.then(function (searchResults) {
+                    expect(Array.isArray(searchResults)).toEqual(true);
+                    if (searchResults.length > 0) {
+                        expect(searchResults[0].StationID).toEqual(stationId);
+                    }
+                }, function (error: Error) {
+                    done.fail(error);
+                });
+
+                Promise.all([promise1, promise2]).then(() => {
+                    done();
+                });
             }, function (error) {
                 done.fail(error);
             });
         });
 
-        it("should be able to get weather info for a single station", function (done) {
-            let stationId = 1909;
-            client.getCurrentWeatherInformationById(stationId).then(function (weatherInfo: WeatherInfo) {
-                expect(weatherInfo.StationID).toEqual(stationId);
+        it("Should be able to get weather station locations", function (done) {
+            let promise = client.getCurrentStations();
+            promise.then(function (stations) {
+                runGenericTests(stations);
                 done();
-            }, function (error: Error) {
+            });
+            promise.catch(function (error) {
                 done.fail(error);
             });
-        });
-
-        it("should be able to search weather info for a single station", function (done) {
-            let stationId = 1909;
-            let startTime: Date, endTime: Date;
-            startTime = new Date();
-            endTime = new Date(startTime.getTime());
-            startTime.setHours(0);
-            startTime.setMinutes(0);
-            startTime.setSeconds(0);
-            startTime.setMilliseconds(0);
-
-            client.searchWeatherInformation(stationId, startTime, endTime).then(function (weatherInfos) {
-                expect(Array.isArray(weatherInfos)).toEqual(true);
-                if (weatherInfos.length > 0) {
-                    expect(weatherInfos[0].StationID).toEqual(stationId);
-                }
-                done();
-            }, function (error: Error) {
-                done.fail(error);
-            });
-        });
-    });
-
-    it("Should be able to get weather station locations", function (done) {
-        let promise = client.getCurrentStations();
-        promise.then(function (stations) {
-           runGenericTests(stations);
-           done();
-        });
-        promise.catch(function(error){
-            done.fail(error);
         });
     });
 });

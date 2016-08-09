@@ -1,3 +1,3 @@
 interface Window {
-    wsdot_ferries_callback: Function;
+    wsdot_ferries_callback: (json:any) => void;
 }
