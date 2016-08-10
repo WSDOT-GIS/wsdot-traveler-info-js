@@ -1,7 +1,10 @@
-interface Alert {
+interface LatLong {
+    Latitude: number;
+    Longitude: number;
+}
+
+interface AlertCommon {
     AlertID: number;
-    StartRoadwayLocation: RoadwayLocation;
-    EndRoadwayLocation: RoadwayLocation;
     Region: string;
     County: string;
     StartTime: Date;
@@ -14,18 +17,21 @@ interface Alert {
     Priority: string;
 }
 
+interface Alert extends AlertCommon {
+    StartRoadwayLocation: RoadwayLocation;
+    EndRoadwayLocation: RoadwayLocation;
+}
+
 interface MapArea {
     MapArea: string;
     MapAreaDescription: string;
 }
 
-interface RoadwayLocation {
+interface RoadwayLocation extends LatLong {
     Description: string;
     RoadName: string;
     Direction: string;
     MilePost: number;
-    Latitude: number;
-    Longitude: number;
 }
 
 interface BorderCrossingData {
@@ -35,10 +41,9 @@ interface BorderCrossingData {
     WaitTime: number;
 }
 
-interface Camera {
+interface CameraCommon {
     CameraID: number;
     Region: string;
-    CameraLocation: RoadwayLocation;
     DisplayLatitude: number;
     DisplayLongitude: number;
     Title: string;
@@ -52,9 +57,13 @@ interface Camera {
     SortOrder: number;
 }
 
+interface Camera extends CameraCommon {
+    CameraLocation: RoadwayLocation;
+}
+
 type CommercialVehicleRestrictionType = "restriction" | "bridge" | "road";
 
-interface CVRestrictionData {
+interface CVRestrictionData extends LatLong {
     StateRouteID: string;
     State: string;
     RestrictionWidthInInches: number;
@@ -71,8 +80,6 @@ interface CVRestrictionData {
     LocationName: string;
     LocationDescription: string;
     RestrictionComment: string;
-    Latitude: number;
-    Longitude: number;
     BridgeNumber: string;
     MaximumGrossVehicleWeightInPounds: number;
     BridgeName: string;
@@ -89,11 +96,9 @@ interface TravelRestriction {
     RestrictionText: string;
 }
 
-interface PassCondition {
+interface PassCondition extends LatLong {
     MountainPassId: number;
     MountainPassName: string;
-    Latitude: number;
-    Longitude: number;
     DateUpdated: Date;
     TemperatureInFahrenheit: number;
     ElevationInFeet: number;
@@ -113,23 +118,27 @@ interface FlowData {
     FlowReadingValue: number; // FlowStationReading;
 }
 
-interface TravelTimeRoute {
+interface TravelTimeRouteCommon {
     TravelTimeID: number;
     Name: string;
     Description: string;
     TimeUpdated: Date;
-    StartPoint: RoadwayLocation;
-    EndPoint: RoadwayLocation;
     Distance: number;
     AverageTime: number;
     CurrentTime: number;
 }
 
-interface WeatherInfo {
-    StationID: number;
+interface TravelTimeRoute extends TravelTimeRouteCommon {
+    StartPoint: RoadwayLocation;
+    EndPoint: RoadwayLocation;
+}
+
+interface WeatherCommon extends LatLong {
     StationName: string;
-    Latitude: number;
-    Longitude: number;
+}
+
+interface WeatherInfo extends WeatherCommon, LatLong {
+    StationID: number;
     ReadingTime: Date;
     TemperatureInFahrenheit: number;
     PrecipitationInInches: number;
@@ -142,9 +151,6 @@ interface WeatherInfo {
     WindDirection: number;
 }
 
-interface WeatherStationData {
+interface WeatherStationData extends WeatherCommon, LatLong {
     StationCode: number;
-    StationName: string;
-    Latitude: number;
-    Longitude: number;
 }

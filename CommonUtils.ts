@@ -156,3 +156,20 @@ export function convertObjectProperties(o: any): void {
         }
     }
 }
+
+/**
+ * Determines if an object has properties matching ALL of the given names.
+ * @param {object} o - An object
+ * @param {...string} propertyNames - Names of properties to look for.
+ * @returns {boolean} returns true if object has all named properties, false otherwise.
+ */
+export function hasAllProperties(o: Object, ...propertyNames: string[]): boolean {
+    let allFound = true;
+    for (let n of propertyNames) {
+        allFound = allFound && o.hasOwnProperty(n);
+        if (!allFound) {
+            break;
+        }
+    }
+    return allFound;
+}
