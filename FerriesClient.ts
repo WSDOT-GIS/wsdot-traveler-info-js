@@ -1,5 +1,3 @@
-/// <reference path="Ferries.d.ts" />
-
 /**
  * Client for {@link http://www.wsdot.wa.gov/ferries/api/fares/documentation/ WSDOT Ferries API}.
  * @module FerriesClient

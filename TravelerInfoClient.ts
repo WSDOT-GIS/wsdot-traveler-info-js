@@ -1,6 +1,3 @@
-/// <amd-module name='TravelerInfoClient' />
-/// <reference path="TravelerInfo.d.ts" />
-
 /**
  * Client for the WSDOT Traveler Information API.
  * @see {@link http://www.wsdot.wa.gov/Traffic/api/}

@@ -1,4 +1,7 @@
-/// <reference path="Ferries.d.ts" />
+/**
+ * Client for {@link http://www.wsdot.wa.gov/ferries/api/fares/documentation/ WSDOT Ferries API}.
+ * @module FerriesClient
+ */
 (function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
@@ -8,10 +11,6 @@
     }
 })(function (require, exports) {
     "use strict";
-    /**
-     * Client for {@link http://www.wsdot.wa.gov/ferries/api/fares/documentation/ WSDOT Ferries API}.
-     * @module FerriesClient
-     */
     var CommonUtils_1 = require("./CommonUtils");
     // let isBrowser = typeof window === "undefined";
     // // To use the Fetch API in node, the node-fetch module is required.

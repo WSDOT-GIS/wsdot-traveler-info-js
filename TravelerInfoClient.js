@@ -1,5 +1,8 @@
-/// <amd-module name='TravelerInfoClient' />
-/// <reference path="TravelerInfo.d.ts" />
+/**
+ * Client for the WSDOT Traveler Information API.
+ * @see {@link http://www.wsdot.wa.gov/Traffic/api/}
+ * @module TravelerInfoClient
+ */
 (function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
@@ -9,11 +12,6 @@
     }
 })(function (require, exports) {
     "use strict";
-    /**
-     * Client for the WSDOT Traveler Information API.
-     * @see {@link http://www.wsdot.wa.gov/Traffic/api/}
-     * @module TravelerInfoClient
-     */
     // To use the Fetch API in node, the node-fetch module is required.
     // Older web browsers may require a polyfill.
     var CommonUtils_1 = require("./CommonUtils");

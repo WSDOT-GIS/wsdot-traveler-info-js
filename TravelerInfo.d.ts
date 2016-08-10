@@ -52,7 +52,7 @@ interface Camera {
     SortOrder: number;
 }
 
-// type RestrictionType = { "restriction" | "bridge" | "road" };
+type CommercialVehicleRestrictionType = "restriction" | "bridge" | "road";
 
 interface CVRestrictionData {
     StateRouteID: string;
@@ -81,7 +81,7 @@ interface CVRestrictionData {
     SAMaxAxle: number;
     TDMaxAxle: number;
     VehicleType: string;
-    RestrictionType: "restriction" | "bridge" | "road"; //CommercialVehicleRestrictionType;
+    RestrictionType: CommercialVehicleRestrictionType;
 }
 
 interface TravelRestriction {
