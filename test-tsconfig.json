@@ -1,15 +1,14 @@
 {
-    "compileOnSave": true,
+    "$schema": "http://json.schemastore.org/tsconfig",
     "compilerOptions": {
+        "rootDir": "spec",
         "module": "umd",
         "target": "es5",
         "noImplicitAny": true,
         "sourceMap": false,
-        "declaration": true
+        "declaration": false
     },
     "exclude": [
-        "bower_components",
-        "node_modules",
-        "spec"
+        "node_modules"
     ]
 }

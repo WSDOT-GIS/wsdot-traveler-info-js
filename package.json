@@ -5,11 +5,13 @@
   "main": "TravelerInfoClient.js",
   "scripts": {
     "docs": "jsdoc2md TravelerInfoClient.js FerriesClient.js CommonUtils.js > api.md",
-    "build": "typings install && tsc",
+    "build:test": "typings install  && tsc --project test-tsconfig.json",
+    "build": "typings install --production && tsc",
     "prepublish": "npm run build",
+    "pretest": "npm run build:test",
     "test": "jasmine",
     "lint": "tslint -c tslint.json -e \"typings/**/\" \"**/*.ts\"",
-    "clean": "echo Removing compiled JavaScript... && del *.js *.map \"spec\\*Spec.js\""
+    "clean": "echo Removing compiled JavaScript... && del *.js *.map \"spec\\*Spec.js\" \"spec\\*.d.ts\" CommonUtils.d.ts FerriesClient.d.ts TravelerInfoClient.d.ts "
   },
   "files": [
     "CommonUtils.d.ts",

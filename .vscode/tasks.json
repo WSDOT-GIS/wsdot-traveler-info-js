@@ -23,7 +23,7 @@
         },
         {
             "taskName": "test",
-            "args": ["test"],
+            "suppressTaskName": false,
             "isTestCommand": true
         }
     ]
