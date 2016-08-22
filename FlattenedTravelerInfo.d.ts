@@ -5,8 +5,7 @@ declare namespace Flattened {
         StartRoadName: string;
         StartDirection: string;
         StartMilePost: number;
-        StartLatitude: number;
-        StartLongitude: number;
+        StartCoordinates: [number, number];
     }
 
     interface MultiPoint extends Point {
@@ -14,8 +13,7 @@ declare namespace Flattened {
         EndRoadName: string;
         EndDirection: string;
         EndMilePost: number;
-        EndLatitude: number;
-        EndLongitude: number;
+        EndCoordinates: [number, number];
     }
 
     interface Alert extends AlertCommon, MultiPoint {

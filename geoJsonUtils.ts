@@ -23,26 +23,49 @@ import { hasAllProperties } from "CommonUtils";
 
 // }
 
+
+
 /**
  * "Flattens" the properties of an object so that there are no inner-objects.
  * @param {object} o
  * @param {string} [ignoredName] The name of a property to be ignored. Intended for use with the feature ID.
  */
 export function flattenProperties(o: any, ignoredName?: string): any {
+    let coordRe = /((?:Lat)|(?:Long))itude$/;
     let output: any = {};
+    let position: number[];
+
+    function addRouteLocationPropertiesToObject(output: any, propertyName: string, roadwayLocation: RoadwayLocation) {
+        let endRe = /^End/i;
+        let prefix = endRe.test(propertyName) ? "End" : "Start";
+        for (let k2 in roadwayLocation) {
+            if (coordRe) {
+                continue;
+            }
+            output[`${prefix}${k2}`] = roadwayLocation;
+        }
+        output[`${prefix}Coordinates`] = [roadwayLocation.Longitude, roadwayLocation.Latitude];
+    }
+
     for (let k in o) {
-        if (o.hasOwnProperty(k) && !(ignoredName && k === ignoredName)) {
+        // Test for (Display)Lat|Longitude property.
+        let match = k.match(coordRe);
+        if (match) {
+            // Create the position array if necessary.
+            if (!position) {
+                position = [];
+            }
+            // Assign coordinate to corresponding array element.
+            let i = match[1] === "Lat" ? 1 : 0;
+            position[i] = o[k];
+        } else if (!(ignoredName && k === ignoredName)) {
             let v = o[k];
             if (typeof v === "object" && !(v instanceof Date)) {
                 if (hasAllProperties(v, "Description", "RoadName", "Direction", "MilePost", "Longitude", "Latitude")) {
-                    let re = /^End/i;
-                    for (let k2 in v) {
-                        output[`${re.test(k2) ? "End" : "Start"}${k2}`] = v;
-                    }
+                    addRouteLocationPropertiesToObject(output, k, v);
                 } else {
                     for (let k2 in v) {
                         if (v.hasOwnProperty(k2)) {
-                            // output[[k, k2].join("_")] = v[k2];
                             output[`${k}_${k2}`] = v[k2];
                         }
                     }
@@ -95,27 +118,6 @@ export function getId(properties: any): GetIdOutput {
 function detectMultipoint(input: any): Boolean {
     return input && (input.hasOwnProperty("EndRoadwayLocation") || input.hasOwnProperty("EndPoint"));
 }
-
-// function alertToGeometry(alert: Alert) {
-//     let geometry: GeoJSON.GeometryObject;
-//     if (detectMultipoint(alert)) {
-//         let multipoint: GeoJSON.MultiPoint = {
-//             type: "MultiPoint",
-//             coordinates: [
-//                 [alert.StartRoadwayLocation.Longitude, alert.StartRoadwayLocation.Latitude],
-//                 [alert.EndRoadwayLocation.Longitude, alert.EndRoadwayLocation.Latitude],
-//             ]
-//         };
-//         geometry = multipoint;
-//     } else {
-//         let point: GeoJSON.Point = {
-//             type: "Point",
-//             coordinates: [alert.StartRoadwayLocation.Longitude, alert.EndRoadwayLocation.Latitude]
-//         };
-//         geometry = point;
-//     }
-//     return geometry;
-// }
 
 function roadwayLocationToCoordinates(...roadwayLocations: RoadwayLocation[]): [number, number] | [number, number][] | any {
     if (roadwayLocations.length < 1) {
