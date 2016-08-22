@@ -11,6 +11,18 @@
     "lint": "tslint -c tslint.json -e \"typings/**/\" \"**/*.ts\"",
     "clean": "echo Removing compiled JavaScript... && del *.js *.map \"spec\\*Spec.js\""
   },
+  "files": [
+    "CommonUtils.d.ts",
+    "CommonUtils.js",
+    "Ferries.d.ts",
+    "FerriesClient.d.ts",
+    "FerriesClient.js",
+    "index.d.ts",
+    "TravelerInfo.d.ts",
+    "TravelerInfoClient.d.ts",
+    "TravelerInfoClient.js",
+    "typings.json"
+  ],
   "keywords": [
     "WSDOT",
     "traveler",
