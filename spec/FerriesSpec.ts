@@ -1,10 +1,8 @@
-/// <reference path="../typings/index.d.ts" />
-
 import FerriesClient from "../FerriesClient";
 
 export default describe("Ferries", function () {
     let needsClient = Boolean(typeof window === "object");
-    let client = new FerriesClient("3a364cc8-0538-48f6-a08b-f1317f95fd7d", needsClient, undefined, "http://crossorigin.me/");
+    let client = new FerriesClient("3a364cc8-0538-48f6-a08b-f1317f95fd7d", needsClient, undefined);
     let tripDate: Date = new Date();
     let terminalId: number = 1;
     let endTerminalId: number = 10;

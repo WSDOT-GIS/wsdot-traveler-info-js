@@ -9,7 +9,6 @@
     },
     "exclude": [
         "bower_components",
-        "node_modules",
-        "spec"
+        "node_modules"
     ]
 }

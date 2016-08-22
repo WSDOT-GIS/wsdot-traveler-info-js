@@ -21,8 +21,5 @@
     "test",
     "tests"
   ],
-  "devDependencies": {
-    "jasmine-core": "jasmine#^2.4.1",
-    "requirejs": "^2.2.0"
-  }
+  "devDependencies": {}
 }
