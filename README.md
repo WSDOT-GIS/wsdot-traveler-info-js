@@ -18,10 +18,23 @@ Development Environment
 
 [Visual Studio Code]
 
+Testing
+-------
+
+This project uses [Jasmine] for testing in Node.js environment and [Karma] for testing in browser environment. To run both tests, run `npm test`.
+
+[Karma] test runs on [PhantomJS] with the `web-security` option turned off to work around CORS issue. This allows the tests to pass without using a proxy.
+
+Continuous Integration testing performed on Git push via [Travis-CI].
+
 Usage
 -----
 
 See the JavaScript and TypeScript files in the `spec` folder for usage examples.
 
+[Jasmine]:http://jasmine.github.io/
+[Karma]:http://karma-runner.github.io
+[PhantomJS]:http://phantomjs.org/
+[Travis-CI]:https://travis-ci.org/WSDOT-GIS/wsdot-traveler-info-js
 [WSDOT Traveler Information API]:http://www.wsdot.wa.gov/Traffic/api/
 [Visual Studio Code]:http://code.visualstudio.com/
