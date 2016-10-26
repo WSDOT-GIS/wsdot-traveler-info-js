@@ -8,6 +8,8 @@ TravelerInfoClient.d.ts
 CommonUtils.js
 FerriesClient.js
 TravelerInfoClient.js
+geoJsonUtils.js
+geoJsonUtils.d.ts
 
 
 # Logs

@@ -1,6 +1,6 @@
 // TODO: create recursive property flattener.
 
-import { hasAllProperties } from "CommonUtils";
+import { hasAllProperties } from "./CommonUtils";
 
 // /**
 //  * Converts an object into a valid GeoJSON feature attribute list, with no nested objects.
@@ -99,7 +99,7 @@ export function getId(properties: any): GetIdOutput {
     let output: GetIdOutput;
     if (typeof properties === "object") {
         let re = /(?:(?:Alert)|(?:Camera)|(?:MountainPass)|(?:FlowData)|(?:TravelTime))ID/i;
-        for (name in properties) {
+        for (let name in properties) {
             if (properties.hasOwnProperty(name) && re.test(name)) {
                 output = {
                     name: name,
