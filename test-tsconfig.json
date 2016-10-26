@@ -1,6 +1,7 @@
 {
-    "compileOnSave": true,
+    "$schema": "http://json.schemastore.org/tsconfig",
     "compilerOptions": {
+        "rootDir": "spec",
         "module": "umd",
         "target": "es5",
         "noImplicitAny": true,
@@ -8,7 +9,6 @@
         "declaration": false
     },
     "exclude": [
-        "bower_components",
         "node_modules"
     ]
 }
