@@ -30,6 +30,12 @@ Continuous Integration testing performed on Git push via [Travis-CI].
 Usage
 -----
 
+### Install from NPM ###
+
+```console
+npm install wsdot-traveler-info --save
+```
+
 See the JavaScript and TypeScript files in the `spec` folder for usage examples.
 
 [Jasmine]:http://jasmine.github.io/

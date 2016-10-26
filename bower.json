@@ -5,6 +5,10 @@
   "authors": [
     "WSDOT"
   ],
+  "moduleType": [
+    "amd",
+    "node"
+  ],
   "license": "Unlicense",
   "keywords": [
     "WSDOT",
