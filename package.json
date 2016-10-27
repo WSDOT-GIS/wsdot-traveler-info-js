@@ -14,13 +14,19 @@
   "files": [
     "CommonUtils.d.ts",
     "CommonUtils.js",
+    "CommonUtils.js.map",
     "Ferries.d.ts",
     "FerriesClient.d.ts",
     "FerriesClient.js",
+    "FerriesClient.js.map",
+    "geoJsonUtils.js",
+    "geoJsonUtils.js.map",
+    "geoJsonUtils.d.ts",
     "index.d.ts",
     "TravelerInfo.d.ts",
     "TravelerInfoClient.d.ts",
-    "TravelerInfoClient.js"
+    "TravelerInfoClient.js",
+    "TravelerInfoClient.js.map"
   ],
   "keywords": [
     "WSDOT",

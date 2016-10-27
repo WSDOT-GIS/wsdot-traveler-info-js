@@ -1,6 +1,8 @@
 typings/
 bower_components
+**/*.js.map
 *Spec.d.ts
+**/spec/support/*.d.ts
 **/spec/**/*.js
 CommonUtils.d.ts
 FerriesClient.d.ts

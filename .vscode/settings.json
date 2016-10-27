@@ -2,6 +2,7 @@
 {
   "files.exclude": {
     "**/{*Spec,CommonUtils,*Client,geoJsonUtils,support/*}.{js,d.ts}": { "when": "$(basename).ts" },
+    "**/*.js.map": true,
     "**/.git": true,
     "**/.svn": true,
     "**/.hg": true,

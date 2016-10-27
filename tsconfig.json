@@ -4,8 +4,9 @@
         "module": "umd",
         "target": "es5",
         "noImplicitAny": true,
-        "sourceMap": false,
-        "declaration": false,
+        "sourceMap": true,
+        "pretty": true,
+        "declaration": true,
         "strictNullChecks": true
     },
     "exclude": [

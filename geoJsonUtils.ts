@@ -59,7 +59,7 @@ export function flattenProperties(o: any, ignoredName?: string): any {
  * @property {string} name - The name of the ID property
  * @property {number} value
  */
-interface GetIdOutput {
+export interface GetIdOutput {
     /** The name of the ID property of the object */
     name: string;
     /** The value of the ID property. */
@@ -113,7 +113,7 @@ function roadwayLocationToCoordinates(...roadwayLocations: RoadwayLocation[]): [
     }
 }
 
-type HasExtractableGeometry = LatLong | Alert | Camera | FlowData | TravelTimeRoute;
+export type HasExtractableGeometry = LatLong | Alert | Camera | FlowData | TravelTimeRoute;
 
 /**
  * Extracts the geometry from a Traffic API feature and returns it as a GeoJSON geometry.
