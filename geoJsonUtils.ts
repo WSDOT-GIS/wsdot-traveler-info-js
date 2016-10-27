@@ -1,6 +1,6 @@
 // TODO: create recursive property flattener.
 
-import { hasAllProperties } from "./CommonUtils";
+import { hasAllProperties, getPropertyMatching } from "./CommonUtils";
 
 // /**
 //  * Converts an object into a valid GeoJSON feature attribute list, with no nested objects.
@@ -33,7 +33,7 @@ import { hasAllProperties } from "./CommonUtils";
 export function flattenProperties(o: any, ignoredName?: string): any {
     let coordRe = /((?:Lat)|(?:Long))itude$/;
     let output: any = {};
-    let position: number[];
+    let position: number[] | null = null;
 
     function addRouteLocationPropertiesToObject(output: any, propertyName: string, roadwayLocation: RoadwayLocation) {
         let endRe = /^End/i;
@@ -95,8 +95,8 @@ interface GetIdOutput {
  * @param {object} properties - An object returned from the traffic API with an ID.
  * @returns {GetIdOutput} - Returns the name of the ID field as well as the ID value.
  */
-export function getId(properties: any): GetIdOutput {
-    let output: GetIdOutput;
+export function getId(properties: any): GetIdOutput | null {
+    let output: GetIdOutput | null = null;
     if (typeof properties === "object") {
         let re = /(?:(?:Alert)|(?:Camera)|(?:MountainPass)|(?:FlowData)|(?:TravelTime))ID/i;
         for (let name in properties) {
@@ -119,9 +119,14 @@ function detectMultipoint(input: any): Boolean {
     return input && (input.hasOwnProperty("EndRoadwayLocation") || input.hasOwnProperty("EndPoint"));
 }
 
+/**
+ * Converts a roadway location object to GeoJSON coordinates.
+ * @param {...RoadwayLocation} roadwayLocations - Roadway location objects.
+ * @returns {(number[] | number[][])} coordinate array(s)
+ */
 function roadwayLocationToCoordinates(...roadwayLocations: RoadwayLocation[]): [number, number] | [number, number][] | any {
     if (roadwayLocations.length < 1) {
-
+        throw new TypeError("No input provided.");
     } else if (roadwayLocations.length > 1) {
         let output: [number, number][] = [];
         for (let l of roadwayLocations) {
@@ -133,9 +138,16 @@ function roadwayLocationToCoordinates(...roadwayLocations: RoadwayLocation[]): [
     }
 }
 
-function wsdotToGeometry(input: any) {
-    if (!input) {
-        throw new TypeError("No input element");
+type HasExtractableGeometry = LatLong | Alert | Camera | FlowData | TravelTimeRoute;
+
+/**
+ * Extracts the geometry from a Traffic API feature and returns it as a GeoJSON geometry.
+ */
+function wsdotToGeometry(input: any | HasExtractableGeometry): GeoJSON.Point | GeoJSON.MultiPoint | null {
+    if (input === undefined) {
+        throw new TypeError("No input provided");
+    } else if (input === null) {
+        return null;
     }
 
     let type = detectMultipoint(input) ? "MultiPoint" : "Point";
@@ -147,21 +159,65 @@ function wsdotToGeometry(input: any) {
             type: "MultiPoint",
             coordinates: roadwayLocationToCoordinates(startPoint, endPoint)
         };
+        return mp;
+    } else if (hasAllProperties(input, "Latitude", "Longitude")) {
+        return {
+            type: "Point",
+            coordinates: [input.Latitude, input.Longitude]
+        };
     } else {
-
+        let {name, location} = getPropertyMatching(input, /Location$/);
+        if (hasAllProperties(location, "Latitude", "Longitude")) {
+            return {
+                type: "Point",
+                coordinates: [location.Latitude, location.Longitude]
+            };
+        } else {
+            return null;
+        }
     }
 }
 
-// /**
-//  * Converts a traffic API feature into a GeoJSON feature.
-//  */
-// export function convertToGeoJsonFeature<T extends GeoJSON.GeometryObject>(wsdotFeature: any): GeoJSON.Feature<T> {
-//     let idInfo = getId(wsdotFeature);
-//     let flattened = flattenProperties(wsdotFeature, idInfo ? idInfo.name : undefined);
+/**
+ * Converts a traffic API feature into a GeoJSON feature.
+ */
+export function convertToGeoJsonFeature(wsdotFeature: any | HasExtractableGeometry) {
+    let idInfo = getId(wsdotFeature);
+    let flattened = flattenProperties(wsdotFeature, idInfo !== null ? idInfo.name : undefined);
+    let geometry = wsdotToGeometry(wsdotFeature);
+    let f: GeoJSON.Feature<GeoJSON.Point> | GeoJSON.Feature<GeoJSON.MultiPoint> | {
+        type: "Feature",
+        geometry: null,
+        properties: any,
+        id?: string
+    };
+    if (geometry !== null) {
+        let g2: GeoJSON.Point | GeoJSON.MultiPoint = geometry;
+        if (g2.type === "MultiPoint") {
+            f = {
+                type: "Feature",
+                geometry: g2,
+                properties: flattened
+            };
+        } else if (g2.type === "Point") {
+            f = {
+                type: "Feature",
+                geometry: g2,
+                properties: flattened
+            };
+        } else {
+            throw new TypeError("Could not convert to GeoJSON feature.");
+        }
+    } else {
+        f = {
+            type: "Feature",
+            geometry: null,
+            properties: flattened
+        };
+    }
+    if (idInfo !== null) {
+        f.id = idInfo.value.toString();
+    }
+    return f;
 
-//     if (idInfo.name === "AlertID") {
-//         let alertGeo = alertToGeometry(wsdotFeature);
-//     } else {
-//         // Point
-//     }
-// }
+}

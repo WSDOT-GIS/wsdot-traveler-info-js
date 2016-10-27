@@ -1,7 +1,7 @@
 typings/
 bower_components
 *Spec.d.ts
-**/spec/*.js
+**/spec/**/*.js
 CommonUtils.d.ts
 FerriesClient.d.ts
 TravelerInfoClient.d.ts

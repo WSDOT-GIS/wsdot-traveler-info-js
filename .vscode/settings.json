@@ -1,7 +1,7 @@
 // Place your settings in this file to overwrite default and user settings.
 {
   "files.exclude": {
-    "**/*.{js,d.ts}": { "when": "$(basename).ts" },
+    "**/{*Spec,CommonUtils,*Client,geoJsonUtils,support/*}.{js,d.ts}": { "when": "$(basename).ts" },
     "**/.git": true,
     "**/.svn": true,
     "**/.hg": true,

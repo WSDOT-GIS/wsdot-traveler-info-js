@@ -6,12 +6,12 @@ interface LatLong {
 interface AlertCommon {
     AlertID: number;
     Region: string;
-    County: string;
+    County: string | null;
     StartTime: Date;
-    EndTime: Date;
+    EndTime: Date | null;
     EventCategory: string;
     HeadlineDescription: string;
-    ExtendedDescription: string;
+    ExtendedDescription: string | null;
     EventStatus: string;
     LastUpdatedTime: Date;
     Priority: string;
@@ -28,16 +28,16 @@ interface MapArea {
 }
 
 interface RoadwayLocation extends LatLong {
-    Description: string;
+    Description: string | null;
     RoadName: string;
-    Direction: string;
+    Direction: string | null;
     MilePost: number;
 }
 
 interface BorderCrossingData {
     Time: Date;
     CrossingName: string;
-    BorderCrossingLocation: RoadwayLocation;
+    BorderCrossingLocation: RoadwayLocation | null;
     WaitTime: number;
 }
 
@@ -47,13 +47,13 @@ interface CameraCommon {
     DisplayLatitude: number;
     DisplayLongitude: number;
     Title: string;
-    Description: string;
-    ImageURL: string;
-    CameraOwner: string;
-    OwnerURL: string;
+    Description: string | null;
+    ImageURL: string | null;
+    CameraOwner: string | null;
+    OwnerURL: string | null;
     ImageWidth: number;
     ImageHeight: number;
-    IsActive: boolean;
+    IsActive: boolean | null;
     SortOrder: number;
 }
 
@@ -100,7 +100,7 @@ interface PassCondition extends LatLong {
     MountainPassId: number;
     MountainPassName: string;
     DateUpdated: Date;
-    TemperatureInFahrenheit: number;
+    TemperatureInFahrenheit: number | null;
     ElevationInFeet: number;
     WeatherCondition: string;
     RoadCondition: string;
@@ -137,18 +137,26 @@ interface WeatherCommon extends LatLong {
     StationName: string;
 }
 
+type CardinalDirection =
+    "N" | "S" | "E" | "W" |
+    "NNE" | "NEE" | "NE" | "NW" | "NNW" | "NWW" |
+    "SSE" | "SEE" | "SE" | "SW" | "SSW" | "SWW" |
+    "N/A";
+
+
 interface WeatherInfo extends WeatherCommon, LatLong {
     StationID: number;
     ReadingTime: Date;
-    TemperatureInFahrenheit: number;
-    PrecipitationInInches: number;
-    WindSpeedInMPH: number;
-    Visibility: number;
+    TemperatureInFahrenheit: number | null;
+    PrecipitationInInches: number | null;
+    WindSpeedInMPH: number | null;
+    Visibility: number | null;
     SkyCoverage: string;
-    BarametricPressure: number;
-    RelativeHumidity: number;
-    WindDirectionCardinal: string;
-    WindDirection: number;
+    BarometricPressure: number | null;
+    RelativeHumidity: number | null;
+    WindDirectionCardinal: CardinalDirection; //string;
+    WindDirection: number | null;
+    WindGustSpeedInMPH: number | null,
 }
 
 interface WeatherStationData extends WeatherCommon, LatLong {
