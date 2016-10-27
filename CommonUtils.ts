@@ -93,7 +93,7 @@ export function getJsonFromUrl(url: string): Promise<any> {
  */
 export function parseWcfDate(dateString: string): Date | string {
     if (typeof dateString === "string") {
-        let match: string[] = dateString.match(wcfDateRe);
+        let match = dateString.match(wcfDateRe);
         if (match) {
             // Remove the whole match, the first item in array.
             // Parse remaining into numbers.
@@ -118,7 +118,7 @@ export function toWcfDate(date: Date): string {
  * @param {?Object} searchParams - Search parameters.
  * @returns {string} search string for URL
  */
-export function buildSearchString(searchParams?: any): string {
+export function buildSearchString(searchParams?: any): string | null {
     if (!searchParams) {
         return null;
     } else {
@@ -155,4 +155,44 @@ export function convertObjectProperties(o: any): void {
             }
         }
     }
+}
+
+/**
+ * Determines if an object has properties matching ALL of the given names.
+ * @param {object} o - An object
+ * @param {...string} propertyNames - Names of properties to look for.
+ * @returns {boolean} returns true if object has all named properties, false otherwise.
+ */
+export function hasAllProperties(o: Object, ...propertyNames: string[]): boolean {
+    if (o === null) {
+        return false;
+    }
+    let allFound = true;
+    for (let n of propertyNames) {
+        allFound = allFound && o.hasOwnProperty(n);
+        if (!allFound) {
+            break;
+        }
+    }
+    return allFound;
+}
+
+/**
+ * Gets the property name and value that matches the given Regexp.
+ */
+export function getPropertyMatching(o: any, propertyNameRegexp: RegExp): { name: string | null, location: any | null } {
+    let name: string | null = null;
+    let location: RoadwayLocation | null = null;
+
+    for (let n in o) {
+        if (n.match(propertyNameRegexp)) {
+            name = n;
+            location = o[n];
+            break;
+        }
+    }
+    return {
+        name: name,
+        location: location
+    };
 }

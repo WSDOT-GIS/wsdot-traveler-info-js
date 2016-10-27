@@ -1,17 +1,25 @@
-interface Alert {
+interface LatLong {
+    Latitude: number;
+    Longitude: number;
+}
+
+interface AlertCommon {
     AlertID: number;
-    StartRoadwayLocation: RoadwayLocation;
-    EndRoadwayLocation: RoadwayLocation;
     Region: string;
-    County: string;
+    County: string | null;
     StartTime: Date;
-    EndTime: Date;
+    EndTime: Date | null;
     EventCategory: string;
     HeadlineDescription: string;
-    ExtendedDescription: string;
+    ExtendedDescription: string | null;
     EventStatus: string;
     LastUpdatedTime: Date;
     Priority: string;
+}
+
+interface Alert extends AlertCommon {
+    StartRoadwayLocation: RoadwayLocation;
+    EndRoadwayLocation: RoadwayLocation;
 }
 
 interface MapArea {
@@ -19,42 +27,43 @@ interface MapArea {
     MapAreaDescription: string;
 }
 
-interface RoadwayLocation {
-    Description: string;
+interface RoadwayLocation extends LatLong {
+    Description: string | null;
     RoadName: string;
-    Direction: string;
+    Direction: string | null;
     MilePost: number;
-    Latitude: number;
-    Longitude: number;
 }
 
 interface BorderCrossingData {
     Time: Date;
     CrossingName: string;
-    BorderCrossingLocation: RoadwayLocation;
+    BorderCrossingLocation: RoadwayLocation | null;
     WaitTime: number;
 }
 
-interface Camera {
+interface CameraCommon {
     CameraID: number;
     Region: string;
-    CameraLocation: RoadwayLocation;
     DisplayLatitude: number;
     DisplayLongitude: number;
     Title: string;
-    Description: string;
-    ImageURL: string;
-    CameraOwner: string;
-    OwnerURL: string;
+    Description: string | null;
+    ImageURL: string | null;
+    CameraOwner: string | null;
+    OwnerURL: string | null;
     ImageWidth: number;
     ImageHeight: number;
-    IsActive: boolean;
+    IsActive: boolean | null;
     SortOrder: number;
 }
 
-// type RestrictionType = { "restriction" | "bridge" | "road" };
+interface Camera extends CameraCommon {
+    CameraLocation: RoadwayLocation;
+}
 
-interface CVRestrictionData {
+type CommercialVehicleRestrictionType = "restriction" | "bridge" | "road";
+
+interface CVRestrictionData extends LatLong {
     StateRouteID: string;
     State: string;
     RestrictionWidthInInches: number;
@@ -71,8 +80,6 @@ interface CVRestrictionData {
     LocationName: string;
     LocationDescription: string;
     RestrictionComment: string;
-    Latitude: number;
-    Longitude: number;
     BridgeNumber: string;
     MaximumGrossVehicleWeightInPounds: number;
     BridgeName: string;
@@ -81,7 +88,7 @@ interface CVRestrictionData {
     SAMaxAxle: number;
     TDMaxAxle: number;
     VehicleType: string;
-    RestrictionType: "restriction" | "bridge" | "road"; //CommercialVehicleRestrictionType;
+    RestrictionType: CommercialVehicleRestrictionType;
 }
 
 interface TravelRestriction {
@@ -89,13 +96,11 @@ interface TravelRestriction {
     RestrictionText: string;
 }
 
-interface PassCondition {
+interface PassCondition extends LatLong {
     MountainPassId: number;
     MountainPassName: string;
-    Latitude: number;
-    Longitude: number;
     DateUpdated: Date;
-    TemperatureInFahrenheit: number;
+    TemperatureInFahrenheit: number | null;
     ElevationInFeet: number;
     WeatherCondition: string;
     RoadCondition: string;
@@ -113,38 +118,47 @@ interface FlowData {
     FlowReadingValue: number; // FlowStationReading;
 }
 
-interface TravelTimeRoute {
+interface TravelTimeRouteCommon {
     TravelTimeID: number;
     Name: string;
     Description: string;
     TimeUpdated: Date;
-    StartPoint: RoadwayLocation;
-    EndPoint: RoadwayLocation;
     Distance: number;
     AverageTime: number;
     CurrentTime: number;
 }
 
-interface WeatherInfo {
-    StationID: number;
-    StationName: string;
-    Latitude: number;
-    Longitude: number;
-    ReadingTime: Date;
-    TemperatureInFahrenheit: number;
-    PrecipitationInInches: number;
-    WindSpeedInMPH: number;
-    Visibility: number;
-    SkyCoverage: string;
-    BarametricPressure: number;
-    RelativeHumidity: number;
-    WindDirectionCardinal: string;
-    WindDirection: number;
+interface TravelTimeRoute extends TravelTimeRouteCommon {
+    StartPoint: RoadwayLocation;
+    EndPoint: RoadwayLocation;
 }
 
-interface WeatherStationData {
-    StationCode: number;
+interface WeatherCommon extends LatLong {
     StationName: string;
-    Latitude: number;
-    Longitude: number;
+}
+
+type CardinalDirection =
+    "N" | "S" | "E" | "W" |
+    "NNE" | "NEE" | "NE" | "NW" | "NNW" | "NWW" |
+    "SSE" | "SEE" | "SE" | "SW" | "SSW" | "SWW" |
+    "N/A";
+
+
+interface WeatherInfo extends WeatherCommon, LatLong {
+    StationID: number;
+    ReadingTime: Date;
+    TemperatureInFahrenheit: number | null;
+    PrecipitationInInches: number | null;
+    WindSpeedInMPH: number | null;
+    Visibility: number | null;
+    SkyCoverage: string;
+    BarometricPressure: number | null;
+    RelativeHumidity: number | null;
+    WindDirectionCardinal: CardinalDirection; //string;
+    WindDirection: number | null;
+    WindGustSpeedInMPH: number | null,
+}
+
+interface WeatherStationData extends WeatherCommon, LatLong {
+    StationCode: number;
 }

@@ -26,7 +26,8 @@ module.exports = function(config) {
       {pattern: 'CommonUtils.js', included: false},
       {pattern: 'FerriesClient.js', included: false},
       {pattern: 'TravelerInfoClient.js', included: false},
-      {pattern: 'spec/*.js', included: false},
+      {pattern: 'geoJsonUtils.js', included: false},
+      {pattern: 'spec/**/*.js', included: false},
       'test-main.js'
     ],
 
