@@ -1,29 +1,4 @@
-// TODO: create recursive property flattener.
-
 import { hasAllProperties, getPropertyMatching } from "./CommonUtils";
-
-// /**
-//  * Converts an object into a valid GeoJSON feature attribute list, with no nested objects.
-//  */
-// export function flattenProperties(obj: any, rootObj?: any, prefix: string = ""): any {
-//     let output = rootObj || {};
-
-//     for (let name in obj) {
-//         if (obj.hasOwnProperty(name)) {
-//             let value = obj[name];
-//             if (typeof value === "object" && !(value instanceof Date)) {
-//                 flattenProperties(value, output, `${prefix}${name}_`);
-//             } else {
-//                 output[name] = value;
-//             }
-//         }
-//     }
-
-//     return output;
-
-// }
-
-
 
 /**
  * "Flattens" the properties of an object so that there are no inner-objects.
@@ -185,39 +160,33 @@ export function convertToGeoJsonFeature(wsdotFeature: any | HasExtractableGeomet
     let idInfo = getId(wsdotFeature);
     let flattened = flattenProperties(wsdotFeature, idInfo !== null ? idInfo.name : undefined);
     let geometry = wsdotToGeometry(wsdotFeature);
-    let f: GeoJSON.Feature<GeoJSON.Point> | GeoJSON.Feature<GeoJSON.MultiPoint> | {
+    let f: GeoJSON.Feature<any>;
+    f = {
         type: "Feature",
-        geometry: null,
-        properties: any,
-        id?: string
+        geometry: geometry,
+        properties: flattened
     };
-    if (geometry !== null) {
-        let g2: GeoJSON.Point | GeoJSON.MultiPoint = geometry;
-        if (g2.type === "MultiPoint") {
-            f = {
-                type: "Feature",
-                geometry: g2,
-                properties: flattened
-            };
-        } else if (g2.type === "Point") {
-            f = {
-                type: "Feature",
-                geometry: g2,
-                properties: flattened
-            };
-        } else {
-            throw new TypeError("Could not convert to GeoJSON feature.");
-        }
-    } else {
-        f = {
-            type: "Feature",
-            geometry: null,
-            properties: flattened
-        };
-    }
     if (idInfo !== null) {
         f.id = idInfo.value.toString();
     }
     return f;
+}
 
+/**
+ * Converts an array of Traveler API objects into a GeoJSON feature collection.
+ */
+export function convertToGeoJsonFeatureCollection(wsdotFeatures: any[]): GeoJSON.FeatureCollection<any> {
+    let geoJsonFeatures: GeoJSON.Feature<any>[] = [];
+    let featureType: string | null = null;
+    for (let item of wsdotFeatures) {
+        let feature = convertToGeoJsonFeature(item);
+        if (featureType === null && feature.geometry !== null) {
+            featureType = feature.geometry.type;
+        }
+        geoJsonFeatures.push(feature);
+    }
+    return {
+        features: geoJsonFeatures,
+        type: "FeatureCollection",
+    };
 }

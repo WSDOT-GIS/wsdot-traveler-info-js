@@ -1,5 +1,6 @@
-import { flattenProperties, convertToGeoJsonFeature } from "../geoJsonUtils";
+import { flattenProperties, convertToGeoJsonFeatureCollection } from "../geoJsonUtils";
 import { hasAllProperties } from "../CommonUtils";
+// Import sample data
 import alerts from "./support/Alerts";
 import borderCrossings from "./support/BorderCrossings";
 import cameras from "./support/Cameras";
@@ -26,38 +27,37 @@ describe("geoJsonUtils test", () => {
     describe("should be able to convert API response to GeoJSON features", () => {
 
 
-        let convertFeatures = (arr: any[]) => {
-            let features: any[] = [];
-            for (let item of arr) {
-                let geoJsonFeature = convertToGeoJsonFeature(item);
-                expect(hasAllProperties(geoJsonFeature, "geometry", "type", "properties")).toEqual(true, "Should have all required GeoJSON Feature properties.");
-                expect(geoJsonFeature.type).toEqual("Feature");
-                if (geoJsonFeature.id) {
-                    let t = typeof geoJsonFeature.id;
+        function convertAndTestFeatures(arr: any[]) {
+            let fc = convertToGeoJsonFeatureCollection(arr);
+            expect(fc.features.length).toEqual(arr.length);
+            for (let feature of fc.features) {
+                expect(hasAllProperties(feature, "geometry", "type", "properties")).toEqual(true, "Should have all required GeoJSON Feature properties.");
+                expect(feature.type).toEqual("Feature");
+                if (feature.id) {
+                    let t = typeof feature.id;
                     expect(t === "string" || t === "number").toEqual(true);
                 }
-                features.push(geoJsonFeature);
+
             }
-            expect(features.length).toEqual(arr.length);
-        };
+        }
 
         it("should be able to convert alerts to GeoJSON features", () => {
-            convertFeatures(alerts);
+            convertAndTestFeatures(alerts);
         });
         it("should be able to convert borderCrossings to GeoJSON features", () => {
-            convertFeatures(borderCrossings);
+            convertAndTestFeatures(borderCrossings);
         });
         it("should be able to convert cameras to GeoJSON features", () => {
-            convertFeatures(cameras);
+            convertAndTestFeatures(cameras);
         });
         it("should be able to convert flowDatas to GeoJSON features", () => {
-            convertFeatures(flowDatas);
+            convertAndTestFeatures(flowDatas);
         });
         it("should be able to convert passConditions to GeoJSON features", () => {
-            convertFeatures(passConditions);
+            convertAndTestFeatures(passConditions);
         });
         it("should be able to convert weatherInfo to GeoJSON features", () => {
-            convertFeatures(weatherInfo);
+            convertAndTestFeatures(weatherInfo);
         });
     });
 });
