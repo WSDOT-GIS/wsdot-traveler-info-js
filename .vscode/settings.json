@@ -1,6 +1,7 @@
 // Place your settings in this file to overwrite default and user settings.
 {
   "files.exclude": {
+    // Exclude complied output JavaScript and type definition files.
     "**/{*Spec,CommonUtils,*Client,geoJsonUtils,support/*}.{js,d.ts}": { "when": "$(basename).ts" },
     "**/*.js.map": true,
     "**/.git": true,

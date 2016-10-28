@@ -1,3 +1,5 @@
+// Jasmine tests for Traveler Info API access functions.
+
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
 import TravelerInfoClient from "../TravelerInfoClient";

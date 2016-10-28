@@ -1,3 +1,5 @@
+// Jasmine tests for the Ferries Client functions.
+
 import FerriesClient from "../FerriesClient";
 
 export default describe("Ferries", function () {

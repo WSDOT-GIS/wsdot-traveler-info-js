@@ -1,3 +1,6 @@
+/**
+ * Provides sample flow data.
+ */
 let fd: FlowData[] = [
   {
     "FlowDataID": 4544,

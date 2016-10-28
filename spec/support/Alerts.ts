@@ -1,3 +1,6 @@
+/**
+ * Provides sample alert data
+ */
 let alerts: Alert[] = [
   {
     "AlertID": 252640,

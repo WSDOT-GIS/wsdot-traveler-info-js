@@ -1,3 +1,6 @@
+/**
+ * Provides sample Pass Conditions
+ */
 let mpc: PassCondition[] = [
   {
     "DateUpdated": new Date(1477521223197 - 700),

@@ -1,3 +1,6 @@
+/**
+ * Provides sample border crossing data.
+ */
 let bc: BorderCrossingData[] = [
   {
     "BorderCrossingLocation": {

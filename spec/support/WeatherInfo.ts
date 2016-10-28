@@ -1,3 +1,7 @@
+/**
+ * Provides sample weather info.
+ */
+
 let weatherInfo: WeatherInfo[] = [
   {
     "BarometricPressure": 1001.8,

@@ -1,3 +1,6 @@
+/**
+ * Provides sample camera data.
+ */
 let cameras: Camera[] = [
   {
     CameraID: 8216,
