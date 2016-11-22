@@ -1,8 +1,8 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        "module": "umd",
-        "target": "es5",
+        "module": "es2015",
+        "target": "es2015",
         "noImplicitAny": true,
         "sourceMap": true,
         "pretty": true,

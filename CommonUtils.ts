@@ -1,9 +1,3 @@
-let isBrowser = typeof window === "undefined";
-
-// To use the Fetch API in node, the node-fetch module is required.
-// Older web browsers may require a polyfill.
-let fetch = isBrowser ? require("node-fetch") : window.fetch;
-
 /**
  * Provides common functions for other modules.
  * @module CommonUtils

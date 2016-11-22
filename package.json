@@ -5,11 +5,9 @@
   "main": "TravelerInfoClient.js",
   "scripts": {
     "docs": "jsdoc2md TravelerInfoClient.js FerriesClient.js CommonUtils.js > api.md",
-    "build": "tsc",
-    "prepublish": "npm run build",
+    "prepublish": "grunt",
     "test": "jasmine && karma start",
-    "lint": "tslint -c tslint.json -e \"typings/**/\" \"**/*.ts\"",
-    "clean": "echo Removing compiled JavaScript... && del *.js *.map \"spec\\*Spec.js\" \"spec\\*.d.ts\" CommonUtils.d.ts FerriesClient.d.ts TravelerInfoClient.d.ts "
+    "lint": "tslint -c tslint.json -e \"typings/**/\" \"**/*.ts\""
   },
   "files": [
     "CommonUtils.d.ts",
@@ -42,18 +40,27 @@
   "author": "WSDOT",
   "license": "Unlicense",
   "devDependencies": {
-    "@types/core-js": "^0.9.34",
     "@types/geojson": "0.0.31",
-    "@types/jasmine": "^2.5.35",
-    "@types/node": "^6.0.45",
+    "@types/jasmine": "^2.5.38",
+    "@types/node": "^6.0.50",
     "@types/whatwg-fetch": "0.0.32",
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-es2015": "^6.18.0",
+    "grunt": "^1.0.1",
+    "grunt-babel": "^6.0.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-ts": "^6.0.0-beta.3",
     "jasmine": "^2.5.2",
     "karma": "^1.3.0",
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-requirejs": "^1.1.0",
+    "load-grunt-tasks": "^3.5.2",
     "requirejs": "^2.3.2",
-    "typescript": "^2.0.3"
+    "typescript": "^2.0.10",
+    "whatwg-fetch": "^2.0.1"
   },
   "dependencies": {
     "node-fetch": "^1.6.3"

@@ -8,7 +8,6 @@
 // Older web browsers may require a polyfill.
 import { parseWcfDate, buildSearchString } from "./CommonUtils";
 
-let fetch = typeof window === "undefined" ? require("node-fetch") : window.fetch;
 /**
  * Provides custom JSON parsing.
  */

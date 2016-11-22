@@ -18,7 +18,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       // Polyfills for PhantomJS.
-      'https://cdn.polyfill.io/v2/polyfill.min.js?features=fetch,Intl.~locale.en-US',
+      'node_modules/babel-polyfill/dist/polyfill.min.js',
+      'node_modules/whatwg-fetch/fetch.js',
       // Require.js
       'node_modules/requirejs/require.js',
       'node_modules/karma-requirejs/lib/adapter.js',

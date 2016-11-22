@@ -6,25 +6,24 @@
 
 import { parseWcfDate, wcfDateRe, convertObjectProperties, getJsonP, getJsonFromUrl } from "./CommonUtils";
 
-
-// let isBrowser = typeof window === "undefined";
-
-// // To use the Fetch API in node, the node-fetch module is required.
-// // Older web browsers may require a polyfill.
-// let fetch = isBrowser ? require("node-fetch") : window.fetch;
-let dateFmt = new Intl.DateTimeFormat(undefined, {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit"
-});
-
 /**
  * Formats the date to YYYY-MM-DD format.
  * @param {Date} theDate - Date to be formatted.
  * @returns {string}
  */
 function formatDate(theDate: Date): string {
-    return dateFmt.format(theDate).replace(/\//g, "-");
+    let dateParts = [theDate.getFullYear(), theDate.getMonth() + 1, theDate.getDate()].map(function(n, index) {
+        if (index === 0) {
+            return n.toString(10);
+        } else {
+            let s = n.toString(10);
+            if (s.length === 1) {
+                s = `0${s}`;
+            }
+            return s;
+        }
+    });
+    return dateParts.join('-');
 }
 
 /**

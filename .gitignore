@@ -1,4 +1,6 @@
+.tscache
 typings/
+.tscache/
 bower_components
 **/*.js.map
 *Spec.d.ts
