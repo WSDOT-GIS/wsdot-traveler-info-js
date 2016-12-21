@@ -1,5 +1,6 @@
 // Jasmine tests for the Ferries Client functions.
 
+import { DateRange } from "../Ferries";
 import FerriesClient from "../FerriesClient";
 
 export default describe("Ferries", function () {

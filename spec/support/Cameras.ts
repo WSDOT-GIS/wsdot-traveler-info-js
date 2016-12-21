@@ -1,3 +1,5 @@
+import { Camera } from "../../TravelerInfo";
+
 /**
  * Provides sample camera data.
  */

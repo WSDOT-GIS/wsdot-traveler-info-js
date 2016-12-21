@@ -11,6 +11,7 @@ import cameras from "./support/Cameras";
 import flowDatas from "./support/FlowDatas";
 import passConditions from "./support/PassConditions";
 import weatherInfo from "./support/WeatherInfo";
+import { Alert, BorderCrossingData, Camera, FlowData, PassCondition, WeatherInfo } from "../TravelerInfo";
 
 describe("geoJsonUtils test", () => {
     it("should be able to flatten an object", () => {

@@ -5,6 +5,7 @@
 
 
 import { parseWcfDate, wcfDateRe, convertObjectProperties, getJsonP, getJsonFromUrl } from "./CommonUtils";
+import { DateRange, Terminal, TerminalCombo, TerminalComboVerbose, FareLineItem, VerboseFareLineItem, FareTotal } from "./Ferries";
 
 /**
  * Formats the date to YYYY-MM-DD format.
@@ -23,7 +24,7 @@ function formatDate(theDate: Date): string {
             return s;
         }
     });
-    return dateParts.join('-');
+    return dateParts.join("-");
 }
 
 /**

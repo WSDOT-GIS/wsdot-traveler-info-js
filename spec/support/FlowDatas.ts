@@ -1,3 +1,6 @@
+import { FlowData } from "../../TravelerInfo";
+
+
 /**
  * Provides sample flow data.
  */

@@ -7,6 +7,7 @@
 // To use the Fetch API in node, the node-fetch module is required.
 // Older web browsers may require a polyfill.
 import { parseWcfDate, buildSearchString } from "./CommonUtils";
+import { BorderCrossingData, Alert, CVRestrictionData, MapArea, Camera, PassCondition, FlowData, TravelTimeRoute, WeatherInfo, WeatherStationData } from "./TravelerInfo";
 
 /**
  * Provides custom JSON parsing.

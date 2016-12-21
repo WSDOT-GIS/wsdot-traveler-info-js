@@ -1,3 +1,6 @@
+import { WeatherInfo } from "../../TravelerInfo";
+
+
 /**
  * Provides sample weather info.
  */

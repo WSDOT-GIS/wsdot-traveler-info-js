@@ -3,6 +3,9 @@
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
 import TravelerInfoClient from "../TravelerInfoClient";
+
+import { Alert, MapArea, WeatherInfo } from "../TravelerInfo";
+
 let apiKey = "3a364cc8-0538-48f6-a08b-f1317f95fd7d";
 let client = new TravelerInfoClient(apiKey);
 

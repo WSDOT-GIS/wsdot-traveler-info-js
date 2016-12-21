@@ -1,3 +1,6 @@
+import { PassCondition } from "../../TravelerInfo";
+
+
 /**
  * Provides sample Pass Conditions
  */

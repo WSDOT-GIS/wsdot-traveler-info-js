@@ -1,9 +1,9 @@
-interface LatLong {
+export interface LatLong {
     Latitude: number;
     Longitude: number;
 }
 
-interface AlertCommon {
+export interface AlertCommon {
     AlertID: number;
     Region: string;
     County: string | null;
@@ -17,31 +17,31 @@ interface AlertCommon {
     Priority: string;
 }
 
-interface Alert extends AlertCommon {
+export interface Alert extends AlertCommon {
     StartRoadwayLocation: RoadwayLocation;
     EndRoadwayLocation: RoadwayLocation;
 }
 
-interface MapArea {
+export interface MapArea {
     MapArea: string;
     MapAreaDescription: string;
 }
 
-interface RoadwayLocation extends LatLong {
+export interface RoadwayLocation extends LatLong {
     Description: string | null;
     RoadName: string;
     Direction: string | null;
     MilePost: number;
 }
 
-interface BorderCrossingData {
+export interface BorderCrossingData {
     Time: Date;
     CrossingName: string;
     BorderCrossingLocation: RoadwayLocation | null;
     WaitTime: number;
 }
 
-interface CameraCommon {
+export interface CameraCommon {
     CameraID: number;
     Region: string;
     DisplayLatitude: number;
@@ -57,13 +57,13 @@ interface CameraCommon {
     SortOrder: number;
 }
 
-interface Camera extends CameraCommon {
+export interface Camera extends CameraCommon {
     CameraLocation: RoadwayLocation;
 }
 
-type CommercialVehicleRestrictionType = "restriction" | "bridge" | "road";
+export type CommercialVehicleRestrictionType = "restriction" | "bridge" | "road";
 
-interface CVRestrictionData extends LatLong {
+export interface CVRestrictionData extends LatLong {
     StateRouteID: string;
     State: string;
     RestrictionWidthInInches: number;
@@ -91,12 +91,12 @@ interface CVRestrictionData extends LatLong {
     RestrictionType: CommercialVehicleRestrictionType;
 }
 
-interface TravelRestriction {
+export interface TravelRestriction {
     TravelDirection: string;
     RestrictionText: string;
 }
 
-interface PassCondition extends LatLong {
+export interface PassCondition extends LatLong {
     MountainPassId: number;
     MountainPassName: string;
     DateUpdated: Date;
@@ -109,7 +109,7 @@ interface PassCondition extends LatLong {
     RestrictionTwo: TravelRestriction;
 }
 
-interface FlowData {
+export interface FlowData {
     FlowDataID: number;
     Time: Date;
     StationName: string;
@@ -118,7 +118,7 @@ interface FlowData {
     FlowReadingValue: number; // FlowStationReading;
 }
 
-interface TravelTimeRouteCommon {
+export interface TravelTimeRouteCommon {
     TravelTimeID: number;
     Name: string;
     Description: string;
@@ -128,23 +128,23 @@ interface TravelTimeRouteCommon {
     CurrentTime: number;
 }
 
-interface TravelTimeRoute extends TravelTimeRouteCommon {
+export interface TravelTimeRoute extends TravelTimeRouteCommon {
     StartPoint: RoadwayLocation;
     EndPoint: RoadwayLocation;
 }
 
-interface WeatherCommon extends LatLong {
+export interface WeatherCommon extends LatLong {
     StationName: string;
 }
 
-type CardinalDirection =
+export type CardinalDirection =
     "N" | "S" | "E" | "W" |
     "NNE" | "NEE" | "NE" | "NW" | "NNW" | "NWW" |
     "SSE" | "SEE" | "SE" | "SW" | "SSW" | "SWW" |
     "N/A";
 
 
-interface WeatherInfo extends WeatherCommon, LatLong {
+export interface WeatherInfo extends WeatherCommon, LatLong {
     StationID: number;
     ReadingTime: Date;
     TemperatureInFahrenheit: number | null;
@@ -159,6 +159,6 @@ interface WeatherInfo extends WeatherCommon, LatLong {
     WindGustSpeedInMPH: number | null,
 }
 
-interface WeatherStationData extends WeatherCommon, LatLong {
+export interface WeatherStationData extends WeatherCommon, LatLong {
     StationCode: number;
 }

@@ -59,7 +59,7 @@
     "karma-requirejs": "^1.1.0",
     "load-grunt-tasks": "^3.5.2",
     "requirejs": "^2.3.2",
-    "typescript": "^2.0.10",
+    "typescript": "^2.1.4",
     "whatwg-fetch": "^2.0.1"
   },
   "dependencies": {

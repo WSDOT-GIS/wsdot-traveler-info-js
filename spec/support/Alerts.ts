@@ -1,3 +1,5 @@
+import { Alert } from "../../TravelerInfo";
+
 /**
  * Provides sample alert data
  */

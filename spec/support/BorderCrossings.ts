@@ -1,3 +1,6 @@
+import { BorderCrossingData } from "../../TravelerInfo";
+
+
 /**
  * Provides sample border crossing data.
  */

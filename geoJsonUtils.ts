@@ -1,4 +1,5 @@
 import { hasAllProperties, getPropertyMatching } from "./CommonUtils";
+import { RoadwayLocation, LatLong, Alert, Camera, FlowData, TravelTimeRoute } from "./TravelerInfo";
 
 /**
  * "Flattens" the properties of an object so that there are no inner-objects.
