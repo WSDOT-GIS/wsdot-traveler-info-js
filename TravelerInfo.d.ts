@@ -154,9 +154,9 @@ export interface WeatherInfo extends WeatherCommon, LatLong {
     SkyCoverage: string;
     BarometricPressure: number | null;
     RelativeHumidity: number | null;
-    WindDirectionCardinal: CardinalDirection; //string;
+    WindDirectionCardinal: CardinalDirection;
     WindDirection: number | null;
-    WindGustSpeedInMPH: number | null,
+    WindGustSpeedInMPH: number | null;
 }
 
 export interface WeatherStationData extends WeatherCommon, LatLong {

@@ -1,13 +1,13 @@
 {
   "name": "wsdot-traveler-info",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Client for WSDOT Traveler Info API",
   "main": "TravelerInfoClient.js",
+  "types": "TravelerInfoClient.d.ts",
   "scripts": {
-    "docs": "jsdoc2md TravelerInfoClient.js FerriesClient.js CommonUtils.js > api.md",
     "prepublish": "grunt",
     "test": "jasmine && karma start",
-    "lint": "tslint -c tslint.json -e \"typings/**/\" \"**/*.ts\""
+    "lint": "tslint --config \"tslint.json\" \"*.ts\""
   },
   "files": [
     "CommonUtils.d.ts",
@@ -20,7 +20,7 @@
     "geoJsonUtils.js",
     "geoJsonUtils.js.map",
     "geoJsonUtils.d.ts",
-    "index.d.ts",
+    "window-callback.d.ts",
     "TravelerInfo.d.ts",
     "TravelerInfoClient.d.ts",
     "TravelerInfoClient.js",
