@@ -4,7 +4,7 @@
         "module": "es2015",
         "target": "es2015",
         "noImplicitAny": true,
-        "sourceMap": true,
+        "sourceMap": false,
         "pretty": true,
         "declaration": true,
         "strictNullChecks": true

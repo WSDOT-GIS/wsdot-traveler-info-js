@@ -5,6 +5,7 @@
   "main": "TravelerInfoClient.js",
   "types": "TravelerInfoClient.d.ts",
   "scripts": {
+    "createdocs": "typedoc \"./*.ts\" --out docs --mode modules --includeDeclarations --exclude \"node_modules\"",
     "prepublish": "grunt",
     "test": "jasmine && karma start",
     "lint": "tslint --config \"tslint.json\" \"*.ts\""
@@ -59,6 +60,7 @@
     "karma-requirejs": "^1.1.0",
     "load-grunt-tasks": "^3.5.2",
     "requirejs": "^2.3.2",
+    "typedoc": "^0.5.5",
     "typescript": "^2.1.4",
     "whatwg-fetch": "^2.0.1"
   },

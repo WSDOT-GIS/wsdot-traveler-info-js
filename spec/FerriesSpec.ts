@@ -1,5 +1,7 @@
 // Jasmine tests for the Ferries Client functions.
 
+/// <reference types="jasmine" />
+
 import { DateRange } from "../Ferries";
 import FerriesClient from "../FerriesClient";
 

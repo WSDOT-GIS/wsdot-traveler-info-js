@@ -1,6 +1,6 @@
+.vscode/iis*.json
 .tscache
-typings/
-.tscache/
+docs/
 bower_components
 **/*.js.map
 *Spec.d.ts

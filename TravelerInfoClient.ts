@@ -100,7 +100,7 @@ export default class TravelerInfoClient {
     }
     /**
      * Gets all alerts
-     * @returns {Promise.<Alert[]>} - alertsy
+     * @returns {Promise.<Alert[]>} - alerts
      */
     getAlerts(): Promise<Alert[]> {
         return this.getJson("HighwayAlerts", "GetAlerts");

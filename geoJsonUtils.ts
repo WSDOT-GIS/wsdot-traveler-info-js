@@ -1,3 +1,5 @@
+/// <reference types="geojson" />
+
 import { hasAllProperties, getPropertyMatching } from "./CommonUtils";
 import { RoadwayLocation, LatLong, Alert, Camera, FlowData, TravelTimeRoute } from "./TravelerInfo";
 

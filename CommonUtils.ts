@@ -3,6 +3,9 @@
  * @module CommonUtils
  */
 
+/// <reference types="whatwg-fetch" />
+
+
 import {RoadwayLocation} from "./TravelerInfo";
 
 /**
