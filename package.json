@@ -25,7 +25,8 @@
     "TravelerInfo.d.ts",
     "TravelerInfoClient.d.ts",
     "TravelerInfoClient.js",
-    "TravelerInfoClient.js.map"
+    "TravelerInfoClient.js.map",
+    "WebApi.d.ts"
   ],
   "keywords": [
     "WSDOT",

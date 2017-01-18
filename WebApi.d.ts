@@ -1,8 +1,10 @@
+import { MultiPoint } from "./FlattenedTravelerInfo"
+
 /**
  * Toll information for HOV toll lanes
  * Attention: The tolls reported here may not match what is currently displayed on the road signs due to timing issues between WSDOT and the tolling contractor
  */
-export interface TollRate {
+export interface TollRate extends MultiPoint {
     /** Message displayed on the sign in place of a toll */
     CurrentMessage: string;
     /** The computed toll in cents which is sent to the tolling company, may not match what is displayed on the sign due to timing issues */

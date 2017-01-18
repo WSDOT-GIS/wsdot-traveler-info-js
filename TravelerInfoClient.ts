@@ -8,7 +8,7 @@
 // Older web browsers may require a polyfill.
 import { parseWcfDate, buildSearchString } from "./CommonUtils";
 import { BorderCrossingData, Alert, CVRestrictionData, MapArea, Camera, PassCondition, FlowData, TravelTimeRoute, WeatherInfo, WeatherStationData } from "./TravelerInfo";
-import { TollRate } from "./TollRate";
+import { TollRate } from "./WebApi";
 
 /**
  * Provides custom JSON parsing.
