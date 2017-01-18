@@ -245,6 +245,22 @@ describe("Traveler Info API client test", function () {
             let promise = client.getTolling();
             promise.then(tollRates => {
                 runGenericTests(tollRates);
+                for (let tr of tollRates) {
+                    expect(typeof tr.TripName).toEqual("string");
+                    expect(typeof tr.CurrentToll).toEqual("number");
+                    if (tr.CurrentMessage !== null) {
+                        expect(typeof tr.CurrentMessage).toEqual("string");
+                    }
+                    expect(typeof tr.StateRoute).toEqual("string");
+                    expect(typeof tr.TravelDirection).toEqual("string");
+                    expect(typeof tr.StartMilepost).toEqual("number");
+                    expect(typeof tr.StartLongitude).toEqual("number");
+                    expect(typeof tr.StartLatitude).toEqual("number");
+                    expect(typeof tr.EndMilepost).toEqual("number");
+                    expect(typeof tr.EndLongitude).toEqual("number");
+                    // expect(typeof tr.SignName).toEqual("string" || "undefined");
+                    expect(typeof tr.EndLatitude).toEqual("number");
+                }
                 done();
             });
             promise.catch(error => {
