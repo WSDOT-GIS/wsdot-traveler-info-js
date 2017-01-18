@@ -8,6 +8,7 @@
 // Older web browsers may require a polyfill.
 import { parseWcfDate, buildSearchString } from "./CommonUtils";
 import { BorderCrossingData, Alert, CVRestrictionData, MapArea, Camera, PassCondition, FlowData, TravelTimeRoute, WeatherInfo, WeatherStationData } from "./TravelerInfo";
+import { TollRate } from "./TollRate";
 
 /**
  * Provides custom JSON parsing.
@@ -30,7 +31,13 @@ export default class TravelerInfoClient {
      * @returns {string} - API URL.
      */
     private buildApiUrl(operation: string, functionName: string = `Get${operation}`, searchParams?: any, omitAccessCode: boolean = false): string {
-        let url = `${this.urlBase}${operation}/${operation}REST.svc/${functionName}AsJson`;
+        let url: string;
+        const webApiOperationsRe = /tolling/i;
+        if (webApiOperationsRe.test(operation)) {
+            url = `${this.urlBase}/api/${operation}`;
+        } else {
+            url = `${this.urlBase}${operation}/${operation}REST.svc/${functionName}AsJson`;
+        }
 
         if (!searchParams && !omitAccessCode) {
             searchParams = {
@@ -236,5 +243,11 @@ export default class TravelerInfoClient {
     }
     getCurrentStations(): Promise<WeatherStationData[]> {
         return this.getJson("WeatherStations", "GetCurrentStations");
+    }
+    /**
+     * Gets tolling information.
+     */
+    getTolling(): Promise<TollRate[]> {
+        return this.getJson("tolling");
     }
 }

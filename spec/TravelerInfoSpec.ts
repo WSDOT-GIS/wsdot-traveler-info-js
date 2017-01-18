@@ -240,5 +240,16 @@ describe("Traveler Info API client test", function () {
                 done.fail(error);
             });
         });
+
+        it("should be able to get tolling info", done => {
+            let promise = client.getTolling();
+            promise.then(tollRates => {
+                runGenericTests(tollRates);
+                done();
+            });
+            promise.catch(error => {
+                done.fail(error);
+            });
+        });
     });
 });
