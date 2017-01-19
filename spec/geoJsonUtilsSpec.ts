@@ -13,7 +13,9 @@ import cameras from "./support/Cameras";
 import flowDatas from "./support/FlowDatas";
 import passConditions from "./support/PassConditions";
 import weatherInfo from "./support/WeatherInfo";
+import tollRates from "./support/TollingRates";
 import { Alert, BorderCrossingData, Camera, FlowData, PassCondition, WeatherInfo } from "../TravelerInfo";
+import { TollRate } from "../WebApi";
 
 describe("geoJsonUtils test", () => {
     it("should be able to flatten an object", () => {
@@ -34,7 +36,7 @@ describe("geoJsonUtils test", () => {
     describe("should be able to convert API response to GeoJSON features", () => {
 
 
-        function convertAndTestFeatures(arr: Alert[] | BorderCrossingData[] | Camera[] | FlowData[] | PassCondition[] | WeatherInfo[]) {
+        function convertAndTestFeatures(arr: Alert[] | BorderCrossingData[] | Camera[] | FlowData[] | PassCondition[] | WeatherInfo[] | TollRate[]) {
             // Convert input array to GeoJSON Feature Collection.
             let fc = convertToGeoJsonFeatureCollection(arr);
             expect(fc.features.length).toEqual(arr.length, "Input and output should have the same length.");
@@ -47,6 +49,7 @@ describe("geoJsonUtils test", () => {
                     expect(t === "string" || t === "number").toEqual(true, "If provided, feature's 'id' property should be either string or number.");
                 }
             }
+            return fc;
         }
 
         // Test each of the sample responses.
@@ -67,6 +70,9 @@ describe("geoJsonUtils test", () => {
         });
         it("should be able to convert weatherInfo to GeoJSON features", () => {
             convertAndTestFeatures(weatherInfo);
+        });
+        it("should be able to convert TollRates to GeoJSON features", () => {
+            convertAndTestFeatures(tollRates);
         });
     });
 });

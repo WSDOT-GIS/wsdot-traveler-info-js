@@ -1,6 +1,6 @@
 {
   "name": "wsdot-traveler-info",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "Client for WSDOT Traveler Info API",
   "main": "TravelerInfoClient.js",
   "types": "TravelerInfoClient.d.ts",
@@ -25,7 +25,8 @@
     "TravelerInfo.d.ts",
     "TravelerInfoClient.d.ts",
     "TravelerInfoClient.js",
-    "TravelerInfoClient.js.map"
+    "TravelerInfoClient.js.map",
+    "WebApi.d.ts"
   ],
   "keywords": [
     "WSDOT",
