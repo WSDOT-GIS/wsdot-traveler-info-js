@@ -21,7 +21,8 @@ module.exports = function(grunt) {
           "spec/support/Cameras.js": "es2015/spec/support/Cameras.js",
           "spec/support/FlowDatas.js": "es2015/spec/support/FlowDatas.js",
           "spec/support/PassConditions.js": "es2015/spec/support/PassConditions.js",
-          "spec/support/WeatherInfo.js": "es2015/spec/support/WeatherInfo.js"
+          "spec/support/WeatherInfo.js": "es2015/spec/support/WeatherInfo.js",
+          "spec/support/TollingRates.js": "es2015/spec/support/TollingRates.js"
         }
       }
     },

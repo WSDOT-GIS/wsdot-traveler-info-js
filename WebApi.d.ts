@@ -1,13 +1,28 @@
-import { MultiPoint } from "./FlattenedTravelerInfo"
+export interface Multipoint {
+    StartLatitude: number;
+    StartLongitude: number;
+    EndLongitude: number;
+    EndLatitude: number;
+}
+
+export interface HasStartAndEndMP {
+    StartMilepost: number;
+    EndMilepost: number;
+}
 
 /**
  * Toll information for HOV toll lanes
- * Attention: The tolls reported here may not match what is currently displayed on the road signs due to timing issues between WSDOT and the tolling contractor
+ * Attention: The tolls reported here may not match what is currently
+ * displayed on the road signs due to timing issues between WSDOT
+ * and the tolling contractor
  */
-export interface TollRate {
+export interface TollRate extends Multipoint, HasStartAndEndMP {
     /** Message displayed on the sign in place of a toll */
     CurrentMessage: string | null;
-    /** The computed toll in cents which is sent to the tolling company, may not match what is displayed on the sign due to timing issues */
+    /**
+     * The computed toll in cents which is sent to the tolling company,
+     * may not match what is displayed on the sign due to timing issues
+     */
     CurrentToll: number; // int;
     /** Approximate geographical latitude of the end location */
     EndLatitude: number; // decimal;

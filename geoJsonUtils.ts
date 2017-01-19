@@ -2,6 +2,7 @@
 
 import { hasAllProperties, getPropertyMatching } from "./CommonUtils";
 import { RoadwayLocation, LatLong, Alert, Camera, FlowData, TravelTimeRoute } from "./TravelerInfo";
+import { TollRate, Multipoint } from "./WebApi";
 
 /**
  * "Flattens" the properties of an object so that there are no inner-objects.
@@ -116,7 +117,7 @@ function roadwayLocationToCoordinates(...roadwayLocations: RoadwayLocation[]): [
     }
 }
 
-export type HasExtractableGeometry = LatLong | Alert | Camera | FlowData | TravelTimeRoute;
+export type HasExtractableGeometry = LatLong | Alert | Camera | FlowData | TravelTimeRoute | TollRate;
 
 /**
  * Extracts the geometry from a Traffic API feature and returns it as a GeoJSON geometry.
@@ -159,20 +160,52 @@ function wsdotToGeometry(input: any | HasExtractableGeometry): GeoJSON.Point | G
 /**
  * Converts a traffic API feature into a GeoJSON feature.
  */
-export function convertToGeoJsonFeature(wsdotFeature: any | HasExtractableGeometry) {
-    let idInfo = getId(wsdotFeature);
-    let flattened = flattenProperties(wsdotFeature, idInfo !== null ? idInfo.name : undefined);
-    let geometry = wsdotToGeometry(wsdotFeature);
-    let f: GeoJSON.Feature<any>;
-    f = {
-        type: "Feature",
-        geometry: geometry,
-        properties: flattened
-    };
-    if (idInfo !== null) {
-        f.id = idInfo.value.toString();
+export function convertToGeoJsonFeature(wsdotFeature: any | HasExtractableGeometry | Multipoint) {
+    // Detect WebApi response, which does not need flattening.
+    if (hasAllProperties(wsdotFeature, "StartLongitude", "StartLatitude", "EndLongitude", "EndLatitude")) {
+        let mp = wsdotFeature as Multipoint;
+        let geometry: GeoJSON.MultiPoint = {
+            type: "MultiPoint",
+            coordinates: [
+                [mp.StartLongitude, mp.StartLatitude],
+                [mp.EndLongitude, mp.EndLatitude]
+            ],
+        };
+
+        // Copy the properties, excluding coordinates.
+        const coordRe = /L(?:(?:ong)|(?:at))itude$/i; // Detects coordinate property names.
+        let properties: any = {};
+        for (let propName in wsdotFeature) {
+            if (coordRe.test(propName)) {
+                continue;
+            } else if (wsdotFeature.hasOwnProperty(propName)) {
+                properties[propName] = wsdotFeature[propName];
+            }
+        }
+
+
+        let feature: GeoJSON.Feature<GeoJSON.MultiPoint> = {
+            type: "Feature",
+            geometry: geometry,
+            properties: properties
+        };
+        return feature;
     }
-    return f;
+    else {
+        let idInfo = getId(wsdotFeature);
+        let flattened = flattenProperties(wsdotFeature, idInfo !== null ? idInfo.name : undefined);
+        let geometry = wsdotToGeometry(wsdotFeature);
+        let f: GeoJSON.Feature<any>;
+        f = {
+            type: "Feature",
+            geometry: geometry,
+            properties: flattened
+        };
+        if (idInfo !== null) {
+            f.id = idInfo.value.toString();
+        }
+        return f;
+    }
 }
 
 /**
