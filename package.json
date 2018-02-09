@@ -1,32 +1,22 @@
 {
   "name": "wsdot-traveler-info",
-  "version": "1.3.0",
+  "version": "2.0.0-alpha.1",
   "description": "Client for WSDOT Traveler Info API",
   "main": "TravelerInfoClient.js",
   "types": "TravelerInfoClient.d.ts",
+  "directories": {
+    "test": "spec",
+    "lib": "dist"
+  },
   "scripts": {
-    "createdocs": "typedoc \"./*.ts\" --out docs --mode modules --includeDeclarations --exclude \"node_modules\"",
-    "prepublish": "grunt",
-    "test": "jasmine && karma start",
-    "lint": "tslint --config \"tslint.json\" \"*.ts\""
+    "prepare": "npm run build",
+    "build": "npm run build:tsc && node scripts/copyDtsFiles.js",
+    "build:tsc": "tsc",
+    "test": "jasmine",
+    "lint": "tslint --project ."
   },
   "files": [
-    "CommonUtils.d.ts",
-    "CommonUtils.js",
-    "CommonUtils.js.map",
-    "Ferries.d.ts",
-    "FerriesClient.d.ts",
-    "FerriesClient.js",
-    "FerriesClient.js.map",
-    "geoJsonUtils.js",
-    "geoJsonUtils.js.map",
-    "geoJsonUtils.d.ts",
-    "window-callback.d.ts",
-    "TravelerInfo.d.ts",
-    "TravelerInfoClient.d.ts",
-    "TravelerInfoClient.js",
-    "TravelerInfoClient.js.map",
-    "WebApi.d.ts"
+    "dist"
   ],
   "keywords": [
     "WSDOT",
@@ -42,31 +32,18 @@
   "author": "WSDOT",
   "license": "Unlicense",
   "devDependencies": {
-    "@types/geojson": "0.0.31",
-    "@types/jasmine": "^2.5.38",
-    "@types/node": "^6.0.50",
-    "@types/whatwg-fetch": "0.0.32",
-    "babel-polyfill": "^6.16.0",
-    "babel-preset-es2015": "^6.18.0",
-    "grunt": "^1.0.1",
-    "grunt-babel": "^6.0.0",
-    "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-ts": "^6.0.0-beta.3",
-    "jasmine": "^2.5.2",
-    "karma": "^1.3.0",
-    "karma-jasmine": "^1.0.2",
-    "karma-phantomjs-launcher": "^1.0.2",
-    "karma-requirejs": "^1.1.0",
-    "load-grunt-tasks": "^3.5.2",
-    "requirejs": "^2.3.2",
-    "typedoc": "^0.5.5",
-    "typescript": "^2.1.4",
-    "whatwg-fetch": "^2.0.1"
-  },
-  "dependencies": {
-    "node-fetch": "^1.6.3"
+    "@types/geojson": "7946.0.1",
+    "@types/jasmine": "^2.8.6",
+    "fs-extra": "^5.0.0",
+    "isomorphic-fetch": "^2.2.1",
+    "jasmine": "^3.0.0",
+    "prettier": "^1.10.2",
+    "ts-node": "^4.1.0",
+    "tslib": "^1.9.0",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.7.0",
+    "tslint-config-standard": "^7.0.0",
+    "typescript": "^2.7.1"
   },
   "bugs": {
     "url": "https://github.com/wsdot-gis/wsdot-traveler-info-js/issues"

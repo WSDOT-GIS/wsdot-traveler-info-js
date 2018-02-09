@@ -1,9 +1,9 @@
-import { Camera } from "../../TravelerInfo";
+import { Camera } from "../../src/TravelerInfo";
 
 /**
  * Provides sample camera data.
  */
-let cameras: Camera[] = [
+const cameras: Camera[] = [
   {
     CameraID: 8216,
     CameraLocation: {
@@ -571,7 +571,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 46.1984,
     DisplayLongitude: -122.1892,
     ImageHeight: 240,
-    ImageURL: "http://www.fs.fed.us/gpnf/volcanocams/msh/images01/volcanocamhd.jpg",
+    ImageURL:
+      "http://www.fs.fed.us/gpnf/volcanocams/msh/images01/volcanocamhd.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: "http://www.fs.fed.us/gpnf/volcanocams/msh/",
@@ -962,7 +963,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.453969,
     DisplayLongitude: -120.280358,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/DouglasCo/Eastmont/Douglas_Eastmont.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/DouglasCo/Eastmont/Douglas_Eastmont.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -985,7 +987,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 46.884129,
     DisplayLongitude: -117.364272,
     ImageHeight: 240,
-    ImageURL: "http://images.wsdot.wa.gov/traffic/whitmancounty/whitmancounty.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/traffic/whitmancounty/whitmancounty.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: "http://www.whitmancounty.org/",
@@ -1487,7 +1490,8 @@ let cameras: Camera[] = [
       RoadName: "Ferries"
     },
     CameraOwner: null,
-    Description: "Traffic holding area for San Juan Islands (Lopez Island, Orcas Island, Shaw",
+    Description:
+      "Traffic holding area for San Juan Islands (Lopez Island, Orcas Island, Shaw",
     DisplayLatitude: 48.503437,
     DisplayLongitude: -122.679509,
     ImageHeight: 261,
@@ -1533,7 +1537,8 @@ let cameras: Camera[] = [
       RoadName: "Ferries"
     },
     CameraOwner: null,
-    Description: "Seattle Pier 52 Colman Dock Ferry traffic holding area for Bainbridge Islan",
+    Description:
+      "Seattle Pier 52 Colman Dock Ferry traffic holding area for Bainbridge Islan",
     DisplayLatitude: 47.60285,
     DisplayLongitude: -122.3382,
     ImageHeight: 261,
@@ -1556,7 +1561,8 @@ let cameras: Camera[] = [
       RoadName: "Ferries"
     },
     CameraOwner: null,
-    Description: "Seattle Pier 52 Colman Dock ferry traffic holding area for Bremerton Ferry.",
+    Description:
+      "Seattle Pier 52 Colman Dock ferry traffic holding area for Bremerton Ferry.",
     DisplayLatitude: 47.602501,
     DisplayLongitude: -122.339,
     ImageHeight: 261,
@@ -1579,7 +1585,8 @@ let cameras: Camera[] = [
       RoadName: "Ferries"
     },
     CameraOwner: null,
-    Description: "Bermerton Ferry Terminal Holding area for traffic to Seattle.",
+    Description:
+      "Bermerton Ferry Terminal Holding area for traffic to Seattle.",
     DisplayLatitude: 47.56265,
     DisplayLongitude: -122.62535,
     ImageHeight: 261,
@@ -1790,7 +1797,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.5232,
     DisplayLongitude: -122.39359,
     ImageHeight: 261,
-    ImageURL: "http://images.wsdot.wa.gov/wsf/fauntleroy/terminal/fauntleroy.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/wsf/fauntleroy/terminal/fauntleroy.jpg",
     ImageWidth: 352,
     IsActive: true,
     OwnerURL: null,
@@ -1813,7 +1821,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.52263,
     DisplayLongitude: -122.392938,
     ImageHeight: 261,
-    ImageURL: "http://images.wsdot.wa.gov/wsf/fauntleroy/terminal/fauntterminal.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/wsf/fauntleroy/terminal/fauntterminal.jpg",
     ImageWidth: 352,
     IsActive: true,
     OwnerURL: null,
@@ -1836,7 +1845,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.524794,
     DisplayLongitude: -122.392652,
     ImageHeight: 261,
-    ImageURL: "http://images.wsdot.wa.gov/wsf/fauntleroy/terminal/faunttrenton.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/wsf/fauntleroy/terminal/faunttrenton.jpg",
     ImageWidth: 352,
     IsActive: true,
     OwnerURL: null,
@@ -1859,7 +1869,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.526718,
     DisplayLongitude: -122.392883,
     ImageHeight: 240,
-    ImageURL: "http://www.seattle.gov/trafficcams/images/Fauntleroy_Cloverdale.jpg",
+    ImageURL:
+      "http://www.seattle.gov/trafficcams/images/Fauntleroy_Cloverdale.jpg",
     ImageWidth: 352,
     IsActive: true,
     OwnerURL: null,
@@ -1882,7 +1893,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.530459,
     DisplayLongitude: -122.392633,
     ImageHeight: 261,
-    ImageURL: "http://images.wsdot.wa.gov/wsf/fauntleroy/terminal/fauntlincoln.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/wsf/fauntleroy/terminal/fauntlincoln.jpg",
     ImageWidth: 352,
     IsActive: true,
     OwnerURL: null,
@@ -2292,7 +2304,8 @@ let cameras: Camera[] = [
       RoadName: "Ferries"
     },
     CameraOwner: null,
-    Description: "From Tahlequah ferry terminal looking toward Vashon Hwy SW & SW Pohl Rd",
+    Description:
+      "From Tahlequah ferry terminal looking toward Vashon Hwy SW & SW Pohl Rd",
     DisplayLatitude: 47.333079,
     DisplayLongitude: -122.506957,
     ImageHeight: 250,
@@ -2779,7 +2792,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 45.560603,
     DisplayLongitude: -122.562631,
     ImageHeight: 295,
-    ImageURL: "http://www.tripcheck.com/RoadCams/cams/i205Killingsworth_pid534.jpg",
+    ImageURL:
+      "http://www.tripcheck.com/RoadCams/cams/i205Killingsworth_pid534.jpg",
     ImageWidth: 328,
     IsActive: true,
     OwnerURL: "http://www.tripcheck.com",
@@ -12278,7 +12292,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 45.569774,
     DisplayLongitude: -122.679035,
     ImageHeight: 295,
-    ImageURL: "http://www.tripcheck.com/RoadCams/cams/i5portlandblvd_pid572.jpg",
+    ImageURL:
+      "http://www.tripcheck.com/RoadCams/cams/i5portlandblvd_pid572.jpg",
     ImageWidth: 328,
     IsActive: true,
     OwnerURL: "http://www.tripcheck.com",
@@ -12761,7 +12776,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 46.04434,
     DisplayLongitude: -119.22449,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/rweather/Medium_HorseHeaven2@I-82.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/rweather/Medium_HorseHeaven2@I-82.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -16413,7 +16429,8 @@ let cameras: Camera[] = [
       MilePost: 14,
       RoadName: "SR 104"
     },
-    CameraOwner: "Sign up to receive Hood Canal traffic updates by e-mail or text message.",
+    CameraOwner:
+      "Sign up to receive Hood Canal traffic updates by e-mail or text message.",
     Description: null,
     DisplayLatitude: 47.86235,
     DisplayLongitude: -122.6288,
@@ -16421,7 +16438,8 @@ let cameras: Camera[] = [
     ImageURL: "http://images.wsdot.wa.gov/orflow/104vc01470_w.jpg",
     ImageWidth: 320,
     IsActive: true,
-    OwnerURL: "http://service.govdelivery.com/service/multi_subscribe.html?code=WADOT",
+    OwnerURL:
+      "http://service.govdelivery.com/service/multi_subscribe.html?code=WADOT",
     Region: "OL",
     SortOrder: 3104,
     Title: "Hood Canal Bridge Looking West"
@@ -16436,7 +16454,8 @@ let cameras: Camera[] = [
       MilePost: 14,
       RoadName: "SR 104"
     },
-    CameraOwner: "Sign up to receive Hood Canal traffic updates by e-mail or text message.",
+    CameraOwner:
+      "Sign up to receive Hood Canal traffic updates by e-mail or text message.",
     Description: null,
     DisplayLatitude: 47.86235,
     DisplayLongitude: -122.6288,
@@ -16444,7 +16463,8 @@ let cameras: Camera[] = [
     ImageURL: "http://images.wsdot.wa.gov/orflow/104vc01470_e.jpg",
     ImageWidth: 320,
     IsActive: true,
-    OwnerURL: "http://service.govdelivery.com/service/multi_subscribe.html?code=WADOT",
+    OwnerURL:
+      "http://service.govdelivery.com/service/multi_subscribe.html?code=WADOT",
     Region: "OL",
     SortOrder: 3104,
     Title: "Hood Canal Bridge Looking East"
@@ -17200,7 +17220,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.939583,
     DisplayLongitude: -119.010757,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/sr155/grandcoulee/sr155grandcoulee.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/sr155/grandcoulee/sr155grandcoulee.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -18350,7 +18371,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.143404,
     DisplayLongitude: -119.277676,
     ImageHeight: 261,
-    ImageURL: "http://images.wsdot.wa.gov/sr17/moseslake/stratford/stratford.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/sr17/moseslake/stratford/stratford.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -18373,7 +18395,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.15667,
     DisplayLongitude: -119.31228,
     ImageHeight: 261,
-    ImageURL: "http://images.wsdot.wa.gov/SR17/MosesLake/PattonBlvd/SR17PattonBlvd.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/SR17/MosesLake/PattonBlvd/SR17PattonBlvd.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -20144,7 +20167,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.404612,
     DisplayLongitude: -120.289782,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/SR28/sellarbridge/SR28GrantRoad_Intersection.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/SR28/sellarbridge/SR28GrantRoad_Intersection.jpg",
     ImageWidth: 320,
     IsActive: false,
     OwnerURL: null,
@@ -20190,7 +20214,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.409722,
     DisplayLongitude: -120.290833,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/sr28/sellarbridge/sr28sellarbridge_east.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/sr28/sellarbridge/sr28sellarbridge_east.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -20282,7 +20307,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.401667,
     DisplayLongitude: -120.288889,
     ImageHeight: 240,
-    ImageURL: "http://images.wsdot.wa.gov/SR28/Riverview/SR28Riverview_East.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/SR28/Riverview/SR28Riverview_East.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -20305,7 +20331,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.401667,
     DisplayLongitude: -120.288889,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/SR28/Riverview/SR28Riverview_West.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/SR28/Riverview/SR28Riverview_West.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -20420,7 +20447,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.409605,
     DisplayLongitude: -120.301645,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/sr285/FerryStreet/SR285FerryStreet.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/sr285/FerryStreet/SR285FerryStreet.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -20443,7 +20471,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.40981,
     DisplayLongitude: -120.295991,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/sr285/SellarBridge/SR285Mission_SellarBridge.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/sr285/SellarBridge/SR285Mission_SellarBridge.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -20466,7 +20495,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.410786,
     DisplayLongitude: -120.303481,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/sr285/mission/SR285MissionStreet_North.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/sr285/mission/SR285MissionStreet_North.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -20489,7 +20519,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.458366,
     DisplayLongitude: -120.336656,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/sr285/WenRiverBridge/SR285WenRiverBridge_South.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/sr285/WenRiverBridge/SR285WenRiverBridge_South.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -27389,7 +27420,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 48.982285,
     DisplayLongitude: -119.453851,
     ImageHeight: 239,
-    ImageURL: "http://www.images.wsdot.wa.gov/US97/Border/US97BorderHub/US97HubN.jpg",
+    ImageURL:
+      "http://www.images.wsdot.wa.gov/US97/Border/US97BorderHub/US97HubN.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -27412,7 +27444,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 48.982285,
     DisplayLongitude: -119.453851,
     ImageHeight: 239,
-    ImageURL: "http://www.images.wsdot.wa.gov/US97/Border/US97BorderHub/US97HubS.jpg",
+    ImageURL:
+      "http://www.images.wsdot.wa.gov/US97/Border/US97BorderHub/US97HubS.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -27435,7 +27468,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 48.998933,
     DisplayLongitude: -119.461365,
     ImageHeight: 328,
-    ImageURL: "http://www.images.wsdot.wa.gov/US97/Border/US97Border/US97BorderN.jpg",
+    ImageURL:
+      "http://www.images.wsdot.wa.gov/US97/Border/US97Border/US97BorderN.jpg",
     ImageWidth: 352,
     IsActive: true,
     OwnerURL: null,
@@ -27458,7 +27492,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 48.998933,
     DisplayLongitude: -119.461365,
     ImageHeight: 239,
-    ImageURL: "http://www.images.wsdot.wa.gov/US97/Border/US97Border/US97BorderS.jpg",
+    ImageURL:
+      "http://www.images.wsdot.wa.gov/US97/Border/US97Border/US97BorderS.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -27619,7 +27654,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 48.06748,
     DisplayLongitude: -123.61789,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/rweather/Medium_IndianValley@US101.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/rweather/Medium_IndianValley@US101.jpg",
     ImageWidth: 320,
     IsActive: false,
     OwnerURL: null,
@@ -28493,7 +28529,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.619215,
     DisplayLongitude: -117.432158,
     ImageHeight: 280,
-    ImageURL: "http://images.wsdot.wa.gov/spokane/sr195/US-195-Cheney_Spokane.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/spokane/sr195/US-195-Cheney_Spokane.jpg",
     ImageWidth: 352,
     IsActive: true,
     OwnerURL: null,
@@ -28516,7 +28553,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.624302,
     DisplayLongitude: -117.439237,
     ImageHeight: 280,
-    ImageURL: "http://images.wsdot.wa.gov/spokane/sr195/US-195-Inland_Empire.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/spokane/sr195/US-195-Inland_Empire.jpg",
     ImageWidth: 352,
     IsActive: true,
     OwnerURL: null,
@@ -29160,7 +29198,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.596213,
     DisplayLongitude: -120.661354,
     ImageHeight: 261,
-    ImageURL: "http://images.wsdot.wa.gov/US2/Leavenworth/9thEvans/9thEvans.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/US2/Leavenworth/9thEvans/9thEvans.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -29183,7 +29222,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.594575,
     DisplayLongitude: -120.641488,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/us2/leavenworth/Riverbend/US2Riverbend.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/us2/leavenworth/Riverbend/US2Riverbend.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -30540,7 +30580,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 46.03854,
     DisplayLongitude: -120.57795,
     ImageHeight: 250,
-    ImageURL: "http://images.wsdot.wa.gov/rweather/Medium_Us97@YakimaCountyLine.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/rweather/Medium_Us97@YakimaCountyLine.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -30609,7 +30650,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.468171,
     DisplayLongitude: -120.337527,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/US97/Odabashian/US97_Odabashian_East.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/US97/Odabashian/US97_Odabashian_East.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -30701,7 +30743,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 48.982285,
     DisplayLongitude: -119.453851,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/US97/Border/US97BorderHub/US97HubN.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/US97/Border/US97BorderHub/US97HubN.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -30724,7 +30767,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 48.982285,
     DisplayLongitude: -119.453851,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/US97/Border/US97BorderHub/US97HubS.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/US97/Border/US97BorderHub/US97HubS.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -30747,7 +30791,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 48.998933,
     DisplayLongitude: -119.461365,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/US97/Border/US97Border/US97BorderN.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/US97/Border/US97Border/US97BorderN.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -30770,7 +30815,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 48.998933,
     DisplayLongitude: -119.461365,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/US97/Border/US97Border/US97BorderS.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/US97/Border/US97Border/US97BorderS.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,
@@ -30793,7 +30839,8 @@ let cameras: Camera[] = [
     DisplayLatitude: 47.4702,
     DisplayLongitude: -120.325,
     ImageHeight: 239,
-    ImageURL: "http://images.wsdot.wa.gov/US97/Odabashian/US97A_Wenatchee_North.jpg",
+    ImageURL:
+      "http://images.wsdot.wa.gov/US97/Odabashian/US97A_Wenatchee_North.jpg",
     ImageWidth: 320,
     IsActive: true,
     OwnerURL: null,

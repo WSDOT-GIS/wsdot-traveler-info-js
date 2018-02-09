@@ -2,9 +2,9 @@
 {
   "files.exclude": {
     // Exclude complied output JavaScript and type definition files.
-    "**/{*Spec,CommonUtils,*Client,geoJsonUtils,support/*}.{js,d.ts}": { "when": "$(basename).ts" },
+    // "**/{*Spec,CommonUtils,*Client,geoJsonUtils,support/*}.{js,d.ts}": { "when": "$(basename).ts" },
     ".tscache": true,
-    "**/*.js.map": true,
+    // "**/*.js.map": true,
     "**/.git": true,
     "**/.svn": true,
     "**/.hg": true,
