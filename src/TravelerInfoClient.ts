@@ -18,7 +18,7 @@ import {
   TravelTimeRoute,
   WeatherInfo,
   WeatherStationData
-} from "./TravelerInfo";
+} from "./TravelerInfoInterfaces";
 import { TollRate } from "./WebApi";
 
 /**

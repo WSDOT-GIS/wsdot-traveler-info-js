@@ -3,7 +3,7 @@
  * @module CommonUtils
  */
 
-import { RoadwayLocation } from "./TravelerInfo";
+import { RoadwayLocation } from "./TravelerInfoInterfaces";
 
 /**
  * Matches the date format string used by WCF services.

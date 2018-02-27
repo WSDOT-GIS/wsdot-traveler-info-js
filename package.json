@@ -10,7 +10,7 @@
   },
   "scripts": {
     "prepare": "npm run build",
-    "build": "npm run build:tsc && node scripts/copyDtsFiles.js",
+    "build": "npm run build:tsc",
     "build:tsc": "tsc",
     "test": "jasmine",
     "lint": "tslint --project ."

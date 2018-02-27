@@ -6,7 +6,7 @@ import {
   LatLong,
   RoadwayLocation,
   TravelTimeRoute
-} from "./TravelerInfo";
+} from "./TravelerInfoInterfaces";
 import { Multipoint, TollRate } from "./WebApi";
 
 import GeoJSON from "geojson";

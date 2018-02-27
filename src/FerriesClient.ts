@@ -12,7 +12,7 @@ import {
   TerminalCombo,
   TerminalComboVerbose,
   VerboseFareLineItem
-} from "./Ferries";
+} from "./FerriesInterfaces";
 
 /**
  * Formats the date to YYYY-MM-DD format.

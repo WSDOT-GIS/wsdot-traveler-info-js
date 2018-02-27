@@ -2,7 +2,7 @@ import {
   AlertCommon,
   CameraCommon,
   TravelTimeRouteCommon
-} from "./TravelerInfo";
+} from "./TravelerInfoInterfaces";
 
 export interface Point {
   StartDescription: string;
