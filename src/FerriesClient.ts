@@ -248,8 +248,7 @@ export default class FerriesClient {
    */
   private async getValueFromCacheOrRemote(
     propertyName: string,
-    // tslint:disable-next-line:ban-types
-    remoteFunction: Function
+    remoteFunction: (...params: any[]) => any
   ) {
     const self: any = this;
     if (!self[propertyName]) {
