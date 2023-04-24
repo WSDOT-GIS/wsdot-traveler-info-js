@@ -1,5 +1,5 @@
 /**
- * Client for {@link http://www.wsdot.wa.gov/ferries/api/fares/documentation/ WSDOT Ferries API}.
+ * Client for {@link https://www.wsdot.wa.gov/ferries/api/fares/documentation/ WSDOT Ferries API}.
  * @module FerriesClient
  */
 
@@ -49,15 +49,15 @@ export default class FerriesClient {
     : "";
   /**
    * Creates a new instance of the client class.
-   * @param {string} apiAccessCode - Get an access code {@link http://www.wsdot.wa.gov/traffic/api/ here}.
+   * @param {string} apiAccessCode - Get an access code {@link https://www.wsdot.wa.gov/traffic/api/ here}.
    * @param {Boolean} useCallback - Set to true for browsers since API is not CORS-compatible.
-   * @param {string} [apiRoot="http://www.wsdot.wa.gov/ferries/api/fares/rest/"] - Root of the API URL. You only need to set this if the URL changes before this library is updated.
+   * @param {string} [apiRoot="https://www.wsdot.wa.gov/ferries/api/fares/rest/"] - Root of the API URL. You only need to set this if the URL changes before this library is updated.
    * @param {string} [proxy] - Proxy URL for the date
    */
   constructor(
     public apiAccessCode: string,
     public useCallback: boolean = false,
-    public apiRoot: string = "http://www.wsdot.wa.gov/ferries/api/fares/rest/",
+    public apiRoot: string = "https://www.wsdot.wa.gov/ferries/api/fares/rest/",
     public proxy?: string
   ) {}
 
@@ -81,11 +81,10 @@ export default class FerriesClient {
    * @returns {Promise.<Boolean>}
    */
   public async hasCacheBeenUpdated() {
-    const self = this;
     const d = await this.getCacheFlushDate();
-    const output = d !== self.lastFlushDate;
+    const output = d !== this.lastFlushDate;
     if (output) {
-      self.lastFlushDate = d;
+      this.lastFlushDate = d;
     }
     return output;
   }
@@ -183,7 +182,7 @@ export default class FerriesClient {
     departingTerminalId: number,
     arrivingTerminalId: number,
     roundTrip: boolean,
-    basic: boolean = false
+    basic = false
   ): Promise<FareLineItem[]> {
     const url = `${this.apiRoot}farelineitems${
       basic ? "basic" : ""

@@ -5,7 +5,7 @@ import {
   FlowData,
   LatLong,
   RoadwayLocation,
-  TravelTimeRoute
+  TravelTimeRoute,
 } from "./TravelerInfo";
 import { Multipoint, TollRate } from "./WebApi";
 
@@ -36,11 +36,10 @@ export function flattenProperties(o: any, ignoredName?: string): any {
     }
     propOutput[`${prefix}Coordinates`] = [
       roadwayLocation.Longitude,
-      roadwayLocation.Latitude
+      roadwayLocation.Latitude,
     ];
   }
 
-  // tslint:disable-next-line:forin
   for (const k in o) {
     // Test for (Display)Lat|Longitude property.
     const match = k.match(coordRe);
@@ -69,7 +68,7 @@ export function flattenProperties(o: any, ignoredName?: string): any {
           addRouteLocationPropertiesToObject(output, k, v);
         } else {
           for (const k2 in v) {
-            if (v.hasOwnProperty(k2)) {
+            if (Object.hasOwn(v, k2)) {
               output[`${k}_${k2}`] = v[k2];
             }
           }
@@ -102,12 +101,13 @@ export interface GetIdOutput {
 export function getId(properties: any): GetIdOutput | null {
   let output: GetIdOutput | null = null;
   if (typeof properties === "object") {
-    const re = /(?:(?:Alert)|(?:Camera)|(?:MountainPass)|(?:FlowData)|(?:TravelTime))ID/i;
+    const re =
+      /(?:(?:Alert)|(?:Camera)|(?:MountainPass)|(?:FlowData)|(?:TravelTime))ID/i;
     for (const name in properties) {
-      if (properties.hasOwnProperty(name) && re.test(name)) {
+      if (Object.hasOwn(properties, name) && re.test(name)) {
         output = {
           name,
-          value: properties[name]
+          value: properties[name],
         };
         break;
       }
@@ -119,11 +119,11 @@ export function getId(properties: any): GetIdOutput | null {
 /**
  * Examines an object and determines if it should be represented by as a MultiPoint (rather than Point);
  */
-function detectMultipoint(input: object) {
+function detectMultipoint(input: object): input is Alert | TravelTimeRoute {
   return (
     input &&
-    (input.hasOwnProperty("EndRoadwayLocation") ||
-      input.hasOwnProperty("EndPoint"))
+    (Object.hasOwn(input, "EndRoadwayLocation") ||
+      Object.hasOwn(input, "EndPoint"))
   );
 }
 
@@ -175,20 +175,20 @@ function wsdotToGeometry(
     const endPoint = input.EndRoadwayLocation || input.EndPoint;
     const mp: GeoJSON.MultiPoint = {
       type: "MultiPoint",
-      coordinates: roadwayLocationToCoordinates(startPoint, endPoint)
+      coordinates: roadwayLocationToCoordinates(startPoint, endPoint),
     };
     return mp;
   } else if (hasAllProperties(input, "Latitude", "Longitude")) {
     return {
       type: "Point",
-      coordinates: [input.Latitude, input.Longitude]
+      coordinates: [input.Latitude, input.Longitude],
     };
   } else {
     const { location } = getPropertyMatching(input, /Location$/);
-    if (hasAllProperties(location, "Latitude", "Longitude")) {
+    if (location != null && hasAllProperties(location, "Latitude", "Longitude")) {
       return {
         type: "Point",
-        coordinates: [location.Latitude, location.Longitude]
+        coordinates: [location.Latitude, location.Longitude],
       };
     } else {
       return null;
@@ -217,8 +217,8 @@ export function convertToGeoJsonFeature(
       type: "MultiPoint",
       coordinates: [
         [mp.StartLongitude, mp.StartLatitude],
-        [mp.EndLongitude, mp.EndLatitude]
-      ]
+        [mp.EndLongitude, mp.EndLatitude],
+      ],
     };
 
     // Copy the properties, excluding coordinates.
@@ -227,7 +227,7 @@ export function convertToGeoJsonFeature(
     for (const propName in wsdotFeature) {
       if (coordRe.test(propName)) {
         continue;
-      } else if (wsdotFeature.hasOwnProperty(propName)) {
+      } else if (Object.hasOwn(wsdotFeature, propName)) {
         properties[propName] = wsdotFeature[propName];
       }
     }
@@ -235,7 +235,7 @@ export function convertToGeoJsonFeature(
     const feature: GeoJSON.Feature<GeoJSON.MultiPoint> = {
       type: "Feature",
       geometry,
-      properties
+      properties,
     };
     return feature;
   } else {
@@ -245,11 +245,10 @@ export function convertToGeoJsonFeature(
       idInfo !== null ? idInfo.name : undefined
     );
     const geometry = wsdotToGeometry(wsdotFeature);
-    let f: GeoJSON.Feature<any>;
-    f = {
+    const f: GeoJSON.Feature<typeof flattened> = {
       type: "Feature",
       geometry,
-      properties: flattened
+      properties: flattened,
     };
     if (idInfo !== null) {
       f.id = idInfo.value.toString();
@@ -275,6 +274,6 @@ export function convertToGeoJsonFeatureCollection(
   }
   return {
     features: geoJsonFeatures,
-    type: "FeatureCollection"
+    type: "FeatureCollection",
   };
 }

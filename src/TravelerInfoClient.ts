@@ -1,6 +1,6 @@
 /**
  * Client for the WSDOT Traveler Information API.
- * @see {@link http://www.wsdot.wa.gov/Traffic/api/}
+ * @see {@link https://www.wsdot.wa.gov/Traffic/api/}
  * @module TravelerInfoClient
  */
 
@@ -24,7 +24,8 @@ import { TollRate } from "./WebApi";
 /**
  * Provides custom JSON parsing.
  */
-function reviver(k: string, v: any): any {
+function reviver(k: string, v: Parameters<typeof parseWcfDate>[0]): ReturnType<typeof parseWcfDate>
+function reviver(k: string, v: unknown): typeof v | Date {
   if (v && typeof v === "string") {
     v = parseWcfDate(v);
   }
@@ -40,15 +41,15 @@ export default class TravelerInfoClient {
   /**
    * Creates a new instance of this class
    * @param {string} accessCode - API access code
-   * @param {string} [urlBase="http://wsdot.wa.gov/Traffic/api/"] - Base URL. Unless you're using a proxy, you can just use the default value.
+   * @param {string} [urlBase="https://wsdot.wa.gov/Traffic/api/"] - Base URL. Unless you're using a proxy, you can just use the default value.
    */
   constructor(
     public accessCode: string,
-    public urlBase: string = "http://wsdot.wa.gov/Traffic/api/"
+    public urlBase: string = "https://wsdot.wa.gov/Traffic/api/"
   ) {
     if (!this.accessCode || typeof this.accessCode !== "string") {
       throw new TypeError("Invalid access code");
-    } else if (!/[a-f0-9\-]+/.test(this.accessCode)) {
+    } else if (!/[a-f0-9-]+/.test(this.accessCode)) {
       throw new Error("Invalid access code.");
     }
   }
@@ -250,9 +251,9 @@ export default class TravelerInfoClient {
    */
   private buildApiUrl(
     operation: string,
-    functionName: string = `Get${operation}`,
-    searchParams?: any,
-    omitAccessCode: boolean = false
+    functionName = `Get${operation}`,
+    searchParams?: Parameters<typeof buildSearchString>[0],
+    omitAccessCode = false
   ): string {
     let url: string;
     const webApiOperationsRe = /tolling/i;
@@ -269,6 +270,9 @@ export default class TravelerInfoClient {
         AccessCode: this.accessCode
       };
     } else if (!omitAccessCode) {
+      if (!searchParams) {
+        searchParams = {}
+      }
       searchParams.accessCode = this.accessCode;
     }
 
@@ -283,11 +287,11 @@ export default class TravelerInfoClient {
    */
   private async getJson(
     operation: string,
-    functionName: string = `Get${operation}`,
-    searchParams?: object,
-    omitAccessCode: boolean = false
-  ): Promise<any> {
-    const url = this.buildApiUrl(operation, functionName, searchParams);
+    functionName = `Get${operation}`,
+    searchParams?: Parameters<typeof this.buildApiUrl>[2],
+    omitAccessCode = false
+  ) {
+    const url = this.buildApiUrl(operation, functionName, searchParams, omitAccessCode);
     const response = await fetch(url);
     const s = await response.text();
     try {

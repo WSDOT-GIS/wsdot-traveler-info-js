@@ -64,7 +64,7 @@ describe("geoJsonUtils test", () => {
       for (const feature of fc.features) {
         expect(
           hasAllProperties(feature, "geometry", "type", "properties")
-        ).toEqual(true, "Should have all required GeoJSON Feature properties.");
+        ).withContext("Should have all required GeoJSON Feature properties.");
         expect(feature.type).toEqual(
           "Feature",
           "Array elements should be GeoJSON features."
