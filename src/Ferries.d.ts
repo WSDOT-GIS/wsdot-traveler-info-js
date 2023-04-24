@@ -1,6 +1,6 @@
 /**
  * Ferries API data types.
- * @see {@link http://www.wsdot.wa.gov/ferries/api/fares/documentation/index.html|WSF Fares API}
+ * @see {@link https://www.wsdot.wa.gov/ferries/api/fares/documentation/index.html|WSF Fares API}
  */
 
 export interface DateRange {

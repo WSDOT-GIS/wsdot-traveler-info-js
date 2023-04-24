@@ -9,7 +9,7 @@ import { RoadwayLocation } from "./TravelerInfo";
  * Matches the date format string used by WCF services.
  * @type {RegExp}
  */
-export let wcfDateRe: RegExp = /^\/Date\((\d+)([+\-]\d+)?\)\/$/i;
+export const wcfDateRe = /^\/Date\((\d+)([+-]\d+)?\)\/$/i;
 
 /**
  * Converts a HTTP fetch Response to JSON.
@@ -17,7 +17,7 @@ export let wcfDateRe: RegExp = /^\/Date\((\d+)([+\-]\d+)?\)\/$/i;
  * @returns {Promise<Object>} Promise with parsed JSON object.
  */
 export async function responseToJson(response: Response) {
-  const reviver = function(k: string, v: any) {
+  const reviver = function (k: string, v: unknown) {
     if (v && typeof v === "string") {
       return parseWcfDate(v);
     }
@@ -28,12 +28,7 @@ export async function responseToJson(response: Response) {
   const re = /^\s*\w+\s*\((.+?)\);?\s*$/;
   const match = text.match(re);
   if (match) {
-    try {
-      return JSON.parse(match[1], reviver);
-    } catch (err) {
-      // console.log(match, err);
-      throw err;
-    }
+    return JSON.parse(match[1], reviver);
   } else {
     return JSON.parse(text, reviver);
   }
@@ -44,18 +39,22 @@ export async function responseToJson(response: Response) {
  * @param {string} url - JSONP request URL
  * @returns {Promise<Object>} - parsed JSON response
  */
-export function getJsonP(url: string): Promise<any> {
-  return new Promise(function(resolve, reject) {
+export function getJsonP(url: string) {
+  return new Promise(function (resolve, reject) {
     const scriptTag = document.createElement("script");
 
-    window.wsdot_ferries_callback = function(json: any) {
+    (window as typeof window & Record<string, unknown>).wsdot_ferries_callback = function (json: string | Record<string, unknown> | Date) {
       document.head.removeChild(scriptTag);
-      if (typeof json === "string") {
-        json = parseWcfDate(json);
-      } else if (typeof json === "object") {
-        convertObjectProperties(json);
+      try {
+        if (typeof json === "string") {
+          json = parseWcfDate(json);
+        } else if (typeof json === "object" && !(json instanceof Date) ) {
+          convertObjectProperties(json);
+        }
+        resolve(json);
+      } catch (e) {
+        reject(e);
       }
-      resolve(json);
     };
 
     scriptTag.src = url;
@@ -111,17 +110,18 @@ export function toWcfDate(date: Date): string {
  * @param {?Object} searchParams - Search parameters.
  * @returns {string} search string for URL
  */
-export function buildSearchString(searchParams?: any): string | null {
+export function buildSearchString(
+  searchParams?: Record<string, string | number | boolean | Date>
+): string | null {
   if (!searchParams) {
     return null;
   } else {
     const searchStringParts: string[] = [];
     if (searchParams) {
       for (const key in searchParams) {
-        if (searchParams.hasOwnProperty(key)) {
-          let val: any = searchParams[key];
+        if (Object.hasOwn(searchParams, key)) {
+          let val = searchParams[key];
           if (val != null) {
-            // eslint-disable-line eqeqeq
             if (val instanceof Date) {
               val = val.toISOString();
             }
@@ -140,14 +140,14 @@ export function buildSearchString(searchParams?: any): string | null {
  * Converts properties of an object. E.g., converts Wcf date strings into Date objects.
  * @param {Object} o - an object.
  */
-export function convertObjectProperties(o: any): void {
+export function convertObjectProperties(o: Record<string, unknown>): void {
   for (const key in o) {
-    if (o.hasOwnProperty(key)) {
+    if (Object.hasOwn(o, key)) {
       const value = o[key];
       if (typeof value === "string" && value.length > 8) {
         o[key] = parseWcfDate(value);
       } else if (typeof value === "object") {
-        convertObjectProperties(value);
+        convertObjectProperties(value as typeof o);
       }
     }
   }
@@ -168,7 +168,7 @@ export function hasAllProperties(
   }
   let allFound = true;
   for (const n of propertyNames) {
-    allFound = allFound && o.hasOwnProperty(n);
+    allFound = allFound && Object.hasOwn(o, n);
     if (!allFound) {
       break;
     }
@@ -180,21 +180,24 @@ export function hasAllProperties(
  * Gets the property name and value that matches the given Regexp.
  */
 export function getPropertyMatching(
-  o: any,
+  o: Record<string, unknown>,
   propertyNameRegexp: RegExp
-): { name: string | null; location: any | null } {
+) {
   let name: string | null = null;
   let location: RoadwayLocation | null = null;
 
   for (const n in o) {
     if (n.match(propertyNameRegexp)) {
       name = n;
-      location = o[n];
-      break;
+      location = o[n] as RoadwayLocation | null;
+      return {
+        name,
+        location,
+      }
     }
   }
   return {
     name,
-    location
+    location,
   };
 }
