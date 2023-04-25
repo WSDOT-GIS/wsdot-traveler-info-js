@@ -1,0 +1,14 @@
+{
+    "$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json",
+    "line-length": false,
+    "header-style": {
+        "style": "setext_with_atx_closed"
+    },
+    "no-inline-html": {
+        "allowed_elements": [
+            "abbr",
+            "details",
+            "summary"
+        ]
+    }
+}
