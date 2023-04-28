@@ -1,35 +1,41 @@
-import { getPropertyMatching, hasAllProperties } from "./CommonUtils";
-import {
+import { detectMultipoint, isAlert, isTravelTimeRoute } from ".";
+import { getPropertyMatching, hasAllProperties, isRoadwayLocation } from "./CommonUtils";
+import type {
   Alert,
   Camera,
   FlowData,
   LatLong,
+  PassCondition,
   RoadwayLocation,
   TravelTimeRoute,
 } from "./TravelerInfo";
-import { Multipoint, TollRate } from "./WebApi";
+import type { Multipoint, TollRate } from "./WebApi";
 
-import GeoJSON from "geojson";
+import type GeoJSON from "geojson";
 
 /**
  * "Flattens" the properties of an object so that there are no inner-objects.
  * @param {object} o
  * @param {string} [ignoredName] The name of a property to be ignored. Intended for use with the feature ID.
  */
-export function flattenProperties(o: any, ignoredName?: string): any {
+export function flattenProperties(
+  o: Record<string, unknown>,
+  ignoredName?: string
+) {
+  // cspell:disable-next-line
   const coordRe = /((?:Lat)|(?:Long))itude$/;
-  const output: any = {};
+  const output: Record<string, unknown> = {};
   let position: number[] | null = null;
 
   function addRouteLocationPropertiesToObject(
-    propOutput: any,
+    propOutput: Record<string, unknown>,
     propertyName: string,
     roadwayLocation: RoadwayLocation
   ) {
     const endRe = /^End/i;
     const prefix = endRe.test(propertyName) ? "End" : "Start";
     for (const k2 in roadwayLocation) {
-      if (coordRe) {
+      if (coordRe.test(k2)) {
         continue;
       }
       propOutput[`${prefix}${k2}`] = roadwayLocation;
@@ -50,26 +56,20 @@ export function flattenProperties(o: any, ignoredName?: string): any {
       }
       // Assign coordinate to corresponding array element.
       const i = match[1] === "Lat" ? 1 : 0;
-      position[i] = o[k];
+      const v = o[k];
+      if (typeof v !== "number") {
+        throw new TypeError(`${v} is not a number`);
+      }
+      position[i] = v;
     } else if (!(ignoredName && k === ignoredName)) {
       const v = o[k];
       if (typeof v === "object" && !(v instanceof Date)) {
-        if (
-          hasAllProperties(
-            v,
-            "Description",
-            "RoadName",
-            "Direction",
-            "MilePost",
-            "Longitude",
-            "Latitude"
-          )
-        ) {
+        if (isRoadwayLocation(v)) {
           addRouteLocationPropertiesToObject(output, k, v);
         } else {
           for (const k2 in v) {
             if (Object.hasOwn(v, k2)) {
-              output[`${k}_${k2}`] = v[k2];
+              output[`${k}_${k2}`] = (v as Record<string, unknown>)[k2];
             }
           }
         }
@@ -80,6 +80,14 @@ export function flattenProperties(o: any, ignoredName?: string): any {
   }
   return output;
 }
+
+export type HasId = Pick<Alert, "AlertID"> &
+  Pick<Camera, "CameraID"> &
+  Pick<PassCondition, "MountainPassId"> &
+  Pick<FlowData, "FlowDataID"> &
+  Pick<TravelTimeRoute, "TravelTimeID">;
+
+export type PropertyIdFieldName = keyof HasId;
 
 /**
  * @typedef GetIdOutput
@@ -94,20 +102,24 @@ export interface GetIdOutput {
   value: number;
 }
 
-/** Checks the list of properties for a property that can be used as an ID.
+/**
+ * Checks the list of properties for a property that can be used as an ID.
  * @param {object} properties - An object returned from the traffic API with an ID.
  * @returns {GetIdOutput} - Returns the name of the ID field as well as the ID value.
  */
-export function getId(properties: any): GetIdOutput | null {
+export function getId(properties: unknown): GetIdOutput | null {
   let output: GetIdOutput | null = null;
   if (typeof properties === "object") {
     const re =
       /(?:(?:Alert)|(?:Camera)|(?:MountainPass)|(?:FlowData)|(?:TravelTime))ID/i;
     for (const name in properties) {
-      if (Object.hasOwn(properties, name) && re.test(name)) {
+      if (!re.test(name)) {
+        continue;
+      }
+      if (Object.hasOwn(properties, name)) {
         output = {
           name,
-          value: properties[name],
+          value: (properties as Record<string, number>)[name],
         };
         break;
       }
@@ -117,24 +129,18 @@ export function getId(properties: any): GetIdOutput | null {
 }
 
 /**
- * Examines an object and determines if it should be represented by as a MultiPoint (rather than Point);
- */
-function detectMultipoint(input: object): input is Alert | TravelTimeRoute {
-  return (
-    input &&
-    (Object.hasOwn(input, "EndRoadwayLocation") ||
-      Object.hasOwn(input, "EndPoint"))
-  );
-}
+
 
 /**
  * Converts a roadway location object to GeoJSON coordinates.
- * @param {...RoadwayLocation} roadwayLocations - Roadway location objects.
- * @returns {(number[] | number[][])} coordinate array(s)
+ * @param roadwayLocations - Roadway location objects.
+ * @returns coordinate array(s)
  */
+function roadwayLocationToCoordinates(...roadwayLocations: [RoadwayLocation]): [number, number]
+function roadwayLocationToCoordinates(...roadwayLocations: RoadwayLocation[]): [number, number][]
 function roadwayLocationToCoordinates(
   ...roadwayLocations: RoadwayLocation[]
-): [number, number] | Array<[number, number]> | any {
+): [number, number] | [number, number][] {
   if (roadwayLocations.length < 1) {
     throw new TypeError("No input provided.");
   } else if (roadwayLocations.length > 1) {
@@ -144,7 +150,7 @@ function roadwayLocationToCoordinates(
     }
     return output;
   } else {
-    return [roadwayLocations[0].Longitude, roadwayLocations[0].Latitude];
+    return [roadwayLocations[0].Longitude, roadwayLocations[0].Latitude] as [number, number];
   }
 }
 
@@ -168,11 +174,14 @@ function wsdotToGeometry(
     return null;
   }
 
-  const type = detectMultipoint(input) ? "MultiPoint" : "Point";
+  // const is_multipoint = detectMultipoint(input);
+  // const type = is_multipoint ? "MultiPoint" : "Point";
+  const is_alert = isAlert(input)
+  const is_travelTimeRoute = isTravelTimeRoute(input)
 
-  if (type === "MultiPoint") {
-    const startPoint = input.StartRoadwayLocation || input.StartPoint;
-    const endPoint = input.EndRoadwayLocation || input.EndPoint;
+  if (is_alert || is_travelTimeRoute) {
+    const startPoint = is_alert ? input.StartRoadwayLocation : input.StartPoint;
+    const endPoint = is_alert ? input.EndRoadwayLocation : input.EndPoint;
     const mp: GeoJSON.MultiPoint = {
       type: "MultiPoint",
       coordinates: roadwayLocationToCoordinates(startPoint, endPoint),
@@ -185,7 +194,10 @@ function wsdotToGeometry(
     };
   } else {
     const { location } = getPropertyMatching(input, /Location$/);
-    if (location != null && hasAllProperties(location, "Latitude", "Longitude")) {
+    if (
+      location != null &&
+      hasAllProperties(location, "Latitude", "Longitude")
+    ) {
       return {
         type: "Point",
         coordinates: [location.Latitude, location.Longitude],
@@ -222,6 +234,7 @@ export function convertToGeoJsonFeature(
     };
 
     // Copy the properties, excluding coordinates.
+    // cspell:disable-next-line
     const coordRe = /L(?:(?:ong)|(?:at))itude$/i; // Detects coordinate property names.
     const properties: any = {};
     for (const propName in wsdotFeature) {
@@ -245,7 +258,7 @@ export function convertToGeoJsonFeature(
       idInfo !== null ? idInfo.name : undefined
     );
     const geometry = wsdotToGeometry(wsdotFeature);
-    const f: GeoJSON.Feature<typeof flattened> = {
+    const f: GeoJSON.Feature<typeof geometry> = {
       type: "Feature",
       geometry,
       properties: flattened,

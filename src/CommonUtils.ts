@@ -3,7 +3,24 @@
  * @module CommonUtils
  */
 
-import { RoadwayLocation } from "./TravelerInfo";
+import type { RoadwayLocation } from "./TravelerInfo";
+
+/**
+ * Determines if the input value is a {@link RoadwayLocation}
+ * @param v 
+ * @returns 
+ */
+export function isRoadwayLocation(v: unknown): v is RoadwayLocation {
+  return hasAllProperties(
+    v,
+    "Description",
+    "RoadName",
+    "Direction",
+    "MilePost",
+    "Longitude",
+    "Latitude"
+  );
+}
 
 /**
  * Matches the date format string used by WCF services.
@@ -160,10 +177,10 @@ export function convertObjectProperties(o: Record<string, unknown>): void {
  * @returns {boolean} returns true if object has all named properties, false otherwise.
  */
 export function hasAllProperties(
-  o: object,
+  o: unknown,
   ...propertyNames: string[]
 ): boolean {
-  if (o === null) {
+  if (o == null) {
     return false;
   }
   let allFound = true;

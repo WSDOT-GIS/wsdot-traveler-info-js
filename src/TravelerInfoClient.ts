@@ -7,7 +7,7 @@
 // To use the Fetch API in node, the node-fetch module is required.
 // Older web browsers may require a polyfill.
 import { buildSearchString, parseWcfDate } from "./CommonUtils";
-import {
+import type {
   Alert,
   BorderCrossingData,
   Camera,
@@ -19,7 +19,7 @@ import {
   WeatherInfo,
   WeatherStationData
 } from "./TravelerInfo";
-import { TollRate } from "./WebApi";
+import type { TollRate } from "./WebApi";
 
 /**
  * Provides custom JSON parsing.

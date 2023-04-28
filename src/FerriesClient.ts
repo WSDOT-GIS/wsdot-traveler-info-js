@@ -4,7 +4,7 @@
  */
 
 import { getJsonFromUrl } from "./CommonUtils";
-import {
+import type {
   DateRange,
   FareLineItem,
   FareTotal,
@@ -249,6 +249,7 @@ export default class FerriesClient {
     propertyName: string,
     remoteFunction: (...params: any[]) => any
   ) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self: any = this;
     if (!self[propertyName]) {
       return remoteFunction();
