@@ -1,5 +1,9 @@
 import { detectMultipoint, isAlert, isTravelTimeRoute } from ".";
-import { getPropertyMatching, hasAllProperties, isRoadwayLocation } from "./CommonUtils";
+import {
+  getPropertyMatching,
+  hasAllProperties,
+  isRoadwayLocation,
+} from "./CommonUtils";
 import type {
   Alert,
   Camera,
@@ -136,8 +140,12 @@ export function getId(properties: unknown): GetIdOutput | null {
  * @param roadwayLocations - Roadway location objects.
  * @returns coordinate array(s)
  */
-function roadwayLocationToCoordinates(...roadwayLocations: [RoadwayLocation]): [number, number]
-function roadwayLocationToCoordinates(...roadwayLocations: RoadwayLocation[]): [number, number][]
+function roadwayLocationToCoordinates(
+  ...roadwayLocations: [RoadwayLocation]
+): [number, number];
+function roadwayLocationToCoordinates(
+  ...roadwayLocations: RoadwayLocation[]
+): [number, number][];
 function roadwayLocationToCoordinates(
   ...roadwayLocations: RoadwayLocation[]
 ): [number, number] | [number, number][] {
@@ -150,7 +158,10 @@ function roadwayLocationToCoordinates(
     }
     return output;
   } else {
-    return [roadwayLocations[0].Longitude, roadwayLocations[0].Latitude] as [number, number];
+    return [roadwayLocations[0].Longitude, roadwayLocations[0].Latitude] as [
+      number,
+      number
+    ];
   }
 }
 
@@ -162,11 +173,15 @@ export type HasExtractableGeometry =
   | TravelTimeRoute
   | TollRate;
 
+export function isLatLong(input: unknown): input is LatLong {
+  return input != null && hasAllProperties(input, "Latitude", "Longitude");
+}
+
 /**
  * Extracts the geometry from a Traffic API feature and returns it as a GeoJSON geometry.
  */
 function wsdotToGeometry(
-  input: any | HasExtractableGeometry
+  input: unknown | HasExtractableGeometry
 ): GeoJSON.Point | GeoJSON.MultiPoint | null {
   if (input === undefined) {
     throw new TypeError("No input provided");
@@ -176,8 +191,8 @@ function wsdotToGeometry(
 
   // const is_multipoint = detectMultipoint(input);
   // const type = is_multipoint ? "MultiPoint" : "Point";
-  const is_alert = isAlert(input)
-  const is_travelTimeRoute = isTravelTimeRoute(input)
+  const is_alert = isAlert(input);
+  const is_travelTimeRoute = isTravelTimeRoute(input);
 
   if (is_alert || is_travelTimeRoute) {
     const startPoint = is_alert ? input.StartRoadwayLocation : input.StartPoint;
@@ -187,17 +202,14 @@ function wsdotToGeometry(
       coordinates: roadwayLocationToCoordinates(startPoint, endPoint),
     };
     return mp;
-  } else if (hasAllProperties(input, "Latitude", "Longitude")) {
+  } else if (isLatLong(input)) {
     return {
       type: "Point",
       coordinates: [input.Latitude, input.Longitude],
     };
   } else {
-    const { location } = getPropertyMatching(input, /Location$/);
-    if (
-      location != null &&
-      hasAllProperties(location, "Latitude", "Longitude")
-    ) {
+    const { location } = getPropertyMatching(input as Record<string, unknown>, /Location$/);
+    if (location != null && isLatLong(location)) {
       return {
         type: "Point",
         coordinates: [location.Latitude, location.Longitude],

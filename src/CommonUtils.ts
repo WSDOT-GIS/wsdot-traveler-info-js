@@ -24,7 +24,6 @@ export function isRoadwayLocation(v: unknown): v is RoadwayLocation {
 
 /**
  * Matches the date format string used by WCF services.
- * @type {RegExp}
  */
 export const wcfDateRe = /^\/Date\((\d+)([+-]\d+)?\)\/$/i;
 
@@ -53,14 +52,14 @@ export async function responseToJson(response: Response) {
 
 /**
  * Submits a JSONP request via a temporarily added script tag.
- * @param {string} url - JSONP request URL
- * @returns {Promise<Object>} - parsed JSON response
+ * @param url - JSONP request URL
+ * @returns - parsed JSON response
  */
-export function getJsonP(url: string) {
+export function getJsonP(url: string, callbackProperty: string = "wsdot_ferries_callback") {
   return new Promise(function (resolve, reject) {
     const scriptTag = document.createElement("script");
 
-    (window as typeof window & Record<string, unknown>).wsdot_ferries_callback = function (json: string | Record<string, unknown> | Date) {
+    (window as typeof window & Record<string, unknown>)[callbackProperty] = function (json: string | Record<string, unknown> | Date) {
       document.head.removeChild(scriptTag);
       try {
         if (typeof json === "string") {
@@ -88,7 +87,8 @@ export function getJsonP(url: string) {
  */
 export function getJsonFromUrl(url: string) {
   if (/&callback/.test(url)) {
-    return getJsonP(url);
+    const callbackProperty = new URL(url).searchParams.get("callback")
+    return getJsonP(url, callbackProperty ?? undefined);
   } else {
     return fetch(url).then(responseToJson);
   }

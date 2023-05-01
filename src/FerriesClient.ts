@@ -38,6 +38,8 @@ function formatDate(theDate: Date): string {
   return dateParts.join("-");
 }
 
+const callback_name = "wsdot_ferries_callback";
+
 /**
  * Client for Ferries API.
  * @alias module:FerriesClient
@@ -45,7 +47,7 @@ function formatDate(theDate: Date): string {
 export default class FerriesClient {
   private lastFlushDate: Date | null = null;
   private callbackSuffix: string = this.useCallback
-    ? "&callback=wsdot_ferries_callback"
+    ? `&callback=${callback_name}`
     : "";
   /**
    * Creates a new instance of the client class.
