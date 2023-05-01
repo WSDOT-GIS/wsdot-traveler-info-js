@@ -29,8 +29,8 @@ export const wcfDateRe = /^\/Date\((\d+)([+-]\d+)?\)\/$/i;
 
 /**
  * Converts a HTTP fetch Response to JSON.
- * @param {Response} response - HTTP fetch response
- * @returns {Promise<Object>} Promise with parsed JSON object.
+ * @param response - HTTP fetch response
+ * @returns Promise with parsed JSON object.
  */
 export async function responseToJson(response: Response) {
   const reviver = function (k: string, v: unknown) {
@@ -41,7 +41,8 @@ export async function responseToJson(response: Response) {
   };
 
   const text = await response.text();
-  const re = /^\s*\w+\s*\((.+?)\);?\s*$/;
+  // identifier (otherstuff);string
+  const re = /^\s*\w+\s*\((?<parenContents>.+?)\);?\s*$/;
   const match = text.match(re);
   if (match) {
     return JSON.parse(match[1], reviver);
