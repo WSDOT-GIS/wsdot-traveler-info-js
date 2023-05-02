@@ -56,7 +56,7 @@ export async function responseToJson(response: Response) {
  * @param url - JSONP request URL
  * @returns - parsed JSON response
  */
-export function getJsonP(url: string, callbackProperty: string = "wsdot_ferries_callback") {
+export function getJsonP(url: string, callbackProperty = "wsdot_ferries_callback") {
   return new Promise(function (resolve, reject) {
     const scriptTag = document.createElement("script");
 

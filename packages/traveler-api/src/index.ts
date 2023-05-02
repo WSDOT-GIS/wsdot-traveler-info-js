@@ -1,5 +1,20 @@
 import type { Alert, TravelTimeRoute } from "./TravelerInfo";
 export type * from "./WebApi";
+export * from "./CommonUtils";
+export type * from "./Ferries";
+export * from "./FerriesClient";
+export type {
+  Camera,
+  MultiPoint,
+  Point,
+  TravelTimeRoute,
+  Alert,
+} from "./FlattenedTravelerInfo";
+export * from "./geoJsonUtils";
+export type * from "./TravelerInfo";
+export * from "./TravelerInfoClient";
+
+export const defaultApiRoot = new URL("https://www.wsdot.wa.gov/Traffic/api/");
 
 /**
  * Detects if the input object is an {@link Alert}
@@ -23,7 +38,7 @@ export function isTravelTimeRoute(input: object): input is TravelTimeRoute {
  * Examines an object and determines if it should be represented by as a MultiPoint (rather than Point);
  */
 export function detectMultipoint(
-    input: object
-  ): input is Alert | TravelTimeRoute {
-    return isAlert(input) || isTravelTimeRoute(input)
-  }
+  input: object
+): input is Alert | TravelTimeRoute {
+  return isAlert(input) || isTravelTimeRoute(input);
+}
