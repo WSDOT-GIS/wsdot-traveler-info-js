@@ -1,16 +1,19 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "npm",
-			"script": "test",
-			"group": {
-				"kind": "test",
-				"isDefault": true
-			},
-			"problemMatcher": [],
-			"label": "npm: test",
-			"detail": "c8 jasmine"
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+	{
+		"label": "Test",
+		"type": "shell",
+		"command": "npm run test -ws --if-present",
+		"group": {
+			"kind": "test",
+			"isDefault": true
+		},
+		"icon": {
+			"id": "beaker",
+			"color": "terminal.ansiCyan"
+		},
+		"problemMatcher": []
+	}
+  ]
 }
