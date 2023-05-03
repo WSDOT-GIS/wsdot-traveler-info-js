@@ -1,4 +1,4 @@
-import { type TollRate, defaultApiRoot } from "..";
+import { type TollRate, defaultApiRoot, CardinalDirection } from "..";
 import { getJsonFromUrl } from "../CommonUtils";
 
 /**
@@ -11,6 +11,54 @@ export interface TollVersion {
   TimeStamp: Date;
   /**
    * Integer version number
+   */
+  Version: number;
+}
+
+export interface TollTripGeometry {
+  type: "LineString";
+  coordinates: [number, number][];
+}
+
+export type WcfDateString = `/Date(${number}${`-${number}` | ""})/`;
+
+export type TripName = `${number}tp${number}`;
+
+export interface TollTripInfoRaw {
+  EndLatitude: number;
+  EndLocationName: string;
+  EndLongitude: number;
+  EndMilepost: number;
+  Geometry: ReturnType<typeof JSON.stringify>;
+  ModifiedDate: WcfDateString;
+  StartLatitude: number;
+  StartLocationName: string;
+  StartLongitude: number;
+  StartMilepost: number;
+  TravelDirection: CardinalDirection;
+  TripName: TripName;
+}
+
+export interface TollTripInfo
+  extends Omit<TollTripInfoRaw, "Geometry" | "ModifiedDate"> {
+  Geometry: TollTripGeometry;
+  ModifiedDate: Date;
+}
+
+type DateObjectOrWcfString = Date | WcfDateString;
+
+interface TollTrip<T extends DateObjectOrWcfString> {
+  Message: `$${TollTrip<T>["Toll"]}`;
+  MessageUpdateTime: T;
+  Toll: number;
+  TripName: TripName;
+}
+
+export interface TollTripRate<T extends DateObjectOrWcfString> {
+  LastUpdated: T;
+  Trips: TollTrip<T>[];
+  /**
+   * integer version number
    */
   Version: number;
 }
@@ -86,7 +134,7 @@ export const getTollTripInfo = async (
   accessCode: string,
   apiUrl: URL = defaultApiRoot
 ) =>
-  await getApiData<TollRate[]>(
+  await getApiData<TollTripInfo[]>(
     accessCode,
     "TollRates",
     "TollTripInfo",
@@ -147,16 +195,15 @@ export const getTripRatesByVersion = async (
     accessCode,
     "TollRates",
     "TripRatesByVersion",
-    undefined,
+    { version },
     apiUrl
   );
 
 /*
-Uri 	Method 	Description
-GetTollRatesAsJson 	GET 	Service at http://www.wsdot.wa.gov/Traffic/api/TollRates/TollRatesREST.svc/GetTollRatesAsJson?AccessCode={ACCESSCODE}
-GetTollTripInfoAsJson 	GET 	Service at http://www.wsdot.wa.gov/Traffic/api/TollRates/TollRatesREST.svc/GetTollTripInfoAsJson?AccessCode={ACCESSCODE}
-GetTollTripRatesAsJson 	GET 	Service at http://www.wsdot.wa.gov/Traffic/api/TollRates/TollRatesREST.svc/GetTollTripRatesAsJson?AccessCode={ACCESSCODE}
-GetTollTripVersionAsJson 	GET 	Service at http://www.wsdot.wa.gov/Traffic/api/TollRates/TollRatesREST.svc/GetTollTripVersionAsJson?AccessCode={ACCESSCODE}
-GetTripRatesByDateAsJson 	GET 	Service at http://www.wsdot.wa.gov/Traffic/api/TollRates/TollRatesREST.svc/GetTripRatesByDateAsJson?AccessCode={ACCESSCODE}&fromDate={FROMDATE}&toDate={TODATE}
-GetTripRatesByVersionAsJson 	GET 	Service at http://www.wsdot.wa.gov/Traffic/api/TollRates/TollRatesREST.svc/GetTripRatesByVersionAsJson?AccessCode={ACCESSCODE}&version={VERSION}
+{{ApiRoot}}/TollRates/TollRatesREST.svc/GetTollRatesAsJson?AccessCode={{AccessCode}}
+{{ApiRoot}}/TollRates/TollRatesREST.svc/GetTollTripInfoAsJson?AccessCode={{AccessCode}}
+{{ApiRoot}}/TollRates/TollRatesREST.svc/GetTollTripRatesAsJson?AccessCode={{AccessCode}}
+{{ApiRoot}}/TollRates/TollRatesREST.svc/GetTollTripVersionAsJson?AccessCode={{AccessCode}}
+{{ApiRoot}}/TollRates/TollRatesREST.svc/GetTripRatesByDateAsJson?AccessCode={{AccessCode}}&fromDate={{fromDate}}&toDate={{toDate}}
+{{ApiRoot}}/TollRates/TollRatesREST.svc/GetTripRatesByVersionAsJson?AccessCode={{AccessCode}}&version={{version}}
 */
