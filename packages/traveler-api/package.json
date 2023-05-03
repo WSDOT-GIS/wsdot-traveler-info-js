@@ -2,6 +2,7 @@
   "name": "wsdot-traveler-info",
   "version": "2.0.0-alpha.1",
   "description": "Client for WSDOT Traveler Info API",
+  "type": "module",
   "main": "TravelerInfoClient.js",
   "types": "TravelerInfoClient.d.ts",
   "directories": {
@@ -12,7 +13,8 @@
     "prepare": "npm run build",
     "build": "npm run build:tsc && node scripts/copyDtsFiles.js",
     "build:tsc": "tsc",
-    "test": "c8 jasmine"
+    "test": "c8 jasmine",
+    "lint": "eslint ./src"
   },
   "files": [
     "dist"

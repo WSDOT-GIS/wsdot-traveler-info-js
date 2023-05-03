@@ -14,21 +14,57 @@ export interface TollTripInfo<
   G extends TollTripGeometry | string,
   D extends DateObjectOrWcfString
 > {
+  /**
+   * End Latitude
+   */
   EndLatitude: number;
+  /**
+   * End Location Name
+   */
   EndLocationName: string;
+  /**
+   * End Longitude
+   */
   EndLongitude: number;
+  /**
+   * End Milepost
+   */
   EndMilepost: number;
+  /**
+   * Geometry
+   */
   Geometry: G;
+  /**
+   * Modified Date
+   */
   ModifiedDate: D;
+  /**
+   * Start Latitude
+   */
   StartLatitude: number;
+  /**
+   * Start Location Name
+   */
   StartLocationName: string;
+  /**
+   * Start Longitude
+   */
   StartLongitude: number;
+  /**
+   * Start Milepost
+   */
   StartMilepost: number;
+  /**
+   * Travel Direction
+   */
   TravelDirection: CardinalDirection;
+  /**
+   * TripName
+   */
   TripName: TripName;
 }
 
-type DateObjectOrWcfString = Date | WcfDateString;
+export type DateObjectOrWcfString = Date | WcfDateString;
 
 /**
  * Toll version
@@ -44,7 +80,7 @@ export interface TollTripVersion<T extends DateObjectOrWcfString> {
   Version: number;
 }
 
-interface TollTrip<T extends DateObjectOrWcfString> {
+export interface TollTrip<T extends DateObjectOrWcfString> {
   Message: `$${TollTrip<T>["Toll"]}`;
   MessageUpdateTime: T;
   Toll: number;

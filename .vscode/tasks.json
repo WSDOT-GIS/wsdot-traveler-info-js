@@ -2,6 +2,23 @@
   "version": "2.0.0",
   "tasks": [
 	{
+		"label": "Build",
+		"detail": "Builds projects",
+		"group": {
+			"kind": "build",
+			"isDefault": true
+		},
+		"icon": {
+			"id": "tools",
+			"color": "terminal.ansiGreen"
+		},
+		"type": "shell",
+		"command": "npm run build -ws --if-present",
+		"problemMatcher": [
+			"$tsc"
+		]
+	},
+	{
 		"label": "Test",
 		"type": "shell",
 		"command": "npm run test -ws --if-present",
@@ -14,6 +31,19 @@
 			"color": "terminal.ansiCyan"
 		},
 		"problemMatcher": []
+	},
+	{
+		"label": "Lint",
+		"type": "shell",
+		"icon": {
+			"id": "checklist",
+			"color": "terminal.ansiCyan"
+		},
+		"command": "npm run lint -ws --if-present",
+		"problemMatcher": [
+			"$eslint-compact",
+			"$eslint-stylish"
+		],
 	}
-  ]
+]
 }
