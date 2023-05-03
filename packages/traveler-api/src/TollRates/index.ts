@@ -1,20 +1,6 @@
 import { type TollRate, defaultApiRoot, CardinalDirection } from "..";
 import { getJsonFromUrl } from "../CommonUtils";
 
-/**
- * Toll version
- */
-export interface TollVersion {
-  /**
-   * Version time stamp
-   */
-  TimeStamp: Date;
-  /**
-   * Integer version number
-   */
-  Version: number;
-}
-
 export interface TollTripGeometry {
   type: "LineString";
   coordinates: [number, number][];
@@ -24,13 +10,16 @@ export type WcfDateString = `/Date(${number}${`-${number}` | ""})/`;
 
 export type TripName = `${number}tp${number}`;
 
-export interface TollTripInfoRaw {
+export interface TollTripInfo<
+  G extends TollTripGeometry | string,
+  D extends DateObjectOrWcfString
+> {
   EndLatitude: number;
   EndLocationName: string;
   EndLongitude: number;
   EndMilepost: number;
-  Geometry: ReturnType<typeof JSON.stringify>;
-  ModifiedDate: WcfDateString;
+  Geometry: G;
+  ModifiedDate: D;
   StartLatitude: number;
   StartLocationName: string;
   StartLongitude: number;
@@ -39,13 +28,21 @@ export interface TollTripInfoRaw {
   TripName: TripName;
 }
 
-export interface TollTripInfo
-  extends Omit<TollTripInfoRaw, "Geometry" | "ModifiedDate"> {
-  Geometry: TollTripGeometry;
-  ModifiedDate: Date;
-}
-
 type DateObjectOrWcfString = Date | WcfDateString;
+
+/**
+ * Toll version
+ */
+export interface TollTripVersion<T extends DateObjectOrWcfString> {
+  /**
+   * Version time stamp
+   */
+  TimeStamp: T;
+  /**
+   * Integer version number
+   */
+  Version: number;
+}
 
 interface TollTrip<T extends DateObjectOrWcfString> {
   Message: `$${TollTrip<T>["Toll"]}`;
@@ -54,13 +51,10 @@ interface TollTrip<T extends DateObjectOrWcfString> {
   TripName: TripName;
 }
 
-export interface TollTripRate<T extends DateObjectOrWcfString> {
+export interface TollTripRate<T extends DateObjectOrWcfString>
+  extends Pick<TollTripVersion<T>, "Version"> {
   LastUpdated: T;
   Trips: TollTrip<T>[];
-  /**
-   * integer version number
-   */
-  Version: number;
 }
 
 export const enum TollOperation {
@@ -134,7 +128,7 @@ export const getTollTripInfo = async (
   accessCode: string,
   apiUrl: URL = defaultApiRoot
 ) =>
-  await getApiData<TollTripInfo[]>(
+  await getApiData<TollTripInfo<TollTripGeometry, Date>[]>(
     accessCode,
     "TollRates",
     "TollTripInfo",
@@ -178,24 +172,24 @@ export const getTripRatesByDate = async (
       ["toDate", toDate],
     ] as Array<[string, Date]>
   ).map(([name, value]) => [name, dateFormatter.format(value)]);
-  return await getApiData<TollRate[]>(
+  return await getApiData<Record<string, unknown>[]>(
     accessCode,
     "TollRates",
-    "TripRatesBydate",
+    "TripRatesByDate",
     dateParams,
     apiUrl
   );
 };
 export const getTripRatesByVersion = async (
   accessCode: string,
-  version: string,
+  version: string | number,
   apiUrl?: URL
 ) =>
-  await getApiData<TollRate[]>(
+  await getApiData<TollTripRate<Date>[]>(
     accessCode,
     "TollRates",
     "TripRatesByVersion",
-    { version },
+    { version: `${version}` },
     apiUrl
   );
 
