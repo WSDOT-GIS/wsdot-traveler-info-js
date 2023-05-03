@@ -160,8 +160,6 @@ export default class FerriesClient {
    */
   public getTerminalComboVerbose(
     tripDate: Date,
-    departingTerminalId: number,
-    arrivingTerminalId: number
   ): Promise<TerminalComboVerbose[]> {
     const url = `${this.apiRoot}terminalcomboverbose/${formatDate(
       tripDate
