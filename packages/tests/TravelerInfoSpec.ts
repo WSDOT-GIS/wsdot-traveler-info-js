@@ -1,8 +1,8 @@
 // Unit tests for Traveler Info API access functions.
 
-import TravelerInfoClient from "../src/TravelerInfoClient";
+import TravelerInfoClient from "wsdot-traveler-info";
 
-import { Alert, MapArea, WeatherInfo } from "../src/TravelerInfo";
+import { Alert, MapArea, WeatherInfo } from "wsdot-traveler-info";
 
 const apiKey = "3a364cc8-0538-48f6-a08b-f1317f95fd7d";
 const client = new TravelerInfoClient(apiKey);

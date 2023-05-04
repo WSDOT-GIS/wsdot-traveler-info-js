@@ -1,4 +1,5 @@
-import { Alert } from "../../src/TravelerInfo";
+// spell: disable
+import { Alert } from "wsdot-traveler-info";
 
 /**
  * Provides sample alert data

@@ -1,4 +1,4 @@
-import { BorderCrossingData } from "../../src/TravelerInfo";
+import { BorderCrossingData } from "wsdot-traveler-info";
 
 /**
  * Provides sample border crossing data.

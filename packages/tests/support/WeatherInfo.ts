@@ -1,4 +1,4 @@
-import { WeatherInfo } from "../../src/TravelerInfo";
+import { WeatherInfo } from "wsdot-traveler-info";
 
 /**
  * Provides sample weather info.

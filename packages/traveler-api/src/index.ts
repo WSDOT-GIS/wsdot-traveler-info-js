@@ -2,14 +2,7 @@ import type { Alert, TravelTimeRoute } from "./TravelerInfo";
 export type * from "./WebApi";
 export * from "./CommonUtils";
 export type * from "./Ferries";
-export * from "./FerriesClient";
-export type {
-  Camera,
-  MultiPoint,
-  Point,
-  TravelTimeRoute,
-  Alert,
-} from "./FlattenedTravelerInfo";
+export type * as Flattened from "./FlattenedTravelerInfo";
 export * from "./geoJsonUtils";
 export type * from "./TravelerInfo";
 export * from "./TravelerInfoClient";

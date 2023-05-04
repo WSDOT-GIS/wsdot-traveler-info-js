@@ -1,4 +1,4 @@
-import { FlowData } from "../../src/TravelerInfo";
+import { FlowData } from "wsdot-traveler-info";
 
 /**
  * Provides sample flow data.

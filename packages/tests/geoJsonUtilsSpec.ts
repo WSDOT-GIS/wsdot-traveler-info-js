@@ -6,15 +6,15 @@ import {
   flattenProperties,
   convertToGeoJsonFeatureCollection
 } from "../src/geoJsonUtils";
-import { hasAllProperties } from "../src/CommonUtils";
+import { hasAllProperties } from "wsdot-traveler-info";
 // Import sample data
-import alerts from "./support/Alerts";
-import borderCrossings from "./support/BorderCrossings";
-import cameras from "./support/Cameras";
-import flowDatas from "./support/FlowDatas";
-import passConditions from "./support/PassConditions";
-import weatherInfo from "./support/WeatherInfo";
-import tollRates from "./support/TollingRates";
+import alerts from "wsdot-traveler-info";
+import borderCrossings from "wsdot-traveler-info";
+import cameras from "wsdot-traveler-info";
+import flowDatas from "wsdot-traveler-info";
+import passConditions from "wsdot-traveler-info";
+import weatherInfo from "wsdot-traveler-info";
+import tollRates from "wsdot-traveler-info";
 import {
   Alert,
   BorderCrossingData,
@@ -23,7 +23,7 @@ import {
   PassCondition,
   WeatherInfo
 } from "../src/TravelerInfo";
-import { TollRate } from "../src/WebApi";
+import { TollRate } from "wsdot-traveler-info";
 
 describe("geoJsonUtils test", () => {
   it("should be able to flatten an object", () => {

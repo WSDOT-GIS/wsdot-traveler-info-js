@@ -1,4 +1,4 @@
-import { PassCondition } from "../../src/TravelerInfo";
+import { PassCondition } from "wsdot-traveler-info";
 
 /**
  * Provides sample Pass Conditions

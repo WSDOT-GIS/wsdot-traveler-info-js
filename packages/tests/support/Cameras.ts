@@ -1,4 +1,4 @@
-import { Camera } from "../../src/TravelerInfo";
+import { Camera } from "wsdot-traveler-info";
 
 /**
  * Provides sample camera data.

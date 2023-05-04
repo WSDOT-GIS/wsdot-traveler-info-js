@@ -1,7 +1,7 @@
 // Unit tests for the Ferries Client functions.
 
-import { DateRange } from "../src/Ferries";
-import FerriesClient from "../src/FerriesClient";
+import { DateRange } from "wsdot-traveler-info";
+import FerriesClient from "wsdot-traveler-info";
 
 export default describe("Ferries", function() {
   const needsClient = Boolean(typeof window === "object");

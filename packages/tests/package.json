@@ -1,0 +1,16 @@
+{
+  "name": "tests",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Tests for the Traveler API package",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jeff Jacobson",
+  "license": "Unlicense",
+  "dependencies": {
+    "wsdot-traveler-info": "^2.0.0-alpha.2"
+  }
+}

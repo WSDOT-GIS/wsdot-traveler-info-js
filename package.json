@@ -1,6 +1,7 @@
 {
     "workspaces": [
-        "packages/traveler-api"
+        "packages/traveler-api",
+        "packages/tests"
     ],
     "scripts": {
         "lint": "npm run lint -ws --if-present && markdownlint-cli2 \"**/*.md\" \"#node_modules\""

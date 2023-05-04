@@ -1,4 +1,4 @@
-import { TollRate } from "../../src/WebApi";
+import { TollRate } from "wsdot-traveler-info";
 
 const rates: TollRate[] = [
   {
