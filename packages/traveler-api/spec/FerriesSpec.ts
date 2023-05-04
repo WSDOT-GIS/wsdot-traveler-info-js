@@ -1,6 +1,4 @@
-// Jasmine tests for the Ferries Client functions.
-
-/// <reference types="jasmine" />
+// Unit tests for the Ferries Client functions.
 
 import { DateRange } from "../src/Ferries";
 import FerriesClient from "../src/FerriesClient";

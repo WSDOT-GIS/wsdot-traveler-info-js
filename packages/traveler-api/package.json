@@ -36,9 +36,7 @@
   "license": "Unlicense",
   "devDependencies": {
     "@types/geojson": "7946.0.10",
-    "@types/jasmine": "^4.3.1",
-    "fs-extra": "^11.1.1",
-    "jasmine": "^4.6.0"
+    "fs-extra": "^11.1.1"
   },
   "bugs": {
     "url": "https://github.com/wsdot-gis/wsdot-traveler-info-js/issues"

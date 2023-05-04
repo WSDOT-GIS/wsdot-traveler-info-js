@@ -2,8 +2,6 @@
  * Tests the functions that convert Traffic API responses to GeoJSON.
  */
 
-/// <reference types="jasmine" />
-
 import {
   flattenProperties,
   convertToGeoJsonFeatureCollection

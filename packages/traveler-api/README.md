@@ -1,30 +1,21 @@
-WSDOT Traveler Information API Client
-=====================================
+# WSDOT Traveler Information API Client
 
 JavaScript client library for [WSDOT Traveler Information API].
 
-* Supports Node and browser environments.
-* Written in TypeScript.
+- Supports Node and browser environments.
+- Written in TypeScript.
 
-Browser needs proxy
--------------------
+## Browser needs proxy
 
 Since the [WSDOT Traveler Information API] does not currently support [Cross-Origin Resource Sharing (CORS)][CORS], a proxy must be used in a browser environment.
 
-Development Environment
------------------------
+## Development Environment
 
 [Visual Studio Code]
 
-Testing
--------
+## Usage
 
-This project uses [Jasmine] for testing.
-
-Usage
------
-
-### Install from NPM ###
+### Install from NPM
 
 ```console
 npm install wsdot-traveler-info --save
@@ -32,7 +23,6 @@ npm install wsdot-traveler-info --save
 
 See the JavaScript and TypeScript files in the `spec` folder for usage examples.
 
-[CORS]:https://enable-cors.org/
-[Jasmine]:https://jasmine.github.io/
-[WSDOT Traveler Information API]:https://www.wsdot.wa.gov/Traffic/api/
-[Visual Studio Code]:https://code.visualstudio.com/
+[CORS]: https://enable-cors.org/
+[WSDOT Traveler Information API]: https://www.wsdot.wa.gov/Traffic/api/
+[Visual Studio Code]: https://code.visualstudio.com/

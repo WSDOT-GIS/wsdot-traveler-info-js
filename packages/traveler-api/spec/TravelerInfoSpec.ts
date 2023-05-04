@@ -1,8 +1,4 @@
-// Jasmine tests for Traveler Info API access functions.
-
-/// <reference types="jasmine" />
-
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+// Unit tests for Traveler Info API access functions.
 
 import TravelerInfoClient from "../src/TravelerInfoClient";
 
@@ -11,7 +7,7 @@ import { Alert, MapArea, WeatherInfo } from "../src/TravelerInfo";
 const apiKey = "3a364cc8-0538-48f6-a08b-f1317f95fd7d";
 const client = new TravelerInfoClient(apiKey);
 
-function runGenericTests(response: any[]) {
+function runGenericTests(response: unknown[]) {
   expect(Array.isArray(response)).toBe(true, "Response should be an array.");
   expect(response.length).toBeGreaterThan(
     1,
