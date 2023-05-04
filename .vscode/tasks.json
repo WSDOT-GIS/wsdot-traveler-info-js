@@ -43,7 +43,27 @@
 		"problemMatcher": [
 			"$eslint-compact",
 			"$eslint-stylish"
+		]
+	},
+	{
+		"type": "shell",
+		"command": "npm run spell -ws --if-present",
+		"problemMatcher": [],
+		"icon": {
+			"id": "checklist",
+			"color": "terminal.ansiMagenta"
+		},
+		"label": "Spellcheck",
+		"detail": "Runs spellcheck"
+	},
+	{
+		"type": "npm",
+		"script": "lint",
+		"problemMatcher": [
+			"$markdownlint"
 		],
+		"label": "npm: lint",
+		"detail": "markdownlint-cli2 \"**/*.md\" \"#node_modules\""
 	}
 ]
 }

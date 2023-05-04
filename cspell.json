@@ -2,7 +2,10 @@
     "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
     "allowCompoundWords": true,
     "version": "0.2",
-    "ignorePaths": [],
+    "ignorePaths": [
+        "packages/traveler-api/spec/support/",
+        "tsconfig.json"
+    ],
     "dictionaryDefinitions": [
         {
             "name": "custom-dictionary",
@@ -14,6 +17,18 @@
         "custom-dictionary"
     ],
     "words": [],
-    "ignoreWords": [],
-    "import": []
+    "ignoreWords": [
+        "vfli"
+    ],
+    "import": [],
+    "features": {
+        "weighted-suggestions": true
+    },
+    "language": "en-US",
+    "cache": {
+        "cacheFormat": "universal",
+        "useCache": true
+    },
+    "useGitignore": true,
+    "enabled": true
 }

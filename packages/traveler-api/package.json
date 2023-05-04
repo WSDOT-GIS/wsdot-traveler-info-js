@@ -14,7 +14,8 @@
     "build": "npm run build:tsc && node scripts/copyDtsFiles.js",
     "build:tsc": "tsc",
     "test": "c8 jasmine",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "spell": "cspell . --fail-fast"
   },
   "files": [
     "dist"

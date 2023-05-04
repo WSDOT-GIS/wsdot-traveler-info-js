@@ -167,7 +167,7 @@ describe("Traveler Info API client test", function() {
       );
     });
 
-    it("should be able to get a single moutain pass condition", function(done) {
+    it("should be able to get a single mountain pass condition", function(done) {
       const conditionId = 1;
       client.getMountainPassCondition(conditionId).then(
         function(condition) {
@@ -255,9 +255,8 @@ describe("Traveler Info API client test", function() {
             }
           );
 
-          let startTime: Date, endTime: Date;
-          startTime = new Date();
-          endTime = new Date(startTime.getTime());
+          const startTime = new Date();
+          const endTime = new Date(startTime.getTime());
           startTime.setHours(0);
           startTime.setMinutes(0);
           startTime.setSeconds(0);
