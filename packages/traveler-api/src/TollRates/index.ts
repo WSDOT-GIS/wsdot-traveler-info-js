@@ -1,17 +1,13 @@
 import { type TollRate, defaultApiRoot, CardinalDirection } from "..";
 import { getJsonFromUrl } from "../CommonUtils";
-
-export interface TollTripGeometry {
-  type: "LineString";
-  coordinates: [number, number][];
-}
+import { LineString } from "geojson";
 
 export type WcfDateString = `/Date(${number}${`-${number}` | ""})/`;
 
 export type TripName = `${number}tp${number}`;
 
 export interface TollTripInfo<
-  G extends TollTripGeometry | string,
+  G extends LineString | string,
   D extends DateObjectOrWcfString
 > {
   /**
@@ -164,7 +160,7 @@ export const getTollTripInfo = async (
   accessCode: string,
   apiUrl: URL = defaultApiRoot
 ) =>
-  await getApiData<TollTripInfo<TollTripGeometry, Date>[]>(
+  await getApiData<TollTripInfo<LineString, Date>[]>(
     accessCode,
     "TollRates",
     "TollTripInfo",
